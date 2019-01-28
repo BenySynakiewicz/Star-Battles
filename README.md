@@ -28,6 +28,7 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 - **Explosions**: [Priest865](https://opengameart.org/content/space-assets).
 - **Player's ship, enemies' ships, bullets, bombs**: [Kenney.nl](https://kenney.nl/).
 - **Shields**: [Bonsaiheldin](http://bonsaiheld.org/).
+- **Gems (bonuses)**: [sunburn](https://opengameart.org/content/loot).
 
 ### Sounds
 

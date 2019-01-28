@@ -61,6 +61,11 @@ class Resources(metaclass = Singleton):
 			"Shield"        : Sprite("Resources/Images/Shield.png"        ),
 			"Small Shield"  : Sprite("Resources/Images/Small Shield.png"  ),
 			"Explosion"     : Sprite("Resources/Images/Explosion.png"     ),
+			"Gem 1"         : Sprite("Resources/Images/Gem 1.png"         , True),
+			"Gem 2"         : Sprite("Resources/Images/Gem 2.png"         , True),
+			"Gem 3"         : Sprite("Resources/Images/Gem 3.png"         , True),
+			"Gem 4"         : Sprite("Resources/Images/Gem 4.png"         , True),
+			"Gem 5"         : Sprite("Resources/Images/Gem 5.png"         , True),
 
 		}
 
