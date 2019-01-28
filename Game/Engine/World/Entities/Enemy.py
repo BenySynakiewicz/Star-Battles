@@ -91,7 +91,7 @@ class Enemy(MovingEntity):
 
 	def OnTermination(self):
 
-		if Decision(0.05):
+		if Decision(Parameters.TripleShotBonusProbability):
 
 			bonus = TripleShotBonus(self._scene)
 			bonus.SetRelativePosition(self, AtBottom)
