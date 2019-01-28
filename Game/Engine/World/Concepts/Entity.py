@@ -105,6 +105,8 @@ class Entity(Timed):
 
 		self._terminated = True
 
+		self.OnTermination()
+
 	def Update(self, milisecondsPassed):
 
 		self.UpdateTimers(milisecondsPassed)
@@ -117,5 +119,9 @@ class Entity(Timed):
 		Resources().GetSprite(self._sprite).Blit(GetScreen(), self._position)
 
 	def OnCollision(self, entity):
+
+		pass
+
+	def OnTermination(self):
 
 		pass

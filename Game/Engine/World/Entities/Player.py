@@ -65,6 +65,10 @@ class Player(Entity):
 		self.Bomb = None
 		self.ShieldIsUp = False
 
+	def EnableTripleShotBonus(self):
+
+		self._bonuses.TripleShot = True
+
 	def ChangeBulletEnergy(self, change):
 
 		self.Energy.Bullet = clip(self.Energy.Bullet + change, 0, 100)
@@ -159,6 +163,9 @@ class Player(Entity):
 			Resources().GetSprite("Shield").Blit(GetScreen(), self._position - Vector(15, 15))
 
 	def OnCollision(self, entity):
+
+		if "TripleShotBonus" == type(entity).__name__:
+			return
 
 		if not self.ShieldIsUp:
 			Resources().GetSound("Destruction").Play()

@@ -24,42 +24,29 @@
 #
 ##
 
-from Engine.Utilities.Vector import Vector
-
-from pathlib import Path
-from types import SimpleNamespace
+from Engine.Core.Parameters import Parameters
+from Engine.Core.Resources import Resources
+from Engine.Utilities.Direction import Direction
+from Engine.World.Concepts.MovingEntity import MovingEntity
 
 ##
 #
-# Globals.
+# The main class.
 #
 ##
 
-Parameters = SimpleNamespace(
+class TripleShotBonus(MovingEntity):
 
-	Name = "Star Battles",
-	Version = "1.1-D",
-	Creator = "Beny Synakiewicz",
+	def __init__(self, scene):
 
-	MaximumFrameRate = 120,
+		super().__init__(scene, "Gem 1", Direction.Bottom, Parameters.BonusSpeed)
 
-	HighscoreFilePath = Path("Highscore.txt"),
+	# Inherited methods.
 
-	SmallMargin = 4,
-	MediumMargin = 8,
-	Margin = 12,
+	def OnCollision(self, entity):
 
-	BarHeight = 12,
-	ShadowDistance = Vector(3, 3),
+		if "Player" == type(entity).__name__:
 
-	BulletSpeed = 0.300,
-	BombSpeed = 0.300,
-	EnemySpeed = 0.200,
-	BonusSpeed = 0.300,
+			entity.EnableTripleShotBonus()
 
-	BulletEnergyRegeneration = 0.225,
-	BombEnergyRegeneration = 0.020,
-	ShieldEnergyRegeneration = 0.025,
-	ShieldEnergyUsage = 0.050,
-
-)
+			self.Terminate()

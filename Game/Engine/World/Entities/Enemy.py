@@ -32,6 +32,7 @@ from Engine.Utilities.General import GetScreen, GetScreenDimensions
 from Engine.Utilities.General import Decision
 from Engine.World.Concepts.MovingEntity import MovingEntity
 from Engine.World.Entities.Bullet import Bullet
+from Engine.World.Entities.TripleShotBonus import TripleShotBonus
 from Engine.World.Utilities.Positioning import AtBottom
 
 import pygame
@@ -83,7 +84,16 @@ class Enemy(MovingEntity):
 		if "Bullet" == type(entity).__name__ and "Enemy" == entity.GetCreator():
 			return
 
-		self._terminated = True
+		self.Terminate()
 		self.DestroyedByPlayer = True
 
 		Resources().GetSound("Destruction").Play()
+
+	def OnTermination(self):
+
+		if Decision(0.05):
+
+			bonus = TripleShotBonus(self._scene)
+			bonus.SetRelativePosition(self, AtBottom)
+	
+			self._scene.AppendEntity(bonus)
