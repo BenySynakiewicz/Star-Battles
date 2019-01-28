@@ -37,36 +37,42 @@ from pygame import image, mask, surfarray
 
 class Sprite:
 
-	def __init__(self, path, createShadow: bool = False):
+	def __init__(self, paths, shadows: bool = False):
 
-		self._surface = image.load(path).convert_alpha()
-		self._mask = mask.from_surface(self._surface)
-		self._shadowSurface = None
+		self._surfaces = [image.load(path).convert_alpha() for path in paths]
+		self._masks = [mask.from_surface(surface) for surface in self._surfaces]
+		self._shadows = None
 
-		if createShadow:
+		if shadows:
 			self.CreateShadow()
 
 	def CreateShadow(self):
 
-		if self._shadowSurface:
+		if self._shadows:
 			return
 
-		self._shadowSurface = self._surface.copy()
+		self._shadows = [surface.copy() for surface in self._surfaces]
 
-		shadowPixelData = surfarray.pixels3d(self._shadowSurface)
-		shadowPixelData[:] = 0
+		for shadow in self._shadows:
+
+			shadowPixelData = surfarray.pixels3d(shadow)
+			shadowPixelData[:] = 0
 		
 	def GetDimensions(self):
 
-		return GetDimensions(self._surface)
+		return GetDimensions(self._surfaces[0])
 
-	def GetMask(self):
+	def GetMask(self, frame):
 
-		return self._mask
+		return self._masks[frame]
 
-	def Blit(self, surface, position):
+	def GetFrameCount(self):
 
-		if self._shadowSurface:
-			Blit(surface, self._shadowSurface, position + Parameters.ShadowDistance)
+		return len(self._surfaces)
 
-		Blit(surface, self._surface, position)
+	def Blit(self, frame, surface, position):
+
+		if self._shadows:
+			Blit(surface, self._shadows[frame], position + Parameters.ShadowDistance)
+
+		Blit(surface, self._surfaces[frame], position)

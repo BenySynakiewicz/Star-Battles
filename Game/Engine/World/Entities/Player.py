@@ -200,7 +200,7 @@ class Player(Entity):
 		super().Render()
 
 		if self.ShieldIsUp:
-			Resources().GetSprite("Shield").Blit(GetScreen(), self._position - Vector(15, 15))
+			Resources().GetSprite("Shield").Blit(0, GetScreen(), self._position - Vector(15, 15))
 
 	def OnCollision(self, entity):
 

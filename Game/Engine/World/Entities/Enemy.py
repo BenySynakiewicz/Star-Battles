@@ -77,10 +77,6 @@ class Enemy(MovingEntity):
 		if Decision(self.GetTimer("Shot") / 200000):
 			self.Shoot()
 
-	def Render(self):
-
-		super().Render()
-
 	def OnCollision(self, entity):
 
 		if "Bullet" == type(entity).__name__ and "Enemy" == entity.GetCreator():

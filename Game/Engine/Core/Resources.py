@@ -53,17 +53,35 @@ class Resources(metaclass = Singleton):
 
 		self._sprites = {
 
-			"Bullet (Green)": Sprite("Resources/Images/Bullet (Green).png"),
-			"Bullet (Red)"  : Sprite("Resources/Images/Bullet (Red).png"  ),
-			"Player"        : Sprite("Resources/Images/Player.png"        , True),
-			"Enemy"         : Sprite("Resources/Images/Enemy.png"         , True),
-			"Bomb"          : Sprite("Resources/Images/Bomb.png"          , True),
-			"Shield"        : Sprite("Resources/Images/Shield.png"        ),
-			"Small Shield"  : Sprite("Resources/Images/Small Shield.png"  ),
-			"Explosion"     : Sprite("Resources/Images/Explosion.png"     ),
-			"Gem 1"         : Sprite("Resources/Images/Gem 1.png"         , True),
-			"Gem 2"         : Sprite("Resources/Images/Gem 2.png"         , True),
-			"Gem 3"         : Sprite("Resources/Images/Gem 3.png"         , True),
+			"Bullet (Green)": Sprite(["Resources/Images/Bullet (Green).png"]),
+			"Bullet (Red)"  : Sprite(["Resources/Images/Bullet (Red).png"]  ),
+			"Player"        : Sprite(["Resources/Images/Player.png"]        , True),
+			"Enemy"         : Sprite(["Resources/Images/Enemy.png"]         , True),
+			"Bomb"          : Sprite(["Resources/Images/Bomb.png"]          , True),
+			"Shield"        : Sprite(["Resources/Images/Shield.png"]        ),
+			"Small Shield"  : Sprite(["Resources/Images/Small Shield.png"]  ),
+			"Gem 1"         : Sprite(["Resources/Images/Gem 1.png"]         , True),
+			"Gem 2"         : Sprite(["Resources/Images/Gem 2.png"]         , True),
+			"Gem 3"         : Sprite(["Resources/Images/Gem 3.png"]         , True),
+
+			"Explosion"     : Sprite([
+				# "Resources/Images/Explosion.png",
+				"Resources/Images/Explosion 1.png",
+				"Resources/Images/Explosion 2.png",
+				"Resources/Images/Explosion 3.png",
+				"Resources/Images/Explosion 4.png",
+				"Resources/Images/Explosion 5.png",
+				"Resources/Images/Explosion 6.png",
+				"Resources/Images/Explosion 7.png",
+				"Resources/Images/Explosion 8.png",
+				"Resources/Images/Explosion 9.png",
+				"Resources/Images/Explosion 10.png",
+				"Resources/Images/Explosion 11.png",
+				"Resources/Images/Explosion 12.png",
+				"Resources/Images/Explosion 13.png",
+				"Resources/Images/Explosion 14.png",
+				"Resources/Images/Explosion 15.png",
+			]),
 
 		}
 

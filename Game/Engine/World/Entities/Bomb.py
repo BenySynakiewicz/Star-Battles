@@ -54,7 +54,7 @@ class Bomb(MovingEntity):
 
 		self.StopMoving()
 
-		self.ReplaceSprite("Explosion")
+		self.ReplaceSprite("Explosion", False)
 		Resources().GetSound("Explosion").Play()
 
 		self.AppendTimer("Explosion")
@@ -66,7 +66,7 @@ class Bomb(MovingEntity):
 
 		super().Update(milisecondsPassed)
 
-		if self._exploded and self.GetTimer("Explosion") > 1000:
+		if self._exploded and self._sprite.IsFinished():#self.GetTimer("Explosion") > 1000:
 			self.Terminate()
 
 	def Render(self):
@@ -75,8 +75,9 @@ class Bomb(MovingEntity):
 
 		if not self._exploded:
 			Resources().GetSprite("Small Shield").Blit(
+				0,
 				GetScreen(),
-				AtSameCenter(self._position, self._dimensions, Resources().GetSprite("Small Shield").GetDimensions()),
+				AtSameCenter(self.GetPosition(), self.GetDimensions(), Resources().GetSprite("Small Shield").GetDimensions()),
 			)
 
 	def OnCollision(self, entity):

@@ -28,7 +28,7 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 ### Images
 
 - **Background**: [www.GodsAndIdols.com](https://www.GodsAndIdols.com).
-- **Explosions**: [Priest865](https://opengameart.org/content/space-assets).
+- **Explosions**: [Skorpio](https://opengameart.org/content/sci-fi-effects)
 - **Player's ship, enemies' ships, bullets, bombs**: [Kenney.nl](https://kenney.nl/).
 - **Shields**: [Bonsaiheldin](http://bonsaiheld.org/).
 - **Gems (bonuses)**: [sunburn](https://opengameart.org/content/loot).

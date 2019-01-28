@@ -25,6 +25,7 @@
 ##
 
 from Engine.Core.Resources import Resources
+from Engine.Media.SpriteView import SpriteView
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import GetScreen
 from Engine.World.Utilities.Positioning import IsOutsideScreen
@@ -49,10 +50,10 @@ class Entity(Timed):
 		self._scene = scene
 		self._terminated = False
 
-		self._sprite = sprite
+		self._sprite = SpriteView(Resources().GetSprite(sprite))
 
 		self._position = Vector()
-		self._dimensions = Resources().GetSprite(self._sprite).GetDimensions()
+		self._dimensions = self._sprite.GetDimensions()
 
 	def GetPosition(self):
 
@@ -77,20 +78,20 @@ class Entity(Timed):
 		if not rectangle.colliderect(otherRectangle):
 			return False
 
-		mask = Resources().GetSprite(self._sprite).GetMask()
-		otherMask = Resources().GetSprite(other._sprite).GetMask()
+		mask = self._sprite.GetMask()
+		otherMask = other._sprite.GetMask()
 
 		offsetX = rectangle[0] - otherRectangle[0]
 		offsetY = rectangle[1] - otherRectangle[1]
 
 		return otherMask.overlap(mask, (offsetX, offsetY))
 
-	def ReplaceSprite(self, sprite):
+	def ReplaceSprite(self, sprite, loop = True):
 
-		self._sprite = sprite
+		self._sprite = SpriteView(Resources().GetSprite(sprite), loop)
 
 		self._position += self._dimensions // 2
-		self._dimensions = Resources().GetSprite(self._sprite).GetDimensions()
+		self._dimensions = self._sprite.GetDimensions()
 		self._position -= self._dimensions // 2
 
 	def SetPosition(self, position):
@@ -109,6 +110,7 @@ class Entity(Timed):
 
 	def Update(self, milisecondsPassed):
 
+		self._sprite.Update(milisecondsPassed)
 		self.UpdateTimers(milisecondsPassed)
 
 		if IsOutsideScreen(self._position, self._dimensions):
@@ -116,7 +118,7 @@ class Entity(Timed):
 
 	def Render(self):
 
-		Resources().GetSprite(self._sprite).Blit(GetScreen(), self._position)
+		self._sprite.Blit(GetScreen(), self._position)
 
 	def OnCollision(self, entity):
 
