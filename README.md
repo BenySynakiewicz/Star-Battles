@@ -1,10 +1,23 @@
-# Star Battles 1.0
+# Star Battles 1.1
 
 A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invaders), created for the purpose of learning the basics of the [pygame](https://www.pygame.org/) framework.
 
 ## Dependencies
 
 - **pygame** (pygame).
+
+## Changelog
+
+### Version 1.1
+
+- **TO-DO**: Animate the bomb explosions.
+- **TO-DO**: Add animated explosions of the enemy fighters.
+- **TO-DO**: Draw prettier energy bars.
+- **TO-DO**: Optimize collisions - implement collision groups.
+- **TO-DO**: Add bonuses (loot).
+- **TO-DO**: Add more types of enemies.
+- **TO-DO**: Add battle statistics.
+- **TO-DO**: Remember highscore**s**, not just the single highest score.
 
 ## Assets
 
