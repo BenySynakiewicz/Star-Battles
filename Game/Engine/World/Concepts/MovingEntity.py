@@ -41,6 +41,10 @@ class MovingEntity(Entity):
 		self._movementVector = movementVector
 		self._stopped = False
 
+	def SetMovementVector(self, movementVector):
+
+		self._movementVector = movementVector
+
 	def Update(self, milisecondsPassed):
 
 		super().Update(milisecondsPassed)

@@ -60,6 +60,7 @@ class Player(Entity):
 
 		self._bonuses = SimpleNamespace(
 			TripleShot = False,
+			TwoBombs = False,
 		)
 
 		self.__bombs = []
@@ -68,6 +69,12 @@ class Player(Entity):
 	def EnableTripleShotBonus(self):
 
 		self._bonuses.TripleShot = True
+		self._bonuses.TwoBombs = False
+
+	def EnableTwoBombsBonus(self):
+
+		self._bonuses.TripleShot = False
+		self._bonuses.TwoBombs = True
 
 	def ChangeBulletEnergy(self, change):
 
@@ -129,11 +136,31 @@ class Player(Entity):
 			if self.Energy.Bomb < 100:
 				return
 
-			bomb = Bomb(self._scene)
-			bomb.SetRelativePosition(self, AtTop)
+			if not self._bonuses.TwoBombs:
 
-			self.__bombs.append(bomb)
-			self._scene.AppendEntity(bomb)
+				bomb = Bomb(self._scene)
+				bomb.SetRelativePosition(self, AtTop)
+
+				self.__bombs.append(bomb)
+				self._scene.AppendEntity(bomb)
+
+			else:
+
+				leftBomb = Bomb(self._scene)
+				leftBomb.SetRelativePosition(self, AtTop)
+				leftBomb._position.X -= leftBomb.GetDimensions().X
+				leftBomb.SetMovementVector(Vector(-0.05, -Parameters.BombSpeed))
+
+				rightBomb = Bomb(self._scene)
+				rightBomb.SetRelativePosition(self, AtTop)
+				rightBomb._position.X += rightBomb.GetDimensions().X
+				rightBomb.SetMovementVector(Vector(+0.05, -Parameters.BombSpeed))
+
+				self.__bombs.append(leftBomb)
+				self.__bombs.append(rightBomb)
+
+				self._scene.AppendEntity(leftBomb)
+				self._scene.AppendEntity(rightBomb)
 
 			self.ChangeBombEnergy(-100)
 
@@ -166,7 +193,7 @@ class Player(Entity):
 
 	def OnCollision(self, entity):
 
-		if "TripleShotBonus" == type(entity).__name__:
+		if "TripleShotBonus" == type(entity).__name__ or "TwoBombsBonus" == type(entity).__name__:
 			return
 
 		if not self.ShieldIsUp:
