@@ -26,7 +26,6 @@
 
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
-from Engine.Utilities.Direction import Direction
 from Engine.Utilities.General import GetScreen
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.MovingEntity import MovingEntity
@@ -42,7 +41,7 @@ class Bomb(MovingEntity):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Bomb", Direction.Top, Parameters.BombSpeed)
+		super().__init__(scene, "Bomb", Vector(0, -Parameters.BombSpeed))
 
 		Resources().GetSound("Bomb").Play()
 

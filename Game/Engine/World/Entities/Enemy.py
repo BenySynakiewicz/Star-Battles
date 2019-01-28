@@ -27,9 +27,9 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Utilities.Direction import Direction
-from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import GetScreen, GetScreenDimensions
 from Engine.Utilities.General import Decision
+from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.MovingEntity import MovingEntity
 from Engine.World.Entities.Bullet import Bullet
 from Engine.World.Entities.TripleShotBonus import TripleShotBonus
@@ -47,7 +47,7 @@ class Enemy(MovingEntity):
 
 	def __init__(self, scene, verticalOffset, row, direction):
 
-		super().__init__(scene, "Enemy", direction, Parameters.EnemySpeed)
+		super().__init__(scene, "Enemy", Vector(+Parameters.EnemySpeed, 0) if Direction.Right == direction else Vector(-Parameters.EnemySpeed, 0))
 
 		self.Direction = direction
 

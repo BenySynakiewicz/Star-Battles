@@ -26,7 +26,7 @@
 
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
-from Engine.Utilities.Direction import Direction
+from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.MovingEntity import MovingEntity
 
 ##
@@ -39,7 +39,7 @@ class TripleShotBonus(MovingEntity):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Gem 1", Direction.Bottom, Parameters.BonusSpeed)
+		super().__init__(scene, "Gem 1", Vector(0, Parameters.BonusSpeed))
 
 	# Inherited methods.
 

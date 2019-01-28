@@ -43,6 +43,10 @@ class Vector:
 
 		return Vector(self.X - vector.X, self.Y - vector.Y)
 
+	def __mul__(self, scalar):
+
+		return Vector(self.X * scalar, self.Y * scalar)
+
 	def __floordiv__(self, scalar):
 
 		return Vector(self.X // scalar, self.Y // scalar)

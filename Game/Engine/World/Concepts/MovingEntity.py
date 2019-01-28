@@ -24,7 +24,6 @@
 #
 ##
 
-from Engine.Utilities.Direction import Direction
 from Engine.World.Concepts.Entity import Entity
 
 ##
@@ -35,12 +34,11 @@ from Engine.World.Concepts.Entity import Entity
 
 class MovingEntity(Entity):
 
-	def __init__(self, scene, sprite, direction, speed):
+	def __init__(self, scene, sprite, movementVector):
 
 		super().__init__(scene, sprite)
 
-		self._direction = direction
-		self._speed = speed
+		self._movementVector = movementVector
 		self._stopped = False
 
 	def Update(self, milisecondsPassed):
@@ -48,13 +46,7 @@ class MovingEntity(Entity):
 		super().Update(milisecondsPassed)
 
 		if not self._stopped:
-
-			distance = milisecondsPassed * self._speed
-
-			if   self._direction == Direction.Left  : self._position.X -= distance
-			elif self._direction == Direction.Top   : self._position.Y -= distance
-			elif self._direction == Direction.Right : self._position.X += distance
-			elif self._direction == Direction.Bottom: self._position.Y += distance
+			self._position += self._movementVector * milisecondsPassed
 
 	def StartMoving(self):
 

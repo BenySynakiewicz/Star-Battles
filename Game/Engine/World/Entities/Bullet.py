@@ -27,6 +27,7 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Utilities.Direction import Direction
+from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.MovingEntity import MovingEntity
 
 ##
@@ -42,8 +43,7 @@ class Bullet(MovingEntity):
 		super().__init__(
 			scene,
 			"Bullet (Green)" if Direction.Top == direction else "Bullet (Red)",
-			direction,
-			Parameters.BulletSpeed,
+			Vector(0, -Parameters.BulletSpeed) if Direction.Top == direction else Vector(0, +Parameters.BulletSpeed)
 		)
 
 		self._creator = creator
