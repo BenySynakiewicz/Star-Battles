@@ -34,6 +34,7 @@ from Engine.World.Concepts.MovingEntity import MovingEntity
 from Engine.World.Entities.Bullet import Bullet
 from Engine.World.Entities.TripleShotBonus import TripleShotBonus
 from Engine.World.Entities.TwoBombsBonus import TwoBombsBonus
+from Engine.World.Entities.QuickerShieldBonus import QuickerShieldBonus
 from Engine.World.Utilities.Positioning import AtBottom
 
 import pygame
@@ -102,6 +103,13 @@ class Enemy(MovingEntity):
 		elif Decision(Parameters.TwoBombsBonusProbability):
 
 			bonus = TwoBombsBonus(self._scene)
+			bonus.SetRelativePosition(self, AtBottom)
+	
+			self._scene.AppendEntity(bonus)
+
+		elif Decision(Parameters.QuickerShieldBonusProbability):
+
+			bonus = QuickerShieldBonus(self._scene)
 			bonus.SetRelativePosition(self, AtBottom)
 	
 			self._scene.AppendEntity(bonus)

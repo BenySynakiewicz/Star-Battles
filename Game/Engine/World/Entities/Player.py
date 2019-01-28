@@ -61,6 +61,7 @@ class Player(Entity):
 		self._bonuses = SimpleNamespace(
 			TripleShot = False,
 			TwoBombs = False,
+			QuickerShield = False,
 		)
 
 		self.__bombs = []
@@ -70,11 +71,19 @@ class Player(Entity):
 
 		self._bonuses.TripleShot = True
 		self._bonuses.TwoBombs = False
+		self._bonuses.QuickerShield = False
 
 	def EnableTwoBombsBonus(self):
 
 		self._bonuses.TripleShot = False
 		self._bonuses.TwoBombs = True
+		self._bonuses.QuickerShield = False
+
+	def EnableQuickerShieldBonus(self):
+
+		self._bonuses.TripleShot = False
+		self._bonuses.TwoBombs = False
+		self._bonuses.QuickerShield = True
 
 	def ChangeBulletEnergy(self, change):
 
@@ -177,7 +186,7 @@ class Player(Entity):
 
 		self.ChangeBulletEnergy(milisecondsPassed * Parameters.BulletEnergyRegeneration)
 		self.ChangeBombEnergy(milisecondsPassed * Parameters.BombEnergyRegeneration)
-		self.ChangeShieldEnergy(-(milisecondsPassed * Parameters.ShieldEnergyUsage) if self.ShieldIsUp else (milisecondsPassed * Parameters.ShieldEnergyRegeneration))
+		self.ChangeShieldEnergy(-(milisecondsPassed * (Parameters.ShieldEnergyUsage if not self._bonuses.QuickerShield else Parameters.LowerShieldEnergyUsage)) if self.ShieldIsUp else (milisecondsPassed * Parameters.ShieldEnergyRegeneration))
 
 		if not self.Energy.Shield:
 			self.ShieldIsUp = False
@@ -193,7 +202,7 @@ class Player(Entity):
 
 	def OnCollision(self, entity):
 
-		if "TripleShotBonus" == type(entity).__name__ or "TwoBombsBonus" == type(entity).__name__:
+		if "TripleShotBonus" == type(entity).__name__ or "TwoBombsBonus" == type(entity).__name__ or "QuickerShieldBonus" == type(entity).__name__:
 			return
 
 		if not self.ShieldIsUp:
