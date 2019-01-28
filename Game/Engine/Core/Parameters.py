@@ -57,7 +57,7 @@ Parameters = SimpleNamespace(
 	EnemySpeed = 0.200,
 	BonusSpeed = 0.300,
 
-	TripleShotBonusProbability = 0.03
+	TripleShotBonusProbability = 0.03,
 
 	BulletEnergyRegeneration = 0.225,
 	BombEnergyRegeneration = 0.020,
