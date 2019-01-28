@@ -34,6 +34,7 @@ from Engine.Utilities.Direction import Direction
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import GetScreen, GetScreenDimensions
 
+from copy import copy
 from types import SimpleNamespace
 
 from numpy import clip
@@ -55,6 +56,10 @@ class Player(Entity):
 			Bullet = 0,
 			Bomb = 0,
 			Shield = 0,
+		)
+
+		self._bonuses = SimpleNamespace(
+			TripleShot = False,
 		)
 
 		self.Bomb = None
@@ -87,10 +92,30 @@ class Player(Entity):
 		if self.Energy.Bullet < 100:
 			return
 
-		bullet = Bullet(self._scene, "Player", Direction.Top)
-		bullet._position = AtTop(self._position, self._dimensions, bullet._dimensions)
+		if not self._bonuses.TripleShot:
 
-		self._scene.AppendEntity(bullet)
+			bullet = Bullet(self._scene, "Player", Direction.Top)
+			bullet.SetRelativePosition(self, AtTop)
+
+			self._scene.AppendEntity(bullet)
+
+		else:
+
+			centerBullet = Bullet(self._scene, "Player", Direction.Top)
+			centerBullet.SetRelativePosition(self, AtTop)
+
+			leftBullet = Bullet(self._scene, "Player", Direction.Top)
+			leftBullet.SetPosition(centerBullet.GetPosition())
+			leftBullet._position.X -= Parameters.MediumMargin + leftBullet.GetDimensions().X
+
+			rightBullet = Bullet(self._scene, "Player", Direction.Top)
+			rightBullet.SetPosition(centerBullet.GetPosition())
+			rightBullet._position.X += centerBullet.GetDimensions().X + Parameters.MediumMargin
+
+			self._scene.AppendEntity(centerBullet)
+			self._scene.AppendEntity(leftBullet)
+			self._scene.AppendEntity(rightBullet)
+
 		self.ChangeBulletEnergy(-100)
 
 	def ShootBomb(self):

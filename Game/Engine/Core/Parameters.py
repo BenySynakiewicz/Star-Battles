@@ -46,6 +46,7 @@ Parameters = SimpleNamespace(
 	HighscoreFilePath = Path("Highscore.txt"),
 
 	SmallMargin = 4,
+	MediumMargin = 8,
 	Margin = 12,
 
 	BarHeight = 12,

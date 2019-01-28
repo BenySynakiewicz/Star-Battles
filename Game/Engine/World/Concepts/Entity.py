@@ -30,6 +30,8 @@ from Engine.Utilities.General import GetScreen
 from Engine.World.Utilities.Positioning import IsOutsideScreen
 from Engine.World.Utilities.Timed import Timed
 
+from copy import copy
+
 from pygame import Rect
 
 ##
@@ -93,7 +95,7 @@ class Entity(Timed):
 
 	def SetPosition(self, position):
 
-		self._position = position
+		self._position = copy(position)
 
 	def SetRelativePosition(self, entity, relation):
 
