@@ -5,6 +5,7 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 ## Dependencies
 
 - **pygame** (pygame).
+- **NumPy** (numpy).
 
 ## Changelog
 
@@ -39,4 +40,4 @@ The one and only font used by Star Battles is [Roboto Condensed](https://fonts.g
 
 ## Notes
 
-Tested in **Python 3.7.2**, with **pygame 1.9.4**.
+Tested with **Python 3.7.2**, **pygame 1.9.4** and **NumPy 1.16.0**.
