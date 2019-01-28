@@ -127,10 +127,12 @@ class Player(Entity):
 			leftBullet = Bullet(self._scene, "Player", Direction.Top)
 			leftBullet.SetPosition(centerBullet.GetPosition())
 			leftBullet._position.X -= Parameters.MediumMargin + leftBullet.GetDimensions().X
+			leftBullet.SetMovementVector(leftBullet.GetMovementVector() + Vector(-Parameters.SmallTrajectoryDeviation, 0))
 
 			rightBullet = Bullet(self._scene, "Player", Direction.Top)
 			rightBullet.SetPosition(centerBullet.GetPosition())
 			rightBullet._position.X += centerBullet.GetDimensions().X + Parameters.MediumMargin
+			rightBullet.SetMovementVector(rightBullet.GetMovementVector() + Vector(+Parameters.SmallTrajectoryDeviation, 0))
 
 			self._scene.AppendEntity(centerBullet)
 			self._scene.AppendEntity(leftBullet)
@@ -158,12 +160,12 @@ class Player(Entity):
 				leftBomb = Bomb(self._scene)
 				leftBomb.SetRelativePosition(self, AtTop)
 				leftBomb._position.X -= leftBomb.GetDimensions().X
-				leftBomb.SetMovementVector(Vector(-0.05, -Parameters.BombSpeed))
+				leftBomb.SetMovementVector(Vector(-Parameters.BigTrajectoryDeviation, -Parameters.BombSpeed))
 
 				rightBomb = Bomb(self._scene)
 				rightBomb.SetRelativePosition(self, AtTop)
 				rightBomb._position.X += rightBomb.GetDimensions().X
-				rightBomb.SetMovementVector(Vector(+0.05, -Parameters.BombSpeed))
+				rightBomb.SetMovementVector(Vector(+Parameters.BigTrajectoryDeviation, -Parameters.BombSpeed))
 
 				self.__bombs.append(leftBomb)
 				self.__bombs.append(rightBomb)

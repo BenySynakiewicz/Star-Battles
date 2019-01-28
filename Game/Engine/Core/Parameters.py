@@ -57,6 +57,9 @@ Parameters = SimpleNamespace(
 	EnemySpeed = 0.200,
 	BonusSpeed = 0.300,
 
+	SmallTrajectoryDeviation = 0.03,
+	BigTrajectoryDeviation = 0.06,
+
 	TripleShotBonusProbability = 0.030,
 	TwoBombsBonusProbability = 0.003,
 	QuickerShieldBonusProbability = 0.006,

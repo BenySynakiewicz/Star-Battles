@@ -41,6 +41,10 @@ class MovingEntity(Entity):
 		self._movementVector = movementVector
 		self._stopped = False
 
+	def GetMovementVector(self):
+
+		return self._movementVector
+
 	def SetMovementVector(self, movementVector):
 
 		self._movementVector = movementVector
