@@ -62,7 +62,7 @@ class Player(Entity):
 			TripleShot = False,
 		)
 
-		self.Bomb = None
+		self.__bombs = []
 		self.ShieldIsUp = False
 
 	def EnableTripleShotBonus(self):
@@ -124,20 +124,23 @@ class Player(Entity):
 
 	def ShootBomb(self):
 
-		if not self.Bomb:
+		if not self.__bombs:
 
-			if self.Energy.Bomb < 100 or self.Bomb:
+			if self.Energy.Bomb < 100:
 				return
 
-			self.Bomb = Bomb(self._scene)
-			self.Bomb._position = AtTop(self._position, self._dimensions, self.Bomb._dimensions)
+			bomb = Bomb(self._scene)
+			bomb.SetRelativePosition(self, AtTop)
 
-			self._scene.AppendEntity(self.Bomb)
+			self.__bombs.append(bomb)
+			self._scene.AppendEntity(bomb)
+
 			self.ChangeBombEnergy(-100)
 
 		else:
 
-			self.Bomb.Explode()
+			for bomb in self.__bombs:
+				bomb.Explode()
 
 	# Inherited methods.
 
@@ -152,8 +155,7 @@ class Player(Entity):
 		if not self.Energy.Shield:
 			self.ShieldIsUp = False
 
-		if self.Bomb and self.Bomb._terminated:
-			self.Bomb = None
+		self.__bombs[:] = filter(lambda x: not x._terminated, self.__bombs)
 
 	def Render(self):
 
