@@ -12,11 +12,11 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 ### Version 1.1
 
 - Bomb explosions are now animated.
+- Enemy destruction is now animated.
 - Added bonuses (loot from enemies).
 
 ### *TO-DO*s
 
-- **TO-DO**: Add animated explosions of the enemy fighters.
 - **TO-DO**: Draw prettier energy bars.
 - **TO-DO**: Optimize collisions - implement collision groups.
 - **TO-DO**: Add more types of enemies.

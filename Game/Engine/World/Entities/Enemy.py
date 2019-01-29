@@ -59,6 +59,21 @@ class Enemy(MovingEntity):
 		self.AppendTimer("Shot")
 		self.DestroyedByPlayer = False
 
+		self._isDestroyed = False
+
+	def Destroy(self):
+
+		if self._isDestroyed:
+			return
+
+		self.ReplaceSprite("Small Explosion", False)
+		Resources().GetSound("Destruction").Play()
+
+		self.AppendTimer("Destruction")
+
+		self.DestroyedByPlayer = True
+		self._isDestroyed = True
+
 	def Shoot(self):
 
 		bullet = Bullet(self._scene, "Enemy", Direction.Bottom)
@@ -74,7 +89,10 @@ class Enemy(MovingEntity):
 
 		super().Update(milisecondsPassed)
 
-		if Decision(self.GetTimer("Shot") / 200000):
+		if self._isDestroyed and self._sprite.IsFinished():
+			self.Terminate()
+
+		if not self._isDestroyed and Decision(self.GetTimer("Shot") / 200000):
 			self.Shoot()
 
 	def OnCollision(self, entity):
@@ -82,10 +100,7 @@ class Enemy(MovingEntity):
 		if "Bullet" == type(entity).__name__ and "Enemy" == entity.GetCreator():
 			return
 
-		self.Terminate()
-		self.DestroyedByPlayer = True
-
-		Resources().GetSound("Destruction").Play()
+		self.Destroy()
 
 	def OnTermination(self):
 

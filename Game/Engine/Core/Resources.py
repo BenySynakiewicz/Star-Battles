@@ -65,7 +65,6 @@ class Resources(metaclass = Singleton):
 			"Gem 3"         : Sprite(["Resources/Images/Gem 3.png"]         , True),
 
 			"Explosion"     : Sprite([
-				# "Resources/Images/Explosion.png",
 				"Resources/Images/Explosion 1.png",
 				"Resources/Images/Explosion 2.png",
 				"Resources/Images/Explosion 3.png",
@@ -81,6 +80,24 @@ class Resources(metaclass = Singleton):
 				"Resources/Images/Explosion 13.png",
 				"Resources/Images/Explosion 14.png",
 				"Resources/Images/Explosion 15.png",
+			]),
+
+			"Small Explosion"     : Sprite([
+				"Resources/Images/Small Explosion 1.png",
+				"Resources/Images/Small Explosion 2.png",
+				"Resources/Images/Small Explosion 3.png",
+				"Resources/Images/Small Explosion 4.png",
+				"Resources/Images/Small Explosion 5.png",
+				"Resources/Images/Small Explosion 6.png",
+				"Resources/Images/Small Explosion 7.png",
+				"Resources/Images/Small Explosion 8.png",
+				"Resources/Images/Small Explosion 9.png",
+				"Resources/Images/Small Explosion 10.png",
+				"Resources/Images/Small Explosion 11.png",
+				"Resources/Images/Small Explosion 12.png",
+				"Resources/Images/Small Explosion 13.png",
+				"Resources/Images/Small Explosion 14.png",
+				"Resources/Images/Small Explosion 15.png",
 			]),
 
 		}

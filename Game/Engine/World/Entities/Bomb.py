@@ -66,7 +66,7 @@ class Bomb(MovingEntity):
 
 		super().Update(milisecondsPassed)
 
-		if self._exploded and self._sprite.IsFinished():#self.GetTimer("Explosion") > 1000:
+		if self._exploded and self._sprite.IsFinished():
 			self.Terminate()
 
 	def Render(self):
