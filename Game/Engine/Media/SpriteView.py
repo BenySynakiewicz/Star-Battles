@@ -41,10 +41,10 @@ class SpriteView:
 	def __init__(self, sprite, loop = True):
 
 		self._sprite = sprite
+		self._loop = loop
 
 		self._frame = 0
 		self._timeSincePreviousFrame = 0
-		self._loop = loop
 
 	def GetDimensions(self):
 
@@ -68,7 +68,7 @@ class SpriteView:
 			return
 
 		self._timeSincePreviousFrame += milisecondsPassed
-		framesPassed = self._timeSincePreviousFrame / (1000 / 30)
+		framesPassed = self._timeSincePreviousFrame / (1000 / self._sprite.GetFramesPerSecond())
 
 		if framesPassed < 1:
 			return

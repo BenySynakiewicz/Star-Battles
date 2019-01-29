@@ -43,6 +43,8 @@ class Sprite:
 		self._masks = [mask.from_surface(surface) for surface in self._surfaces]
 		self._shadows = None
 
+		self._framesPerSecond = 30
+
 		if shadows:
 			self.CreateShadow()
 
@@ -54,9 +56,7 @@ class Sprite:
 		self._shadows = [surface.copy() for surface in self._surfaces]
 
 		for shadow in self._shadows:
-
-			shadowPixelData = surfarray.pixels3d(shadow)
-			shadowPixelData[:] = 0
+			surfarray.pixels3d(shadow)[:] = 0
 		
 	def GetDimensions(self):
 
@@ -69,6 +69,10 @@ class Sprite:
 	def GetFrameCount(self):
 
 		return len(self._surfaces)
+
+	def GetFramesPerSecond(self):
+
+		return self._framesPerSecond
 
 	def Blit(self, frame, surface, position):
 
