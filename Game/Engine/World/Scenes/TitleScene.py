@@ -46,7 +46,7 @@ class TitleScene(Scene):
 		super().__init__("Background")
 
 		self._title = RenderText(Parameters.Name, Resources().GetFont("Title"))
-		self._message = RenderText("Press any key to begin the game", Resources().GetFont("Big"))
+		self._message = RenderText("Press any key to begin the game.", Resources().GetFont("Big"))
 		self._creator = RenderText(f"Created by {Parameters.Creator}", Resources().GetFont("Medium"))
 		self._version = RenderText(f"Version {Parameters.Version}", Resources().GetFont("Medium"))
 		self._instruction = RenderText(
