@@ -46,7 +46,4 @@ class QuickerShieldBonus(MovingEntity):
 	def OnCollision(self, entity):
 
 		if "Player" == type(entity).__name__:
-
-			entity.EnableQuickerShieldBonus()
-
 			self.Terminate()

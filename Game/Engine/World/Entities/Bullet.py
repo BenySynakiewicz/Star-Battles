@@ -58,5 +58,7 @@ class Bullet(MovingEntity):
 
 	def OnCollision(self, entity):
 
-		if not "Enemy" == type(entity).__name__ == self._creator:
-			self._terminated = True
+		if "Enemy" == type(entity).__name__ and "Enemy" == self.GetCreator():
+			return
+
+		self.Terminate()

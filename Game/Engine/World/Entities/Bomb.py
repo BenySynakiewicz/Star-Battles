@@ -82,5 +82,7 @@ class Bomb(MovingEntity):
 
 	def OnCollision(self, entity):
 
-		if "Bullet" != type(entity).__name__:
-			self.Explode()
+		if "Bullet" == type(entity).__name__:
+			return
+
+		self.Explode()

@@ -204,11 +204,18 @@ class Player(Entity):
 
 	def OnCollision(self, entity):
 
-		if "TripleShotBonus" == type(entity).__name__ or "TwoBombsBonus" == type(entity).__name__ or "QuickerShieldBonus" == type(entity).__name__:
+		if "TripleShotBonus" == type(entity).__name__:
+			self.EnableTripleShotBonus()
+			return
+		elif "TwoBombsBonus" == type(entity).__name__:
+			self.EnableTwoBombsBonus()
+			return
+		elif "QuickerShieldBonus" == type(entity).__name__:
+			self.EnableQuickerShieldBonus()
 			return
 
 		if not self.ShieldIsUp:
 			Resources().GetSound("Destruction").Play()
-			self._terminated = True
+			self.Terminate()
 		else:
 			Resources().GetSound("Shield").Play()

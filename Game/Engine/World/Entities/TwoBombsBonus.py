@@ -46,7 +46,4 @@ class TwoBombsBonus(MovingEntity):
 	def OnCollision(self, entity):
 
 		if "Player" == type(entity).__name__:
-
-			entity.EnableTwoBombsBonus()
-
 			self.Terminate()
