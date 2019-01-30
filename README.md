@@ -2,11 +2,6 @@
 
 A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invaders), created for the purpose of learning the basics of the [pygame](https://www.pygame.org/) framework.
 
-## Dependencies
-
-- **pygame** (pygame).
-- **NumPy** (numpy).
-
 ## Changelog
 
 ### Version 1.1
@@ -14,10 +9,11 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 - Bomb explosions are now animated.
 - Enemy destruction is now animated.
 - Added bonuses (loot from enemies).
+- Added the option to restart the game after the final scene.
 
 ### *TO-DO*s
 
-- **TO-DO**: Draw prettier energy bars.
+- **TO-DO**: Make energy bars prettier.
 - **TO-DO**: Optimize collisions - implement collision groups.
 - **TO-DO**: Add more types of enemies.
 - **TO-DO**: Add battle statistics.
@@ -28,7 +24,7 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 ### Images
 
 - **Background**: [www.GodsAndIdols.com](https://www.GodsAndIdols.com).
-- **Explosions**: [Skorpio](https://opengameart.org/content/sci-fi-effects)
+- **Explosions**: [Skorpio](https://opengameart.org/content/sci-fi-effects).
 - **Player's ship, enemies' ships, bullets, bombs**: [Kenney.nl](https://kenney.nl/).
 - **Shields**: [Bonsaiheldin](http://bonsaiheld.org/).
 - **Gems (bonuses)**: [sunburn](https://opengameart.org/content/loot).
