@@ -71,3 +71,7 @@ class State(metaclass = Singleton):
 		self._currentScore += change
 
 		return self._currentScore
+
+	def ClearCurrentScore(self):
+
+		self._currentScore = 0

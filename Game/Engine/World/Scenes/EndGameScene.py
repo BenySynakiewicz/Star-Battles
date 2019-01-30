@@ -27,9 +27,11 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Core.State import State
-from Engine.World.Concepts.Scene import Scene
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import Blit, GetDimensions, GetScreen, RenderText
+from Engine.World.Concepts.Scene import Scene
+
+from pygame import KEYDOWN, K_SPACE
 
 ##
 #
@@ -56,7 +58,20 @@ class EndGameScene(Scene):
 			f"You've beaten your previous record of {highestScore} points!",
 			Resources().GetFont("Big")
 		)
-		self._instruction = RenderText("Press the ESC key to quit the game.", Resources().GetFont("Medium"))
+		self._instruction = RenderText(
+			"Press the SPACE key to start the game one more time." "\n"
+			"Press the ESC key to quit the game.",
+			Resources().GetFont("Medium")
+		)
+
+	# Inherited methods.
+
+	def React(self, events, keys):
+
+		for event in [event for event in events if KEYDOWN == event.type]:
+
+			if K_SPACE == event.key:
+				self._nextScene = None#TitleScene()
 
 	def Render(self):
 

@@ -26,6 +26,7 @@
 
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
+from Engine.Core.State import State
 from Engine.World.Concepts.Scene import Scene
 from Engine.World.Scenes.BattleScene import BattleScene
 from Engine.Utilities.Vector import Vector
@@ -44,6 +45,8 @@ class TitleScene(Scene):
 	def __init__(self):
 
 		super().__init__("Background")
+
+		State().ClearCurrentScore()
 
 		self._title = RenderText(Parameters.Name, Resources().GetFont("Title"))
 		self._message = RenderText("Press any key to begin the game.", Resources().GetFont("Big"))

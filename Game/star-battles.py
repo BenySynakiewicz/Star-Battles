@@ -27,6 +27,8 @@
 from Engine.Core.Parameters import Parameters
 from Engine.World.Scenes.TitleScene import TitleScene
 
+from sys import exit
+
 from pygame import(
 	display, event, font, key, mixer, mouse, time,
 	DOUBLEBUF, FULLSCREEN, HWSURFACE, K_ESCAPE, KEYDOWN, QUIT,
@@ -69,10 +71,13 @@ while True:
 	keys = key.get_pressed()
 
 	if any(QUIT == event.type or (KEYDOWN == event.type and K_ESCAPE == event.key) for event in events):
-		break
+		exit()
 
 	scene.Execute(events, keys, timeSincePreviousFrame)
+
 	scene = scene._nextScene
+	if not scene:
+		scene = TitleScene()
 
 	display.flip()
 
