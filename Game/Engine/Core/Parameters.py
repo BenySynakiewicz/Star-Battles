@@ -53,7 +53,7 @@ Parameters = SimpleNamespace(
 	ShadowDistance = Vector(3, 3),
 
 	BulletSpeed = 0.300,
-	BombSpeed = 0.300,
+	BombSpeed = 0.250,
 	EnemySpeed = 0.200,
 	BonusSpeed = 0.300,
 
@@ -65,7 +65,7 @@ Parameters = SimpleNamespace(
 	QuickerShieldBonusProbability = 0.006,
 
 	BulletEnergyRegeneration = 0.225,
-	BombEnergyRegeneration = 0.020,
+	BombEnergyRegeneration = 0.015,
 	ShieldEnergyRegeneration = 0.025,
 	ShieldEnergyUsage = 0.050,
 	LowerShieldEnergyUsage = 0.025,
