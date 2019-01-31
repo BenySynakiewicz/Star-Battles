@@ -18,6 +18,11 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 - **TO-DO**: Add more types of enemies.
 - **TO-DO**: Add battle statistics.
 - **TO-DO**: Remember highscore**s**, not just the single highest score.
+- **TO-DO**: Add animated backgrounds.
+- **TO-DO**: Make enemies move more creatively.
+- **TO-DO**: Idea: shielded enemies with health bars.
+- **TO-DO**: Idea: liberating allies from captivity.
+- **TO-DO**: Idea: enemies dropping Cargo (points).
 
 ## Assets
 
