@@ -9,6 +9,7 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 ### Version 1.2
 
 - Improved and optimized collisions.
+- Made shields impossible to penetrate by anthing (bonuses included).
 - Minor visual improvements.
 
 ### Version 1.1

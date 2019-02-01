@@ -210,6 +210,10 @@ class Player(Node):
 
 	def OnCollision(self, node):
 
+		if self.ShieldIsUp:
+			Resources().GetSound("Shield").Play()
+			return
+
 		if "TripleShotBonus" == type(node).__name__:
 			self.EnableTripleShotBonus()
 			return
@@ -222,8 +226,5 @@ class Player(Node):
 		elif "Cargo" == type(node).__name__:
 			return
 
-		if not self.ShieldIsUp:
-			Resources().GetSound("Destruction").Play()
-			self.Terminate()
-		else:
-			Resources().GetSound("Shield").Play()
+		Resources().GetSound("Destruction").Play()
+		self.Terminate()
