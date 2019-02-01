@@ -36,7 +36,7 @@ from pygame import image, mask, surfarray
 #
 ##
 
-class SpriteView:
+class SpriteInstance:
 
 	def __init__(self, sprite, loop = True):
 

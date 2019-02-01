@@ -25,7 +25,7 @@
 ##
 
 from Engine.Core.Resources import Resources
-from Engine.Media.SpriteView import SpriteView
+from Engine.Media.SpriteInstance import SpriteInstance
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import GetScreen
 from Engine.World.Utilities.Positioning import IsOutsideScreen
@@ -50,7 +50,7 @@ class Entity(Timed):
 		self._scene = scene
 		self._terminated = False
 
-		self._sprite = SpriteView(Resources().GetSprite(sprite))
+		self._sprite = SpriteInstance(Resources().GetSprite(sprite))
 
 		self._position = Vector()
 		self._dimensions = self._sprite.GetDimensions()
@@ -88,7 +88,7 @@ class Entity(Timed):
 
 	def ReplaceSprite(self, sprite, loop = True):
 
-		self._sprite = SpriteView(Resources().GetSprite(sprite), loop)
+		self._sprite = SpriteInstance(Resources().GetSprite(sprite), loop)
 
 		self._position += self._dimensions // 2
 		self._dimensions = self._sprite.GetDimensions()
