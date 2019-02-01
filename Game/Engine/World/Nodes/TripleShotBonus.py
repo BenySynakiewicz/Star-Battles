@@ -39,7 +39,7 @@ class TripleShotBonus(MovingNode):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Gem 1", Vector(0, Parameters.BonusSpeed))
+		super().__init__(scene, "Gem 1", Vector(0, Parameters.BonusSpeed), 2)
 
 	# Inherited methods.
 

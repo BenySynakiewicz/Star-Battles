@@ -43,7 +43,7 @@ from pygame import Rect
 
 class Node(Timed):
 
-	def __init__(self, scene, sprite):
+	def __init__(self, scene, sprite, zIndex = 0):
 
 		super().__init__()
 
@@ -51,6 +51,7 @@ class Node(Timed):
 		self._terminated = False
 
 		self._sprite = SpriteInstance(Resources().GetSprite(sprite))
+		self._zIndex = zIndex
 
 		self._position = Vector()
 		self._dimensions = self._sprite.GetDimensions()

@@ -48,6 +48,7 @@ class Scene(Timed):
 	def AppendNode(self, node):
 
 		self._nodes.append(node)
+		self._nodes.sort(key = lambda x: x._zIndex)
 
 	def React(self, events, keys):
 

@@ -50,7 +50,7 @@ class Player(Node):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Player")
+		super().__init__(scene, "Player", 1)
 
 		self.Energy = SimpleNamespace(
 			Bullet = 0,

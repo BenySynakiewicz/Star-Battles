@@ -34,9 +34,9 @@ from Engine.World.Concepts.Node import Node
 
 class MovingNode(Node):
 
-	def __init__(self, scene, sprite, movementVector):
+	def __init__(self, scene, sprite, movementVector, zIndex = 0):
 
-		super().__init__(scene, sprite)
+		super().__init__(scene, sprite, zIndex)
 
 		self._movementVector = movementVector
 		self._stopped = False

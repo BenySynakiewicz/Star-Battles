@@ -49,7 +49,7 @@ class Enemy(MovingNode):
 
 	def __init__(self, scene, verticalOffset, row, direction):
 
-		super().__init__(scene, "Enemy", Vector(+Parameters.EnemySpeed, 0) if Direction.Right == direction else Vector(-Parameters.EnemySpeed, 0))
+		super().__init__(scene, "Enemy", Vector(+Parameters.EnemySpeed, 0) if Direction.Right == direction else Vector(-Parameters.EnemySpeed, 0), 1)
 
 		self.Direction = direction
 
