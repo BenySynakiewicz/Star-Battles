@@ -49,6 +49,10 @@ class MovingNode(Node):
 
 		self._movementVector = movementVector
 
+	def SetRotationToMovementVector(self):
+
+		self.SetRotation(self._movementVector.GetAngle())
+
 	def Update(self, milisecondsPassed):
 
 		super().Update(milisecondsPassed)

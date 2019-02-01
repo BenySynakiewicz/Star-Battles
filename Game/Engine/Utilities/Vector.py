@@ -20,6 +20,14 @@
 
 ##
 #
+# Imports.
+#
+##
+
+from math import atan2
+
+##
+#
 # The main class.
 #
 ##
@@ -30,6 +38,15 @@ class Vector:
 
 		self.X = x
 		self.Y = y
+
+	def GetAngle(self):
+
+		vector = Vector(0, 1)
+
+		dotProduct = vector.X * self.X + vector.Y * self.Y
+		determinant = vector.X * self.Y - vector.Y * self.X
+
+		return atan2(determinant, dotProduct)
 
 	def __iter__(self):
 

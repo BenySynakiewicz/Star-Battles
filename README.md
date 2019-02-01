@@ -6,6 +6,10 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 
 ## Changelog
 
+### Version 1.2
+
+- Minor visual improvements.
+
 ### Version 1.1
 
 - Bomb explosions are now animated.

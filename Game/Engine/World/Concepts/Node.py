@@ -64,6 +64,10 @@ class Node(Timed):
 
 		return self._dimensions
 
+	def GetSpriteInstance(self):
+
+		return self._sprite
+
 	def IsTerminated(self):
 
 		return self._terminated
@@ -102,6 +106,10 @@ class Node(Timed):
 	def SetRelativePosition(self, node, relation):
 
 		self._position = relation(node._position, node._dimensions, self._dimensions)
+
+	def SetRotation(self, angle):
+
+		self._sprite.SetRotation(angle)
 
 	def Terminate(self):
 
