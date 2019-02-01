@@ -76,17 +76,23 @@ class Player(Node):
 		self._bonuses.TwoBombs = False
 		self._bonuses.QuickerShield = False
 
+		self._scene.UpdateBonusDescriptionText()
+
 	def EnableTwoBombsBonus(self):
 
 		self._bonuses.TripleShot = False
 		self._bonuses.TwoBombs = True
 		self._bonuses.QuickerShield = False
 
+		self._scene.UpdateBonusDescriptionText()
+
 	def EnableQuickerShieldBonus(self):
 
 		self._bonuses.TripleShot = False
 		self._bonuses.TwoBombs = False
 		self._bonuses.QuickerShield = True
+
+		self._scene.UpdateBonusDescriptionText()
 
 	def ChangeBulletEnergy(self, change):
 

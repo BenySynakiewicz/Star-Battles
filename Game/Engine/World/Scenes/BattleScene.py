@@ -52,7 +52,11 @@ class BattleScene(Scene):
 
 		super().__init__("Background")
 
-		self.ScoreText = None
+		# Initialize texts.
+
+		self._scoreText = None
+		self._bonusDescriptionText = None
+
 		self.UpdateScoreText()
 
 		# Initialize the player.
@@ -60,10 +64,12 @@ class BattleScene(Scene):
 		self.Player = Player(self)
 
 		screenDimensions = GetScreenDimensions()
+		topRightCornerPosition = screenDimensions - self.Player.GetDimensions()
+
 		self.Player._position = Vector(
 
-			(screenDimensions.X - self.Player.GetDimensions().X) / 2,
-			(screenDimensions.Y - self.Player.GetDimensions().Y - 2 * Parameters.Margin - Parameters.BarHeight),
+			topRightCornerPosition.X / 2,
+			topRightCornerPosition.Y - 2 * Parameters.Margin - Parameters.BarHeight,
 
 		)
 
@@ -72,12 +78,25 @@ class BattleScene(Scene):
 
 	def UpdateScoreText(self):
 
-		self.ScoreText = RenderText(f"{State().GetCurrentScore()} points", Resources().GetFont("Medium"))
+		self._scoreText = RenderText(f"{State().GetCurrentScore()} points", Resources().GetFont("Medium"))
+
+	def UpdateBonusDescriptionText(self):
+
+		if self.Player._bonuses.TripleShot:
+			description = "TRIPLE SHOT bonus is active"
+		elif self.Player._bonuses.TwoBombs:
+			description = "TWO BOMBS bonus is active"
+		elif self.Player._bonuses.QuickerShield:
+			description = "QUICKER SHIELD bonus is active"
+		else:
+			description = None
+
+		self._bonusDescriptionText = RenderText(description, Resources().GetFont("Medium")) if description else None
 
 	def SpawnEnemies(self):
 
 		currentScore = State().GetCurrentScore()
-		verticalOffset = 2 * Parameters.Margin + GetDimensions(self.ScoreText).Y
+		verticalOffset = 2 * Parameters.Margin + GetDimensions(self._scoreText).Y
 
 		# In the first row...
 
@@ -191,7 +210,10 @@ class BattleScene(Scene):
 
 		# Draw the score.
 
-		Blit(screen, self.ScoreText, Vector(Parameters.Margin, Parameters.Margin))
+		Blit(screen, self._scoreText, Vector(Parameters.Margin, Parameters.Margin))
+
+		if self._bonusDescriptionText:
+			Blit(screen, self._bonusDescriptionText, Vector(screenDimensions.X - Parameters.Margin - GetDimensions(self._bonusDescriptionText).X, Parameters.Margin))
 
 		# Calculate the bar dimensions.
 

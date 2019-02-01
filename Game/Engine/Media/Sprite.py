@@ -55,7 +55,11 @@ class Sprite:
 		if self._shadows:
 			return
 
-		self._shadows = [surface.copy() for surface in self._surfaces]
+		shadowDimensions = self.GetDimensions() * 1.025
+		shadowDimensions.X = int(shadowDimensions.X)
+		shadowDimensions.Y = int(shadowDimensions.Y)
+
+		self._shadows = [transform.smoothscale(surface, tuple(shadowDimensions)) for surface in self._surfaces]
 
 		for shadow in self._shadows:
 			surfarray.pixels3d(shadow)[:] = 0
