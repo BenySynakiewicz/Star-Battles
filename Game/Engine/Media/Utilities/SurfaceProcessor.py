@@ -26,13 +26,21 @@
 
 from Engine.Utilities.General import GetDimensions
 
-from pygame import transform
+from numpy import mean
+from pygame import surfarray, transform
 
 ##
 #
 # Functions.
 #
 ##
+
+def Desaturate(surface):
+
+	pixelData = surfarray.array3d(surface)
+	pixelData = pixelData.dot([0.298, 0.587, 0.114])[:, :, None].repeat(3, axis = 2)
+
+	return surfarray.make_surface(pixelData)
 
 def InterpolateToDimensions(surface, dimensions):
 

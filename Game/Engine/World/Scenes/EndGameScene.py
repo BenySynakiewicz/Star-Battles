@@ -43,7 +43,7 @@ class EndGameScene(Scene):
 
 	def __init__(self):
 
-		super().__init__("Background")
+		super().__init__("Screenshot")
 
 		State().SaveToFile()
 

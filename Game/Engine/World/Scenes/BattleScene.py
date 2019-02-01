@@ -27,6 +27,7 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Core.State import State
+from Engine.Media.Utilities.SurfaceProcessor import Desaturate
 from Engine.World.Concepts.Scene import Scene
 from Engine.World.Nodes.Effects.AbsorptionEffect import AbsorptionEffect
 from Engine.World.Nodes.Player import Player
@@ -150,6 +151,7 @@ class BattleScene(Scene):
 		# Finish the game if the player has been destroyed.
 
 		if self.Player._terminated:
+			Resources()._backgrounds["Screenshot"] = Desaturate(GetScreen())
 			self._nextScene = EndGameScene()
 			return
 
