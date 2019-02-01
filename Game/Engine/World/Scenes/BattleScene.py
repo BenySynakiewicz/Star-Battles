@@ -28,6 +28,7 @@ from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Core.State import State
 from Engine.World.Concepts.Scene import Scene
+from Engine.World.Nodes.Effects.AbsorptionEffect import AbsorptionEffect
 from Engine.World.Nodes.Player import Player
 from Engine.World.Nodes.Enemy import Enemy
 from Engine.World.Scenes.EndGameScene import EndGameScene

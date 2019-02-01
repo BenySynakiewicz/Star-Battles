@@ -27,6 +27,7 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.World.Concepts.Node import Node
+from Engine.World.Nodes.Effects.AbsorptionEffect import AbsorptionEffect
 from Engine.World.Nodes.Bomb import Bomb
 from Engine.World.Nodes.BulletFromPlayer import BulletFromPlayer
 from Engine.World.Utilities.Positioning import AtTop
@@ -209,6 +210,10 @@ class Player(Node):
 			Resources().GetSprite("Shield").Blit(0, GetScreen(), self._position - Vector(15, 15))
 
 	def OnCollision(self, node):
+
+		absorptionEffect = AbsorptionEffect(self._scene, self)
+
+		self._scene.AppendNode(absorptionEffect)
 
 		if self.ShieldIsUp:
 			Resources().GetSound("Shield").Play()

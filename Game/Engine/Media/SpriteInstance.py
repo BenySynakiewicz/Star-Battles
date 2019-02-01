@@ -61,6 +61,10 @@ class SpriteInstance:
 
 		return (not self._loop) and (self._baseSprite.GetFrameCount() - 1 == self._frame)
 
+	def SetLooping(self, loop):
+
+		self._loop = loop
+
 	def SetRotation(self, rotation: int):
 
 		self._rotation = rotation
