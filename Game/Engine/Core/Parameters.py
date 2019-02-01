@@ -38,7 +38,7 @@ from types import SimpleNamespace
 Parameters = SimpleNamespace(
 
 	Name = "Star Battles",
-	Version = "1.1-D",
+	Version = "1.1",
 	Creator = "Beny Synakiewicz",
 
 	MaximumFrameRate = 120,
