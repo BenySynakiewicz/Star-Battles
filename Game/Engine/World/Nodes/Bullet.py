@@ -26,8 +26,9 @@
 
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
+from Engine.Utilities.Direction import Direction
 from Engine.Utilities.Vector import Vector
-from Engine.World.Concepts.MovingEntity import MovingEntity
+from Engine.World.Concepts.MovingNode import MovingNode
 
 ##
 #
@@ -35,15 +36,29 @@ from Engine.World.Concepts.MovingEntity import MovingEntity
 #
 ##
 
-class TripleShotBonus(MovingEntity):
+class Bullet(MovingNode):
 
-	def __init__(self, scene):
+	def __init__(self, scene, creator, direction):
 
-		super().__init__(scene, "Gem 1", Vector(0, Parameters.BonusSpeed))
+		super().__init__(
+			scene,
+			"Bullet (Green)" if Direction.Top == direction else "Bullet (Red)",
+			Vector(0, -Parameters.BulletSpeed) if Direction.Top == direction else Vector(0, +Parameters.BulletSpeed)
+		)
+
+		self._creator = creator
+
+		Resources().GetSound("Bullet").Play()
+
+	def GetCreator(self):
+
+		return self._creator
 
 	# Inherited methods.
 
-	def OnCollision(self, entity):
+	def OnCollision(self, node):
 
-		if "Player" == type(entity).__name__:
-			self.Terminate()
+		if "Enemy" == type(node).__name__ and "Enemy" == self.GetCreator():
+			return
+
+		self.Terminate()

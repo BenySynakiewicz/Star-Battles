@@ -28,8 +28,8 @@ from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Core.State import State
 from Engine.World.Concepts.Scene import Scene
-from Engine.World.Entities.Player import Player
-from Engine.World.Entities.Enemy import Enemy
+from Engine.World.Nodes.Player import Player
+from Engine.World.Nodes.Enemy import Enemy
 from Engine.World.Scenes.EndGameScene import EndGameScene
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.Vector import Vector
@@ -66,7 +66,7 @@ class BattleScene(Scene):
 
 		)
 
-		self.AppendEntity(self.Player)
+		self.AppendNode(self.Player)
 		self.AppendTimer("Enemy")
 
 	def UpdateScoreText(self):
@@ -80,22 +80,22 @@ class BattleScene(Scene):
 
 		# In the first row...
 
-		self.AppendEntity(Enemy(self, verticalOffset, 0, Direction.Right))
+		self.AppendNode(Enemy(self, verticalOffset, 0, Direction.Right))
 
 		# In the sceond row...
 
 		if currentScore >= 100:
-			self.AppendEntity(Enemy(self, verticalOffset, 1, Direction.Left))
+			self.AppendNode(Enemy(self, verticalOffset, 1, Direction.Left))
 
 		# In the third row...
 
 		if currentScore >= 500:
-			self.AppendEntity(Enemy(self, verticalOffset, 2, Direction.Right))
+			self.AppendNode(Enemy(self, verticalOffset, 2, Direction.Right))
 
 		# In the fourth row...
 
 		if currentScore >= 1500:
-			self.AppendEntity(Enemy(self, verticalOffset, 3, Direction.Left))
+			self.AppendNode(Enemy(self, verticalOffset, 3, Direction.Left))
 
 		# Clear the timer.
 
@@ -138,40 +138,40 @@ class BattleScene(Scene):
 		if self.GetTimer("Enemy") // 1000 > 0:
 			self.SpawnEnemies()
 
-		# Remove terminated entities (and update the score).
+		# Remove terminated nodes (and update the score).
 
-		for entity in self._entities:
+		for node in self._nodes:
 
-			if entity._terminated and "Enemy" == type(entity).__name__ and entity.DestroyedByPlayer:
+			if node._terminated and "Enemy" == type(node).__name__ and node.DestroyedByPlayer:
 				State().UpdateCurrentScore(+10)
 				self.UpdateScoreText()
 
-		self._entities[:] = filter(lambda entity: not entity._terminated, self._entities)
+		self._nodes[:] = filter(lambda node: not node._terminated, self._nodes)
 
 		# Find collisions.
 
 		allFoundCollisions = {}
 
-		for entity in self._entities:
+		for node in self._nodes:
 
 			collisions = []
 
-			for alreadyProcessedEntity, alreadyProcessedCollisions in allFoundCollisions.items():
-				if entity in alreadyProcessedCollisions:
-					collisions.append(alreadyProcessedEntity)
+			for alreadyProcessedNode, alreadyProcessedCollisions in allFoundCollisions.items():
+				if node in alreadyProcessedCollisions:
+					collisions.append(alreadyProcessedNode)
 
-			newCollisions = [x for x in self._entities if x not in collisions and entity.DoesCollideWith(x)]
+			newCollisions = [x for x in self._nodes if x not in collisions and node.DoesCollideWith(x)]
 			collisions.extend(newCollisions)
 
 			if collisions:
-				allFoundCollisions[entity] = collisions
+				allFoundCollisions[node] = collisions
 
-		for entity, collidingEntities in allFoundCollisions.items():
+		for node, collidingNodes in allFoundCollisions.items():
 
-			for collidingEntity in collidingEntities:
+			for collidingNode in collidingNodes:
 
-				entity.OnCollision(collidingEntity)
-				collidingEntity.OnCollision(entity)
+				node.OnCollision(collidingNode)
+				collidingNode.OnCollision(node)
 
 	def Render(self):
 

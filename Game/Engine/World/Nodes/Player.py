@@ -26,9 +26,9 @@
 
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
-from Engine.World.Concepts.Entity import Entity
-from Engine.World.Entities.Bomb import Bomb
-from Engine.World.Entities.Bullet import Bullet
+from Engine.World.Concepts.Node import Node
+from Engine.World.Nodes.Bomb import Bomb
+from Engine.World.Nodes.Bullet import Bullet
 from Engine.World.Utilities.Positioning import AtTop
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.Vector import Vector
@@ -46,7 +46,7 @@ import pygame
 #
 ##
 
-class Player(Entity):
+class Player(Node):
 
 	def __init__(self, scene):
 
@@ -117,7 +117,7 @@ class Player(Entity):
 			bullet = Bullet(self._scene, "Player", Direction.Top)
 			bullet.SetRelativePosition(self, AtTop)
 
-			self._scene.AppendEntity(bullet)
+			self._scene.AppendNode(bullet)
 
 		else:
 
@@ -134,9 +134,9 @@ class Player(Entity):
 			rightBullet._position.X += centerBullet.GetDimensions().X + Parameters.MediumMargin
 			rightBullet.SetMovementVector(rightBullet.GetMovementVector() + Vector(+Parameters.SmallTrajectoryDeviation, 0))
 
-			self._scene.AppendEntity(centerBullet)
-			self._scene.AppendEntity(leftBullet)
-			self._scene.AppendEntity(rightBullet)
+			self._scene.AppendNode(centerBullet)
+			self._scene.AppendNode(leftBullet)
+			self._scene.AppendNode(rightBullet)
 
 		self.ChangeBulletEnergy(-100)
 
@@ -153,7 +153,7 @@ class Player(Entity):
 				bomb.SetRelativePosition(self, AtTop)
 
 				self.__bombs.append(bomb)
-				self._scene.AppendEntity(bomb)
+				self._scene.AppendNode(bomb)
 
 			else:
 
@@ -170,8 +170,8 @@ class Player(Entity):
 				self.__bombs.append(leftBomb)
 				self.__bombs.append(rightBomb)
 
-				self._scene.AppendEntity(leftBomb)
-				self._scene.AppendEntity(rightBomb)
+				self._scene.AppendNode(leftBomb)
+				self._scene.AppendNode(rightBomb)
 
 			self.ChangeBombEnergy(-100)
 
@@ -202,15 +202,15 @@ class Player(Entity):
 		if self.ShieldIsUp:
 			Resources().GetSprite("Shield").Blit(0, GetScreen(), self._position - Vector(15, 15))
 
-	def OnCollision(self, entity):
+	def OnCollision(self, node):
 
-		if "TripleShotBonus" == type(entity).__name__:
+		if "TripleShotBonus" == type(node).__name__:
 			self.EnableTripleShotBonus()
 			return
-		elif "TwoBombsBonus" == type(entity).__name__:
+		elif "TwoBombsBonus" == type(node).__name__:
 			self.EnableTwoBombsBonus()
 			return
-		elif "QuickerShieldBonus" == type(entity).__name__:
+		elif "QuickerShieldBonus" == type(node).__name__:
 			self.EnableQuickerShieldBonus()
 			return
 

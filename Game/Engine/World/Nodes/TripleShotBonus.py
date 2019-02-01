@@ -27,7 +27,7 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Utilities.Vector import Vector
-from Engine.World.Concepts.MovingEntity import MovingEntity
+from Engine.World.Concepts.MovingNode import MovingNode
 
 ##
 #
@@ -35,15 +35,15 @@ from Engine.World.Concepts.MovingEntity import MovingEntity
 #
 ##
 
-class QuickerShieldBonus(MovingEntity):
+class TripleShotBonus(MovingNode):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Gem 3", Vector(0, Parameters.BonusSpeed))
+		super().__init__(scene, "Gem 1", Vector(0, Parameters.BonusSpeed))
 
 	# Inherited methods.
 
-	def OnCollision(self, entity):
+	def OnCollision(self, node):
 
-		if "Player" == type(entity).__name__:
+		if "Player" == type(node).__name__:
 			self.Terminate()

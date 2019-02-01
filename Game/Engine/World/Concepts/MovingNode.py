@@ -24,7 +24,7 @@
 #
 ##
 
-from Engine.World.Concepts.Entity import Entity
+from Engine.World.Concepts.Node import Node
 
 ##
 #
@@ -32,7 +32,7 @@ from Engine.World.Concepts.Entity import Entity
 #
 ##
 
-class MovingEntity(Entity):
+class MovingNode(Node):
 
 	def __init__(self, scene, sprite, movementVector):
 

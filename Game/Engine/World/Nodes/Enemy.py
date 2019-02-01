@@ -30,11 +30,11 @@ from Engine.Utilities.Direction import Direction
 from Engine.Utilities.General import GetScreen, GetScreenDimensions
 from Engine.Utilities.General import Decision
 from Engine.Utilities.Vector import Vector
-from Engine.World.Concepts.MovingEntity import MovingEntity
-from Engine.World.Entities.Bullet import Bullet
-from Engine.World.Entities.TripleShotBonus import TripleShotBonus
-from Engine.World.Entities.TwoBombsBonus import TwoBombsBonus
-from Engine.World.Entities.QuickerShieldBonus import QuickerShieldBonus
+from Engine.World.Concepts.MovingNode import MovingNode
+from Engine.World.Nodes.Bullet import Bullet
+from Engine.World.Nodes.TripleShotBonus import TripleShotBonus
+from Engine.World.Nodes.TwoBombsBonus import TwoBombsBonus
+from Engine.World.Nodes.QuickerShieldBonus import QuickerShieldBonus
 from Engine.World.Utilities.Positioning import AtBottom
 
 import pygame
@@ -45,7 +45,7 @@ import pygame
 #
 ##
 
-class Enemy(MovingEntity):
+class Enemy(MovingNode):
 
 	def __init__(self, scene, verticalOffset, row, direction):
 
@@ -80,7 +80,7 @@ class Enemy(MovingEntity):
 		bullet.SetRelativePosition(self, AtBottom)
 		bullet.ShotBy = "Enemy"
 
-		self._scene.AppendEntity(bullet)
+		self._scene.AppendNode(bullet)
 		self.ClearTimer("Shot")
 
 	# Inherited methods.
@@ -95,9 +95,9 @@ class Enemy(MovingEntity):
 		if not self._isDestroyed and Decision(self.GetTimer("Shot") / 200000):
 			self.Shoot()
 
-	def OnCollision(self, entity):
+	def OnCollision(self, node):
 
-		if "Bullet" == type(entity).__name__ and "Enemy" == entity.GetCreator():
+		if "Bullet" == type(node).__name__ and "Enemy" == node.GetCreator():
 			return
 
 		self.Destroy()
@@ -109,18 +109,18 @@ class Enemy(MovingEntity):
 			bonus = TripleShotBonus(self._scene)
 			bonus.SetRelativePosition(self, AtBottom)
 	
-			self._scene.AppendEntity(bonus)
+			self._scene.AppendNode(bonus)
 
 		elif Decision(Parameters.TwoBombsBonusProbability):
 
 			bonus = TwoBombsBonus(self._scene)
 			bonus.SetRelativePosition(self, AtBottom)
 	
-			self._scene.AppendEntity(bonus)
+			self._scene.AppendNode(bonus)
 
 		elif Decision(Parameters.QuickerShieldBonusProbability):
 
 			bonus = QuickerShieldBonus(self._scene)
 			bonus.SetRelativePosition(self, AtBottom)
 	
-			self._scene.AppendEntity(bonus)
+			self._scene.AppendNode(bonus)

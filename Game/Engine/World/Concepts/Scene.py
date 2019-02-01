@@ -40,14 +40,14 @@ class Scene(Timed):
 
 		super().__init__()
 
-		self._entities = []
+		self._nodes = []
 		self._nextScene = self
 
 		self._background = background
 
-	def AppendEntity(self, entity):
+	def AppendNode(self, node):
 
-		self._entities.append(entity)
+		self._nodes.append(node)
 
 	def React(self, events, keys):
 
@@ -57,15 +57,15 @@ class Scene(Timed):
 
 		self.UpdateTimers(milisecondsPassed)
 
-		for entity in self._entities:
-			entity.Update(milisecondsPassed)
+		for node in self._nodes:
+			node.Update(milisecondsPassed)
 
 	def Render(self):
 
 		GetScreen().blit(Resources().GetBackground(self._background), (0, 0))
 
-		for entity in self._entities:
-			entity.Render()
+		for node in self._nodes:
+			node.Render()
 
 	def Execute(self, events, keys, milisecondsPassed):
 

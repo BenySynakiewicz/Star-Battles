@@ -28,7 +28,7 @@ from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Utilities.General import GetScreen
 from Engine.Utilities.Vector import Vector
-from Engine.World.Concepts.MovingEntity import MovingEntity
+from Engine.World.Concepts.MovingNode import MovingNode
 from Engine.World.Utilities.Positioning import AtSameCenter
 
 ##
@@ -37,7 +37,7 @@ from Engine.World.Utilities.Positioning import AtSameCenter
 #
 ##
 
-class Bomb(MovingEntity):
+class Bomb(MovingNode):
 
 	def __init__(self, scene):
 
@@ -80,9 +80,9 @@ class Bomb(MovingEntity):
 				AtSameCenter(self.GetPosition(), self.GetDimensions(), Resources().GetSprite("Small Shield").GetDimensions()),
 			)
 
-	def OnCollision(self, entity):
+	def OnCollision(self, node):
 
-		if "Bullet" == type(entity).__name__:
+		if "Bullet" == type(node).__name__:
 			return
 
 		self.Explode()

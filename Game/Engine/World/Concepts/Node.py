@@ -41,7 +41,7 @@ from pygame import Rect
 #
 ##
 
-class Entity(Timed):
+class Node(Timed):
 
 	def __init__(self, scene, sprite):
 
@@ -98,9 +98,9 @@ class Entity(Timed):
 
 		self._position = copy(position)
 
-	def SetRelativePosition(self, entity, relation):
+	def SetRelativePosition(self, node, relation):
 
-		self._position = relation(entity._position, entity._dimensions, self._dimensions)
+		self._position = relation(node._position, node._dimensions, self._dimensions)
 
 	def Terminate(self):
 
@@ -120,7 +120,7 @@ class Entity(Timed):
 
 		self._sprite.Blit(GetScreen(), self._position)
 
-	def OnCollision(self, entity):
+	def OnCollision(self, node):
 
 		pass
 
