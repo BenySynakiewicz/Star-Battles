@@ -34,9 +34,10 @@ from types import SimpleNamespace
 
 Color = SimpleNamespace(
 
-	Black = (  0,   0,   0),
-	White = (255, 255, 255),
-	Grey  = (100, 100, 100),
+	Black    = (  0,   0,   0),
+	White    = (255, 255, 255),
+	Grey     = (100, 100, 100),
+	DarkGrey = ( 30,  30,  30),
 
 	Green = ( 50, 255,  50),
 	Red   = (255,  50,  50),
