@@ -55,8 +55,8 @@ Parameters = SimpleNamespace(
 	BulletSpeed = 0.300,
 	BombSpeed = 0.250,
 	EnemySpeed = 0.200,
-	BonusSpeed = 0.300,
-	CargoSpeed = 0.300,
+	BonusSpeed = 0.400,
+	CargoSpeed = 0.400,
 
 	EnemyValue = 10,
 	CargoValue = 50,
