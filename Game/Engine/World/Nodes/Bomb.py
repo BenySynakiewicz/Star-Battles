@@ -29,6 +29,7 @@ from Engine.Core.Resources import Resources
 from Engine.Utilities.General import GetScreen
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.MovingNode import MovingNode
+from Engine.World.Nodes.Effects.ExplosionEffect import ExplosionEffect
 from Engine.World.Utilities.Positioning import AtSameCenter
 
 ##
@@ -47,44 +48,29 @@ class Bomb(MovingNode):
 
 		Resources().GetSound("Bomb").Play()
 
-		self._exploded = False
-
 	def Explode(self):
 
-		if self._exploded:
-			return
+		self._scene.AppendNode(ExplosionEffect(self._scene, self))
 
-		self.StopMoving()
-
-		self.ReplaceSprite("Explosion", False)
-		Resources().GetSound("Explosion").Play()
-
-		self.AppendTimer("Explosion")
-		self._exploded = True
+		self.Terminate()
 
 	# Inherited methods.
-
-	def Update(self, milisecondsPassed):
-
-		super().Update(milisecondsPassed)
-
-		if self._exploded and self._sprite.IsFinished():
-			self.Terminate()
 
 	def Render(self):
 
 		super().Render()
 
-		if not self._exploded:
-			Resources().GetSprite("Small Shield").Blit(
-				0,
-				GetScreen(),
-				AtSameCenter(self.GetPosition(), self.GetDimensions(), Resources().GetSprite("Small Shield").GetDimensions()),
-			)
+		Resources().GetSprite("Small Shield").Blit(
+			0,
+			GetScreen(),
+			AtSameCenter(self.GetPosition(), self.GetDimensions(), Resources().GetSprite("Small Shield").GetDimensions()),
+		)
 
 	def OnCollision(self, node):
 
 		if "BulletFromEnemy" == type(node).__name__ or "BulletFromPlayer" == type(node).__name__:
 			return
+
+		self._scene.AppendNode(ExplosionEffect(self._scene, self))
 
 		self.Explode()

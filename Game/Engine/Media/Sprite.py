@@ -27,7 +27,9 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Utilities.General import Blit, GetDimensions
 
-from pygame import image, mask, surfarray
+from copy import copy
+
+from pygame import image, mask, surfarray, transform
 
 ##
 #
@@ -73,6 +75,18 @@ class Sprite:
 	def GetFramesPerSecond(self):
 
 		return self._framesPerSecond
+
+	def GetScaledCopy(self, dimensions):
+
+		scaledCopy = copy(self)
+
+		scaledCopy._surfaces = [transform.smoothscale(surface, tuple(dimensions)) for surface in scaledCopy._surfaces]
+		scaledCopy._masks = [mask.from_surface(surface) for surface in self._surfaces]
+
+		scaledCopy._shadows = None
+		scaledCopy.CreateShadow()
+
+		return scaledCopy
 
 	def Blit(self, frame, surface, position):
 

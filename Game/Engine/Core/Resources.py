@@ -28,6 +28,7 @@ from Engine.Media.Sound import Sound
 from Engine.Media.Sprite import Sprite
 from Engine.Utilities.Singleton import Singleton
 from Engine.Utilities.General import GetScreenDimensions
+from Engine.Utilities.Vector import Vector
 
 from pygame import image, font, mixer, transform
 
@@ -83,24 +84,6 @@ class Resources(metaclass = Singleton):
 				"Resources/Images/Explosion/15.png",
 			]),
 
-			"Small Explosion": Sprite([
-				"Resources/Images/Small Explosion/1.png",
-				"Resources/Images/Small Explosion/2.png",
-				"Resources/Images/Small Explosion/3.png",
-				"Resources/Images/Small Explosion/4.png",
-				"Resources/Images/Small Explosion/5.png",
-				"Resources/Images/Small Explosion/6.png",
-				"Resources/Images/Small Explosion/7.png",
-				"Resources/Images/Small Explosion/8.png",
-				"Resources/Images/Small Explosion/9.png",
-				"Resources/Images/Small Explosion/10.png",
-				"Resources/Images/Small Explosion/11.png",
-				"Resources/Images/Small Explosion/12.png",
-				"Resources/Images/Small Explosion/13.png",
-				"Resources/Images/Small Explosion/14.png",
-				"Resources/Images/Small Explosion/15.png",
-			]),
-
 			"Absorption": Sprite([
 				"Resources/Images/Absorption/1.png",
 				"Resources/Images/Absorption/2.png",
@@ -114,6 +97,8 @@ class Resources(metaclass = Singleton):
 			]),
 
 		}
+
+		self._sprites["Small Explosion"] = self._sprites["Explosion"].GetScaledCopy(Vector(100, 100))
 
 		self._sounds = {
 
