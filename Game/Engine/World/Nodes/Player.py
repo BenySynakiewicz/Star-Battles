@@ -211,25 +211,36 @@ class Player(Node):
 
 	def OnCollision(self, node):
 
-		absorptionEffect = AbsorptionEffect(self._scene, self)
-
-		self._scene.AppendNode(absorptionEffect)
+		# The shield is inpenetrable. Skip any collisions if the thing's up.
 
 		if self.ShieldIsUp:
 			Resources().GetSound("Shield").Play()
 			return
 
-		if "TripleShotBonus" == type(node).__name__:
-			self.EnableTripleShotBonus()
+		# Absorp dropped items.
+
+		nodeName = type(node).__name__
+		absorbableNodes = [
+			"TripleShotBonus",
+			"TwoBombsBonus",
+			"QuickerShieldBonus",
+			"Cargo",
+		]
+
+		if nodeName in absorbableNodes:
+
+			if "TripleShotBonus"      == nodeName: self.EnableTripleShotBonus()
+			elif "TwoBombsBonus"      == nodeName: self.EnableTwoBombsBonus()
+			elif "QuickerShieldBonus" == nodeName: self.EnableQuickerShieldBonus()
+
+			# Create and show the visual effect and play the sound.
+
+			self._scene.AppendNode(AbsorptionEffect(self._scene, self))
+			Resources().GetSound("Absorption").Play()
+
 			return
-		elif "TwoBombsBonus" == type(node).__name__:
-			self.EnableTwoBombsBonus()
-			return
-		elif "QuickerShieldBonus" == type(node).__name__:
-			self.EnableQuickerShieldBonus()
-			return
-		elif "Cargo" == type(node).__name__:
-			return
+
+		# If the colliding node is not absorbable - destroy the Player.
 
 		Resources().GetSound("Destruction").Play()
 		self.Terminate()

@@ -46,7 +46,7 @@ font.init()
 
 mixer.pre_init(44100)
 mixer.init()
-mixer.set_num_channels(24)
+mixer.set_num_channels(26)
 
 # Initialize the screen and the mouse.
 

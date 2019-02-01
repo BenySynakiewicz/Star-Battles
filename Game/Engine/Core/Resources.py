@@ -107,6 +107,7 @@ class Resources(metaclass = Singleton):
 			"Destruction": Sound("Resources/Sounds/Destruction.ogg", range(18, 19)),
 			"Explosion"  : Sound("Resources/Sounds/Explosion.ogg"  , range(20, 21)),
 			"Shield"     : Sound("Resources/Sounds/Shield.ogg"     , range(22, 24)),
+			"Absorption" : Sound("Resources/Sounds/Absorption.ogg" , range(25, 26)),
 
 		}
 

@@ -11,6 +11,7 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 - Improved and optimized collisions.
 - Made shields impossible to penetrate by anthing (bonuses included).
 - Minor visual improvements.
+- Minor audio improvements.
 
 ### Version 1.1
 
