@@ -35,17 +35,18 @@ from Engine.World.Concepts.MovingNode import MovingNode
 #
 ##
 
-class QuickerShieldBonus(MovingNode):
+class BulletFromEnemy(MovingNode):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Gem 3", Vector(0, Parameters.BonusSpeed), 2)
+		super().__init__(scene, "Bullet (Red)", Vector(0, Parameters.BulletSpeed))
 
-		self.SetCollisions({"Bonuses"}, set())
+		self.SetCollisions({"Participants"}, {"Enemy"})
+
+		Resources().GetSound("Bullet").Play()
 
 	# Inherited methods.
 
 	def OnCollision(self, node):
 
-		if "Player" == type(node).__name__:
-			self.Terminate()
+		self.Terminate()

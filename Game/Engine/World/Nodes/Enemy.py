@@ -31,7 +31,7 @@ from Engine.Utilities.General import GetScreen, GetScreenDimensions
 from Engine.Utilities.General import Decision
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.MovingNode import MovingNode
-from Engine.World.Nodes.Bullet import Bullet
+from Engine.World.Nodes.BulletFromEnemy import BulletFromEnemy
 from Engine.World.Nodes.TripleShotBonus import TripleShotBonus
 from Engine.World.Nodes.TwoBombsBonus import TwoBombsBonus
 from Engine.World.Nodes.QuickerShieldBonus import QuickerShieldBonus
@@ -50,6 +50,8 @@ class Enemy(MovingNode):
 	def __init__(self, scene, verticalOffset, row, direction):
 
 		super().__init__(scene, "Enemy", Vector(+Parameters.EnemySpeed, 0) if Direction.Right == direction else Vector(-Parameters.EnemySpeed, 0), 1)
+
+		self.SetCollisions({"Participants"}, {"BulletFromEnemy"})
 
 		self.Direction = direction
 
@@ -76,9 +78,8 @@ class Enemy(MovingNode):
 
 	def Shoot(self):
 
-		bullet = Bullet(self._scene, "Enemy", Direction.Bottom)
+		bullet = BulletFromEnemy(self._scene)
 		bullet.SetRelativePosition(self, AtBottom)
-		bullet.ShotBy = "Enemy"
 
 		self._scene.AppendNode(bullet)
 		self.ClearTimer("Shot")
@@ -96,9 +97,6 @@ class Enemy(MovingNode):
 			self.Shoot()
 
 	def OnCollision(self, node):
-
-		if "Bullet" == type(node).__name__ and "Enemy" == node.GetCreator():
-			return
 
 		self.Destroy()
 

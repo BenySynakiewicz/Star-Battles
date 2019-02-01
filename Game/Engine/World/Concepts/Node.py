@@ -48,6 +48,8 @@ class Node(Timed):
 		super().__init__()
 
 		self._scene = scene
+		self._collisionClasses = set()
+		self._collisionExceptions = set()
 		self._terminated = False
 
 		self._sprite = SpriteInstance(Resources().GetSprite(sprite))
@@ -55,6 +57,14 @@ class Node(Timed):
 
 		self._position = Vector()
 		self._dimensions = self._sprite.GetDimensions()
+
+	def IsTerminated(self):
+
+		return self._terminated
+
+	def GetSpriteInstance(self):
+
+		return self._sprite
 
 	def GetPosition(self):
 
@@ -64,17 +74,22 @@ class Node(Timed):
 
 		return self._dimensions
 
-	def GetSpriteInstance(self):
+	def GetCollisions(self):
 
-		return self._sprite
-
-	def IsTerminated(self):
-
-		return self._terminated
+		return (self._collisionClasses, self._collisionExceptions)
 
 	def DoesCollideWith(self, other):
 
 		if self == other:
+			return False
+
+		otherCollisionClasses, otherCollisionExceptions = other.GetCollisions()
+		if not self._collisionClasses & otherCollisionClasses:
+			return False
+
+		name = type(self).__name__
+		otherName = type(other).__name__
+		if name in otherCollisionExceptions or otherName in self._collisionExceptions:
 			return False
 
 		rectangle = Rect(tuple(self._position), tuple(self._dimensions))
@@ -90,6 +105,11 @@ class Node(Timed):
 		offsetY = rectangle[1] - otherRectangle[1]
 
 		return otherMask.overlap(mask, (offsetX, offsetY))
+
+	def SetCollisions(self, collisionClasses, collisionExceptions):
+
+		self._collisionClasses = collisionClasses
+		self._collisionExceptions = collisionExceptions
 
 	def ReplaceSprite(self, sprite, loop = True):
 

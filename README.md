@@ -8,6 +8,7 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 
 ### Version 1.2
 
+- Improved and optimized collisions.
 - Minor visual improvements.
 
 ### Version 1.1
@@ -20,7 +21,6 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 ### *TO-DO*s
 
 - **TO-DO**: Make energy bars prettier.
-- **TO-DO**: Optimize collisions - implement collision groups.
 - **TO-DO**: Add more types of enemies.
 - **TO-DO**: Add battle statistics.
 - **TO-DO**: Remember highscore*s*, not just the single highest score.

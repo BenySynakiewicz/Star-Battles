@@ -28,7 +28,7 @@ from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.World.Concepts.Node import Node
 from Engine.World.Nodes.Bomb import Bomb
-from Engine.World.Nodes.Bullet import Bullet
+from Engine.World.Nodes.BulletFromPlayer import BulletFromPlayer
 from Engine.World.Utilities.Positioning import AtTop
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.Vector import Vector
@@ -51,6 +51,8 @@ class Player(Node):
 	def __init__(self, scene):
 
 		super().__init__(scene, "Player", 1)
+
+		self.SetCollisions({"Participants", "Bonuses"}, {"BulletFromPlayer"})
 
 		self.Energy = SimpleNamespace(
 			Bullet = 0,
@@ -114,23 +116,23 @@ class Player(Node):
 
 		if not self._bonuses.TripleShot:
 
-			bullet = Bullet(self._scene, "Player", Direction.Top)
+			bullet = BulletFromPlayer(self._scene)
 			bullet.SetRelativePosition(self, AtTop)
 
 			self._scene.AppendNode(bullet)
 
 		else:
 
-			centerBullet = Bullet(self._scene, "Player", Direction.Top)
+			centerBullet = BulletFromPlayer(self._scene)
 			centerBullet.SetRelativePosition(self, AtTop)
 
-			leftBullet = Bullet(self._scene, "Player", Direction.Top)
+			leftBullet = BulletFromPlayer(self._scene)
 			leftBullet.SetPosition(centerBullet.GetPosition())
 			leftBullet._position.X -= Parameters.MediumMargin + leftBullet.GetDimensions().X
 			leftBullet.SetMovementVector(leftBullet.GetMovementVector() + Vector(-Parameters.SmallTrajectoryDeviation, 0))
 			leftBullet.SetRotationToMovementVector()
 
-			rightBullet = Bullet(self._scene, "Player", Direction.Top)
+			rightBullet = BulletFromPlayer(self._scene)
 			rightBullet.SetPosition(centerBullet.GetPosition())
 			rightBullet._position.X += centerBullet.GetDimensions().X + Parameters.MediumMargin
 			rightBullet.SetMovementVector(rightBullet.GetMovementVector() + Vector(+Parameters.SmallTrajectoryDeviation, 0))

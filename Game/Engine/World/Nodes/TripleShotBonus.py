@@ -41,6 +41,8 @@ class TripleShotBonus(MovingNode):
 
 		super().__init__(scene, "Gem 1", Vector(0, Parameters.BonusSpeed), 2)
 
+		self.SetCollisions({"Bonuses"}, set())
+
 	# Inherited methods.
 
 	def OnCollision(self, node):

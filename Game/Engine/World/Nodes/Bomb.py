@@ -43,6 +43,8 @@ class Bomb(MovingNode):
 
 		super().__init__(scene, "Bomb", Vector(0, -Parameters.BombSpeed))
 
+		self.SetCollisions({"Participants"}, set())
+
 		Resources().GetSound("Bomb").Play()
 
 		self._exploded = False
@@ -82,7 +84,7 @@ class Bomb(MovingNode):
 
 	def OnCollision(self, node):
 
-		if "Bullet" == type(node).__name__:
+		if "BulletFromEnemy" == type(node).__name__ or "BulletFromPlayer" == type(node).__name__:
 			return
 
 		self.Explode()
