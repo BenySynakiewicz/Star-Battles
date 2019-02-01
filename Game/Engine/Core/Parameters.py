@@ -56,6 +56,10 @@ Parameters = SimpleNamespace(
 	BombSpeed = 0.250,
 	EnemySpeed = 0.200,
 	BonusSpeed = 0.300,
+	CargoSpeed = 0.300,
+
+	EnemyValue = 10,
+	CargoValue = 50,
 
 	SmallTrajectoryDeviation = 0.03,
 	BigTrajectoryDeviation = 0.06,
@@ -63,6 +67,7 @@ Parameters = SimpleNamespace(
 	TripleShotBonusProbability = 0.030,
 	TwoBombsBonusProbability = 0.003,
 	QuickerShieldBonusProbability = 0.006,
+	CargoProbability = 0.010,
 
 	BulletEnergyRegeneration = 0.225,
 	BombEnergyRegeneration = 0.015,

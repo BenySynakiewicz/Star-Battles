@@ -219,6 +219,8 @@ class Player(Node):
 		elif "QuickerShieldBonus" == type(node).__name__:
 			self.EnableQuickerShieldBonus()
 			return
+		elif "Cargo" == type(node).__name__:
+			return
 
 		if not self.ShieldIsUp:
 			Resources().GetSound("Destruction").Play()

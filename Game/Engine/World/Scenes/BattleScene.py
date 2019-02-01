@@ -143,7 +143,11 @@ class BattleScene(Scene):
 		for node in self._nodes:
 
 			if node._terminated and "Enemy" == type(node).__name__ and node.DestroyedByPlayer:
-				State().UpdateCurrentScore(+10)
+				State().UpdateCurrentScore(+Parameters.EnemyValue)
+				self.UpdateScoreText()
+
+			if node._terminated and "Cargo" == type(node).__name__:
+				State().UpdateCurrentScore(+Parameters.CargoValue)
 				self.UpdateScoreText()
 
 		self._nodes[:] = filter(lambda node: not node._terminated, self._nodes)
