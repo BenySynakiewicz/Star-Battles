@@ -99,6 +99,7 @@ class Resources(metaclass = Singleton):
 		}
 
 		self._sprites["Small Explosion"] = self._sprites["Explosion"].GetScaledCopy(Vector(100, 100))
+		self._sprites["Very Small Explosion"] = self._sprites["Explosion"].GetScaledCopy(Vector(15, 15))
 
 		self._sounds = {
 

@@ -28,6 +28,7 @@ from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.MovingNode import MovingNode
+from Engine.World.Nodes.Effects.VerySmallExplosionEffect import VerySmallExplosionEffect
 
 ##
 #
@@ -49,4 +50,5 @@ class BulletFromEnemy(MovingNode):
 
 	def OnCollision(self, node):
 
+		self._scene.AppendNode(VerySmallExplosionEffect(self._scene, self))
 		self.Terminate()

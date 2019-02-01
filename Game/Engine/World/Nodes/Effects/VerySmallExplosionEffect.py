@@ -24,11 +24,9 @@
 #
 ##
 
-from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
-from Engine.Utilities.Vector import Vector
-from Engine.World.Concepts.MovingNode import MovingNode
-from Engine.World.Nodes.Effects.VerySmallExplosionEffect import VerySmallExplosionEffect
+from Engine.World.Concepts.Node import Node
+from Engine.World.Utilities.Positioning import AtSameCenter
 
 ##
 #
@@ -36,19 +34,21 @@ from Engine.World.Nodes.Effects.VerySmallExplosionEffect import VerySmallExplosi
 #
 ##
 
-class BulletFromPlayer(MovingNode):
+class VerySmallExplosionEffect(Node):
 
-	def __init__(self, scene):
+	def __init__(self, scene, parentNode):
 
-		super().__init__(scene, "Bullet (Green)", Vector(0, -Parameters.BulletSpeed))
+		super().__init__(scene, "Very Small Explosion", +1)
 
-		self.SetCollisions({"Participants"}, set())
+		self._sprite.SetLooping(False)
 
-		Resources().GetSound("Bullet").Play()
+		self.SetRelativePosition(parentNode, AtSameCenter)
 
 	# Inherited methods.
 
-	def OnCollision(self, node):
+	def Update(self, milisecondsPassed):
 
-		self._scene.AppendNode(VerySmallExplosionEffect(self._scene, self))
-		self.Terminate()
+		super().Update(milisecondsPassed)
+
+		if self._sprite.IsFinished():
+			self.Terminate()
