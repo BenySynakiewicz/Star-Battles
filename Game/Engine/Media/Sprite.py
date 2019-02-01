@@ -37,13 +37,13 @@ from pygame import image, mask, surfarray
 
 class Sprite:
 
-	def __init__(self, paths, shadows: bool = False):
+	def __init__(self, paths, shadows: bool = False, framesPerSecond: int = 30):
 
 		self._surfaces = [image.load(path).convert_alpha() for path in paths]
 		self._masks = [mask.from_surface(surface) for surface in self._surfaces]
 		self._shadows = None
 
-		self._framesPerSecond = 30
+		self._framesPerSecond = framesPerSecond
 
 		if shadows:
 			self.CreateShadow()
