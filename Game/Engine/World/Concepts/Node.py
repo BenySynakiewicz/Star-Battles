@@ -25,7 +25,7 @@
 ##
 
 from Engine.Core.Resources import Resources
-from Engine.Media.SpriteInstance import SpriteInstance
+from Engine.Media.Concepts.SpriteInstance import SpriteInstance
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import GetScreen
 from Engine.World.Utilities.Positioning import IsOutsideScreen

@@ -25,11 +25,12 @@
 ##
 
 from Engine.Core.Parameters import Parameters
+from Engine.Media.Utilities.SurfaceProcessor import InterpolateToDimensions, InterpolateToScale
 from Engine.Utilities.General import Blit, GetDimensions
 
 from copy import copy
 
-from pygame import image, mask, surfarray, transform
+from pygame import image, mask, surfarray
 
 ##
 #
@@ -55,11 +56,7 @@ class Sprite:
 		if self._shadows:
 			return
 
-		shadowDimensions = self.GetDimensions() * 1.025
-		shadowDimensions.X = int(shadowDimensions.X)
-		shadowDimensions.Y = int(shadowDimensions.Y)
-
-		self._shadows = [transform.smoothscale(surface, tuple(shadowDimensions)) for surface in self._surfaces]
+		self._shadows = [InterpolateToScale(surface, 1.05) for surface in self._surfaces]
 
 		for shadow in self._shadows:
 			surfarray.pixels3d(shadow)[:] = 0
@@ -84,7 +81,7 @@ class Sprite:
 
 		scaledCopy = copy(self)
 
-		scaledCopy._surfaces = [transform.smoothscale(surface, tuple(dimensions)) for surface in scaledCopy._surfaces]
+		scaledCopy._surfaces = [InterpolateToDimensions(surface, dimensions) for surface in scaledCopy._surfaces]
 		scaledCopy._masks = [mask.from_surface(surface) for surface in self._surfaces]
 
 		scaledCopy._shadows = None

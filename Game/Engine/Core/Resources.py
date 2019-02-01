@@ -24,8 +24,8 @@
 #
 ##
 
-from Engine.Media.Sound import Sound
-from Engine.Media.Sprite import Sprite
+from Engine.Media.Concepts.Sound import Sound
+from Engine.Media.Concepts.Sprite import Sprite
 from Engine.Utilities.Singleton import Singleton
 from Engine.Utilities.General import GetScreenDimensions
 from Engine.Utilities.Vector import Vector
