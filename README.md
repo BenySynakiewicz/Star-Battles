@@ -17,9 +17,13 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 - **TO-DO**: Optimize collisions - implement collision groups.
 - **TO-DO**: Add more types of enemies.
 - **TO-DO**: Add battle statistics.
-- **TO-DO**: Remember highscore**s**, not just the single highest score.
+- **TO-DO**: Remember highscore*s*, not just the single highest score.
 - **TO-DO**: Add animated backgrounds.
 - **TO-DO**: Make enemies move more creatively.
+- **TO-DO**: Create a proper main menu/game menu.
+- **TO-DO**: Bot player and enemies should have some resistance (health) instead of being one-shot targets.
+- **TO-DO**: Idea: one-time bonuses.
+- **TO-DO**: Idea: timed bonuses.
 - **TO-DO**: Idea: shielded enemies with health bars.
 - **TO-DO**: Idea: liberating allies from captivity.
 - **TO-DO**: Idea: enemies dropping Cargo (points).
