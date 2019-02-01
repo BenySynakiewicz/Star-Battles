@@ -1,4 +1,4 @@
-# Star Battles 1.1
+# Star Battles 1.2
 
 ![Screenshot](/Screenshot.jpeg?raw=true)
 
