@@ -42,6 +42,8 @@ class SpriteInstance:
 	def __init__(self, sprite, loop = True):
 
 		self._baseSprite = sprite
+		self._currentSprite = self._baseSprite
+
 		self._loop = loop
 
 		self._rotation = None
@@ -51,23 +53,24 @@ class SpriteInstance:
 
 	def GetDimensions(self):
 
-		return self._baseSprite.GetDimensions()
+		return self._currentSprite.GetDimensions()
 
 	def GetMask(self):
 
-		return self._baseSprite.GetMask(self._frame)
+		return self._currentSprite.GetMask(self._frame)
 
 	def IsFinished(self):
 
-		return (not self._loop) and (self._baseSprite.GetFrameCount() - 1 == self._frame)
+		return (not self._loop) and (self._currentSprite.GetFrameCount() - 1 == self._frame)
 
 	def SetLooping(self, loop):
 
 		self._loop = loop
 
-	def SetRotation(self, rotation: int):
+	def SetRotation(self, angle):
 
-		self._rotation = rotation
+		self._rotation = angle
+		self._currentSprite = self._baseSprite.GetRotatedCopy(angle)
 
 	def Update(self, milisecondsPassed):
 
@@ -75,31 +78,31 @@ class SpriteInstance:
 			return
 
 		self._timeSincePreviousFrame += milisecondsPassed
-		framesPassed = self._timeSincePreviousFrame / (1000 / self._baseSprite.GetFramesPerSecond())
+		framesPassed = self._timeSincePreviousFrame / (1000 / self._currentSprite.GetFramesPerSecond())
 
 		if framesPassed < 1:
 			return
 
 		self._frame = int(self._frame + framesPassed)
 
-		if self._frame > self._baseSprite.GetFrameCount() and not self._loop:
-			self._frame = self._baseSprite.GetFrameCount() - 1
+		if self._frame > self._currentSprite.GetFrameCount() and not self._loop:
+			self._frame = self._currentSprite.GetFrameCount() - 1
 		else:
-			self._frame = self._frame % self._baseSprite.GetFrameCount()
+			self._frame = self._frame % self._currentSprite.GetFrameCount()
 
 		self._timeSincePreviousFrame = 0
 
 	def Blit(self, surface, position):
 
-		if self._rotation:
+		# if self._rotation:
 
-			temporarySurface = Surface(tuple(self.GetDimensions()), SRCALPHA, 32)
+			# temporarySurface = Surface(tuple(self.GetDimensions()), SRCALPHA, 32)
 
-			self._baseSprite.Blit(self._frame, temporarySurface, Vector())
-			temporarySurface = transform.rotate(temporarySurface, self._rotation)
+			# self._currentSprite.Blit(self._frame, temporarySurface, Vector())
+			# temporarySurface = transform.rotate(temporarySurface, self._rotation)
 
-			Blit(surface, temporarySurface, position)
+			# Blit(surface, temporarySurface, position)
 
-		else:
+		# else:
 
-			self._baseSprite.Blit(self._frame, surface, position)
+		self._currentSprite.Blit(self._frame, surface, position)

@@ -30,7 +30,7 @@ from Engine.Utilities.General import Blit, GetDimensions
 
 from copy import copy
 
-from pygame import image, mask, surfarray
+from pygame import image, mask, surfarray, transform
 
 ##
 #
@@ -77,6 +77,19 @@ class Sprite:
 
 		return self._framesPerSecond
 
+	def GetRotatedCopy(self, angle):
+
+		rotatedCopy = copy(self)
+
+		rotatedCopy._surfaces = [transform.rotate(surface, angle) for surface in rotatedCopy._surfaces]
+		rotatedCopy._masks = [mask.from_surface(surface) for surface in self._surfaces]
+
+		if rotatedCopy._shadows:
+			rotatedCopy._shadows = None
+			rotatedCopy.CreateShadow()
+
+		return rotatedCopy
+
 	def GetScaledCopy(self, dimensions):
 
 		scaledCopy = copy(self)
@@ -84,8 +97,9 @@ class Sprite:
 		scaledCopy._surfaces = [InterpolateToDimensions(surface, dimensions) for surface in scaledCopy._surfaces]
 		scaledCopy._masks = [mask.from_surface(surface) for surface in self._surfaces]
 
-		scaledCopy._shadows = None
-		scaledCopy.CreateShadow()
+		if scaledCopy._shadows:
+			scaledCopy._shadows = None
+			scaledCopy.CreateShadow()
 
 		return scaledCopy
 
