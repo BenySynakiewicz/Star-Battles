@@ -24,7 +24,7 @@
 #
 ##
 
-from math import atan2
+from math import atan2, cos, pow, radians, sin, sqrt
 
 ##
 #
@@ -47,6 +47,30 @@ class Vector:
 		determinant = vector.X * self.Y - vector.Y * self.X
 
 		return atan2(determinant, dotProduct)
+
+	def GetNormalized(self):
+
+		length = sqrt(pow(self.X, 2) + pow(self.Y, 2))
+
+		return Vector(self.X / length, self.Y / length)
+
+	def GetRotatedAround(self, pivot, angle):
+
+		if not angle:
+			return Vector(self.X, self.Y)
+
+		angle = radians(-angle)
+
+		sinus = sin(angle)
+		cosinus = cos(angle)
+
+		temporaryRotatedX = self.X - pivot.X
+		temporaryRotatedY = self.Y - pivot.Y
+
+		rotatedX = (temporaryRotatedX * cosinus) - (temporaryRotatedY * sinus) + pivot.X
+		rotatedY = (temporaryRotatedX * sinus) + (temporaryRotatedY * cosinus) + pivot.Y
+
+		return Vector(rotatedX, rotatedY)
 
 	def __iter__(self):
 

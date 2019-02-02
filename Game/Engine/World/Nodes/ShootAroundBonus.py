@@ -28,7 +28,6 @@ from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.MovingNode import MovingNode
-from Engine.World.Nodes.Effects.VerySmallExplosionEffect import VerySmallExplosionEffect
 
 ##
 #
@@ -36,19 +35,17 @@ from Engine.World.Nodes.Effects.VerySmallExplosionEffect import VerySmallExplosi
 #
 ##
 
-class BulletFromPlayer(MovingNode):
+class ShootAroundBonus(MovingNode):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Bullet (Green)", Vector(0, -Parameters.BulletSpeed))
+		super().__init__(scene, "Gem 4", Vector(0, Parameters.BonusSpeed), 2)
 
-		self.SetCollisions({"Participants"}, {"BulletFromPlayer", "Player"})
-
-		Resources().GetSound("Bullet").Play()
+		self.SetCollisions({"Bonuses"}, set())
 
 	# Inherited methods.
 
 	def OnCollision(self, node):
 
-		self._scene.AppendNode(VerySmallExplosionEffect(self._scene, self))
-		self.Terminate()
+		if "Player" == type(node).__name__:
+			self.Terminate()

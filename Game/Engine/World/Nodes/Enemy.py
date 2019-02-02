@@ -33,6 +33,7 @@ from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.MovingNode import MovingNode
 from Engine.World.Nodes.BulletFromEnemy import BulletFromEnemy
 from Engine.World.Nodes.Cargo import Cargo
+from Engine.World.Nodes.ShootAroundBonus import ShootAroundBonus
 from Engine.World.Nodes.TripleShotBonus import TripleShotBonus
 from Engine.World.Nodes.TwoBombsBonus import TwoBombsBonus
 from Engine.World.Nodes.QuickerShieldBonus import QuickerShieldBonus
@@ -120,6 +121,13 @@ class Enemy(MovingNode):
 		elif Decision(Parameters.QuickerShieldBonusProbability):
 
 			bonus = QuickerShieldBonus(self._scene)
+			bonus.SetRelativePosition(self, AtBottom)
+	
+			self._scene.AppendNode(bonus)
+
+		elif Decision(Parameters.ShootAroundBonusProbability):
+
+			bonus = ShootAroundBonus(self._scene)
 			bonus.SetRelativePosition(self, AtBottom)
 	
 			self._scene.AppendNode(bonus)

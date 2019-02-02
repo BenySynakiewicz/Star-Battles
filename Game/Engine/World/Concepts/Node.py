@@ -74,6 +74,10 @@ class Node(Timed):
 
 		return self._dimensions
 
+	def GetCenter(self):
+
+		return self.GetPosition() + (self.GetDimensions() / 2)
+
 	def GetCollisions(self):
 
 		return (self._collisionClasses, self._collisionExceptions)

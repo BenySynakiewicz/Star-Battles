@@ -30,7 +30,7 @@ from Engine.World.Concepts.Node import Node
 from Engine.World.Nodes.Effects.AbsorptionEffect import AbsorptionEffect
 from Engine.World.Nodes.Bomb import Bomb
 from Engine.World.Nodes.BulletFromPlayer import BulletFromPlayer
-from Engine.World.Utilities.Positioning import AtTop
+from Engine.World.Utilities.Positioning import AtSameCenter, AtTop
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import GetScreen, GetScreenDimensions
@@ -94,6 +94,16 @@ class Player(Node):
 
 		self._scene.UpdateBonusDescriptionText()
 
+	def EnableShootAroundBonus(self):
+
+		self.ShootAround()
+
+		self._bonuses.TripleShot = False
+		self._bonuses.TwoBombs = False
+		self._bonuses.QuickerShield = False
+
+		self._scene.UpdateBonusDescriptionText()
+
 	def ChangeBulletEnergy(self, change):
 
 		self.Energy.Bullet = clip(self.Energy.Bullet + change, 0, 100)
@@ -150,6 +160,27 @@ class Player(Node):
 			self._scene.AppendNode(rightBullet)
 
 		self.ChangeBulletEnergy(-100)
+
+	def ShootAround(self):
+
+		numberOfBullets = 50
+		radialStep = (360 / numberOfBullets)
+
+		for n in range(numberOfBullets):
+
+			currentAngle = radialStep * n
+
+			bullet = BulletFromPlayer(self._scene)
+
+			bullet.SetRelativePosition(self, AtTop)
+			bullet._position = bullet._position.GetRotatedAround(self.GetCenter(), currentAngle)
+
+			movementVector = (bullet.GetCenter() - self.GetCenter()).GetNormalized() * Parameters.BulletSpeed
+			bullet.SetMovementVector(movementVector)
+
+			bullet.SetRotation(currentAngle)
+
+			self._scene.AppendNode(bullet)
 
 	def ShootBomb(self):
 
@@ -230,6 +261,7 @@ class Player(Node):
 			"TripleShotBonus",
 			"TwoBombsBonus",
 			"QuickerShieldBonus",
+			"ShootAroundBonus",
 			"Cargo",
 		]
 
@@ -238,6 +270,7 @@ class Player(Node):
 			if "TripleShotBonus"      == nodeName: self.EnableTripleShotBonus()
 			elif "TwoBombsBonus"      == nodeName: self.EnableTwoBombsBonus()
 			elif "QuickerShieldBonus" == nodeName: self.EnableQuickerShieldBonus()
+			elif "ShootAroundBonus"   == nodeName: self.EnableShootAroundBonus()
 
 			# Create and show the visual effect and play the sound.
 

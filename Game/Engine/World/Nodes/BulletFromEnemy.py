@@ -42,7 +42,7 @@ class BulletFromEnemy(MovingNode):
 
 		super().__init__(scene, "Bullet (Red)", Vector(0, Parameters.BulletSpeed))
 
-		self.SetCollisions({"Participants"}, {"Enemy"})
+		self.SetCollisions({"Participants"}, {"BulletFromEnemy", "Enemy"})
 
 		Resources().GetSound("Bullet").Play()
 

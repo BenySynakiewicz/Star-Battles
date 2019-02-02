@@ -64,6 +64,7 @@ class Resources(metaclass = Singleton):
 			"Gem 1"         : Sprite(["Resources/Images/Gem 1.png"]         , True),
 			"Gem 2"         : Sprite(["Resources/Images/Gem 2.png"]         , True),
 			"Gem 3"         : Sprite(["Resources/Images/Gem 3.png"]         , True),
+			"Gem 4"         : Sprite(["Resources/Images/Gem 4.png"]         , True),
 			"Cargo"         : Sprite(["Resources/Images/Cargo.png"]         , True),
 
 			"Explosion": Sprite([
