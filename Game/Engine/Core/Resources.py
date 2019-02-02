@@ -60,7 +60,6 @@ class Resources(metaclass = Singleton):
 			"Enemy"         : Sprite(["Resources/Images/Enemy.png"]         , True),
 			"Bomb"          : Sprite(["Resources/Images/Bomb.png"]          , True),
 			"Shield"        : Sprite(["Resources/Images/Shield.png"]        ),
-			"Small Shield"  : Sprite(["Resources/Images/Small Shield.png"]  ),
 			"Gem 1"         : Sprite(["Resources/Images/Gem 1.png"]         , True),
 			"Gem 2"         : Sprite(["Resources/Images/Gem 2.png"]         , True),
 			"Gem 3"         : Sprite(["Resources/Images/Gem 3.png"]         , True),
@@ -99,6 +98,7 @@ class Resources(metaclass = Singleton):
 
 		}
 
+		self._sprites["Small Shield"] = self._sprites["Shield"].GetScaledCopy(Vector(80, 80))
 		self._sprites["Small Explosion"] = self._sprites["Explosion"].GetScaledCopy(Vector(100, 100))
 		self._sprites["Very Small Explosion"] = self._sprites["Explosion"].GetScaledCopy(Vector(15, 15))
 
