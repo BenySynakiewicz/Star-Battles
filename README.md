@@ -8,9 +8,11 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 
 ### Version 1.2
 
+- Added cargo (catching it noticeably increases the score).
+- Added a new bonus.
 - Improved and optimized collisions.
 - Made shields impossible to penetrate by anthing (bonuses included).
-- Minor visual improvements.
+- Significant visual improvements.
 - Minor audio improvements.
 
 ### Version 1.1
@@ -30,11 +32,9 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 - **TO-DO**: Make enemies move more creatively.
 - **TO-DO**: Create a proper main menu/game menu.
 - **TO-DO**: Bot player and enemies should have some resistance (health) instead of being one-shot targets.
-- **TO-DO**: Idea: one-time bonuses.
 - **TO-DO**: Idea: timed bonuses.
 - **TO-DO**: Idea: shielded enemies with health bars.
 - **TO-DO**: Idea: liberating allies from captivity.
-- **TO-DO**: Idea: enemies dropping Cargo (points).
 
 ## Assets
 
