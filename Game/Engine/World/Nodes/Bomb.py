@@ -44,7 +44,7 @@ class Bomb(MovingNode):
 
 		super().__init__(scene, "Bomb", Vector(0, -Parameters.BombSpeed))
 
-		self.SetCollisions({"Participants"}, set())
+		self.SetCollisions({"Participants"}, {"Bomb"})
 
 		Resources().GetSound("Bomb").Play()
 

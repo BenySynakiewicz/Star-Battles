@@ -30,12 +30,11 @@ from Engine.World.Concepts.Node import Node
 from Engine.World.Nodes.Effects.AbsorptionEffect import AbsorptionEffect
 from Engine.World.Nodes.Bomb import Bomb
 from Engine.World.Nodes.BulletFromPlayer import BulletFromPlayer
-from Engine.World.Utilities.Positioning import AtSameCenter, AtTop
+from Engine.World.Utilities.Positioning import AtTop
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import GetScreen, GetScreenDimensions
 
-from copy import copy
 from types import SimpleNamespace
 
 from numpy import clip
@@ -98,10 +97,6 @@ class Player(Node):
 
 		self.ShootAround()
 
-		self._bonuses.TripleShot = False
-		self._bonuses.TwoBombs = False
-		self._bonuses.QuickerShield = False
-
 		self._scene.UpdateBonusDescriptionText()
 
 	def ChangeBulletEnergy(self, change):
@@ -120,7 +115,7 @@ class Player(Node):
 
 		self._position.X = clip(
 
-			self._position.X + (+8 if Direction.Right == direction else -8),
+			self._position.X + (+Parameters.PlayerSpeed if Direction.Right == direction else -Parameters.PlayerSpeed),
 			Parameters.Margin,
 			GetScreenDimensions().X - Parameters.Margin - self._dimensions.X
 
@@ -131,33 +126,11 @@ class Player(Node):
 		if self.Energy.Bullet < 100:
 			return
 
-		if not self._bonuses.TripleShot:
+		self._ShootSomething("BulletFromPlayer")
 
-			bullet = BulletFromPlayer(self._scene)
-			bullet.SetRelativePosition(self, AtTop)
-
-			self._scene.AppendNode(bullet)
-
-		else:
-
-			centerBullet = BulletFromPlayer(self._scene)
-			centerBullet.SetRelativePosition(self, AtTop)
-
-			leftBullet = BulletFromPlayer(self._scene)
-			leftBullet.SetPosition(centerBullet.GetPosition())
-			leftBullet._position.X -= Parameters.MediumMargin + leftBullet.GetDimensions().X
-			leftBullet.SetMovementVector(leftBullet.GetMovementVector() + Vector(-Parameters.SmallTrajectoryDeviation, 0))
-			leftBullet.SetRotationToMovementVector()
-
-			rightBullet = BulletFromPlayer(self._scene)
-			rightBullet.SetPosition(centerBullet.GetPosition())
-			rightBullet._position.X += centerBullet.GetDimensions().X + Parameters.MediumMargin
-			rightBullet.SetMovementVector(rightBullet.GetMovementVector() + Vector(+Parameters.SmallTrajectoryDeviation, 0))
-			rightBullet.SetRotationToMovementVector()
-
-			self._scene.AppendNode(centerBullet)
-			self._scene.AppendNode(leftBullet)
-			self._scene.AppendNode(rightBullet)
+		if self._bonuses.TripleShot:
+			self._ShootSomething("BulletFromPlayer", +10)
+			self._ShootSomething("BulletFromPlayer", -10)
 
 		self.ChangeBulletEnergy(-100)
 
@@ -167,20 +140,7 @@ class Player(Node):
 		radialStep = (360 / numberOfBullets)
 
 		for n in range(numberOfBullets):
-
-			currentAngle = radialStep * n
-
-			bullet = BulletFromPlayer(self._scene)
-
-			bullet.SetRelativePosition(self, AtTop)
-			bullet._position = bullet._position.GetRotatedAround(self.GetCenter(), currentAngle)
-
-			movementVector = (bullet.GetCenter() - self.GetCenter()).GetNormalized() * Parameters.BulletSpeed
-			bullet.SetMovementVector(movementVector)
-
-			bullet.SetRotation(currentAngle)
-
-			self._scene.AppendNode(bullet)
+			self._ShootSomething("BulletFromPlayer", radialStep * n)
 
 	def ShootBomb(self):
 
@@ -191,31 +151,16 @@ class Player(Node):
 
 			if not self._bonuses.TwoBombs:
 
-				bomb = Bomb(self._scene)
-				bomb.SetRelativePosition(self, AtTop)
-
+				bomb = self._ShootSomething("Bomb")
 				self.__bombs.append(bomb)
-				self._scene.AppendNode(bomb)
 
 			else:
 
-				leftBomb = Bomb(self._scene)
-				leftBomb.SetRelativePosition(self, AtTop)
-				leftBomb._position.X -= leftBomb.GetDimensions().X
-				leftBomb.SetMovementVector(Vector(-Parameters.BigTrajectoryDeviation, -Parameters.BombSpeed))
-				leftBomb.SetRotationToMovementVector()
-
-				rightBomb = Bomb(self._scene)
-				rightBomb.SetRelativePosition(self, AtTop)
-				rightBomb._position.X += rightBomb.GetDimensions().X
-				rightBomb.SetMovementVector(Vector(+Parameters.BigTrajectoryDeviation, -Parameters.BombSpeed))
-				rightBomb.SetRotationToMovementVector()
-
+				leftBomb = self._ShootSomething("Bomb", +10)
 				self.__bombs.append(leftBomb)
-				self.__bombs.append(rightBomb)
 
-				self._scene.AppendNode(leftBomb)
-				self._scene.AppendNode(rightBomb)
+				rightBomb = self._ShootSomething("Bomb", -10)
+				self.__bombs.append(rightBomb)
 
 			self.ChangeBombEnergy(-100)
 
@@ -251,26 +196,27 @@ class Player(Node):
 		# The shield is inpenetrable. Skip any collisions if the thing's up.
 
 		if self.ShieldIsUp:
+
 			Resources().GetSound("Shield").Play()
+
 			return
 
 		# Absorp dropped items.
 
 		nodeName = type(node).__name__
-		absorbableNodes = [
-			"TripleShotBonus",
-			"TwoBombsBonus",
-			"QuickerShieldBonus",
-			"ShootAroundBonus",
-			"Cargo",
-		]
+		absorbableNodes = {
+			"TripleShotBonus"   : Player.EnableTripleShotBonus,
+			"TwoBombsBonus"     : Player.EnableTwoBombsBonus,
+			"QuickerShieldBonus": Player.EnableQuickerShieldBonus,
+			"ShootAroundBonus"  : Player.EnableShootAroundBonus,
+			"Cargo"             : None,
+		}
 
 		if nodeName in absorbableNodes:
 
-			if "TripleShotBonus"      == nodeName: self.EnableTripleShotBonus()
-			elif "TwoBombsBonus"      == nodeName: self.EnableTwoBombsBonus()
-			elif "QuickerShieldBonus" == nodeName: self.EnableQuickerShieldBonus()
-			elif "ShootAroundBonus"   == nodeName: self.EnableShootAroundBonus()
+			functionCall = absorbableNodes[nodeName]
+			if functionCall:
+				functionCall(self)
 
 			# Create and show the visual effect and play the sound.
 
@@ -283,3 +229,23 @@ class Player(Node):
 
 		Resources().GetSound("Destruction").Play()
 		self.Terminate()
+
+	# Private methods.
+
+	def _ShootSomething(self, somethingsName, angle = None):
+
+		node = globals()[somethingsName](self._scene)
+		node.SetRelativePosition(self, AtTop)
+
+		if angle:
+
+			node.SetPosition(node.GetPosition().GetRotatedAround(self.GetCenter(), angle))
+
+			movementVector = (node.GetCenter() - self.GetCenter()).GetNormalized() * Parameters.BulletSpeed
+			node.SetMovementVector(movementVector)
+
+			node.SetRotation(angle)
+
+		self._scene.AppendNode(node)
+
+		return node

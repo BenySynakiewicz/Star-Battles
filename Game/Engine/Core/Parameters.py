@@ -52,6 +52,7 @@ Parameters = SimpleNamespace(
 	BarHeight = 8,
 	ShadowDistance = Vector(3, 3),
 
+	PlayerSpeed = 8,
 	BulletSpeed = 0.300,
 	BombSpeed = 0.250,
 	EnemySpeed = 0.200,
