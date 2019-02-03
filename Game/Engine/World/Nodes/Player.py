@@ -55,9 +55,9 @@ class Player(Node):
 		self.SetCollisions({"Participants", "Bonuses"}, {"BulletFromPlayer"})
 
 		self.Energy = SimpleNamespace(
-			Bullet = 0,
-			Bomb = 0,
-			Shield = 0,
+			Bullet = 100,
+			Bomb = 100,
+			Shield = 100,
 		)
 
 		self._bonuses = SimpleNamespace(

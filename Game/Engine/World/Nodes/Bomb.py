@@ -71,6 +71,7 @@ class Bomb(MovingNode):
 		if "BulletFromEnemy" == type(node).__name__ or "BulletFromPlayer" == type(node).__name__:
 			return
 
-		self._scene.AppendNode(ExplosionEffect(self._scene, self))
+		if not self._terminated:
 
-		self.Explode()
+			self._scene.AppendNode(ExplosionEffect(self._scene, self))
+			self.Explode()

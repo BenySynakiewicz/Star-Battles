@@ -25,13 +25,13 @@
 ##
 
 from Engine.Core.Parameters import Parameters
-from Engine.Utilities.General import GetScreen
+from Engine.Utilities.General import TakeScreenshot
 from Engine.World.Scenes.TitleScene import TitleScene
 
 from sys import exit
 
 from pygame import(
-	display, event, font, image, key, mixer, mouse, time,
+	display, event, font, key, mixer, mouse, time,
 	DOUBLEBUF, FULLSCREEN, HWSURFACE, K_ESCAPE, K_F12, KEYDOWN, QUIT,
 )
 
@@ -79,7 +79,7 @@ while True:
 			exit()
 
 		if (KEYDOWN == x.type and K_F12 == x.key):
-			image.save(GetScreen(), str(Parameters.ScreenshotFilePath))
+			TakeScreenshot()
 
 	scene.Execute(events, keys, timeSincePreviousFrame)
 

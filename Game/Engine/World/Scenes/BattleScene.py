@@ -215,8 +215,8 @@ class BattleScene(Scene):
 
 		# Calculate the bar dimensions.
 
-		barDimensions = Vector((screenDimensions.X - 4 * Parameters.Margin) / 3, Parameters.BarHeight)
-		barVerticalPosition = screenDimensions.Y - Parameters.Margin - barDimensions.Y
+		barDimensions = Vector(screenDimensions.X / 3, Parameters.BarHeight)
+		barVerticalPosition = screenDimensions.Y - barDimensions.Y
 
 		# Draw the bullet energy bar.
 
@@ -238,7 +238,7 @@ class BattleScene(Scene):
 
 			screen,
 
-			Vector(Parameters.Margin + 1 * (barDimensions.X + Parameters.Margin), barVerticalPosition),
+			Vector(Parameters.Margin + barDimensions.X, barVerticalPosition),
 			barDimensions,
 
 			Color.Red if (100 == self.Player.Energy.Bomb) else Color.Black,
@@ -252,7 +252,7 @@ class BattleScene(Scene):
 
 			screen,
 
-			Vector(Parameters.Margin + 2 * (barDimensions.X + Parameters.Margin), barVerticalPosition),
+			Vector(Parameters.Margin + 2 * barDimensions.X, barVerticalPosition),
 			barDimensions,
 
 			Color.Blue,

@@ -28,10 +28,11 @@ from Engine.Utilities.Color import Color
 from Engine.Utilities.Vector import Vector
 
 from pathlib import Path
+from string import Template
 
 from natsort import natsorted, ns
 from numpy import random
-from pygame import display, font, Surface, SRCALPHA
+from pygame import display, font, image, Surface, SRCALPHA
 
 ##
 #
@@ -93,3 +94,19 @@ def RenderText(text, font, color = Color.White):
 		verticalCursor += surface.get_height()
 
 	return destination
+
+def SubstituteInPath(path, identifier, value):
+
+	return Path(Template(str(path)).substitute({identifier: value}))
+
+def TakeScreenshot():
+
+	outputPathTemplate = "Screenshot $index.png"
+	index = 1
+
+	outputPath = SubstituteInPath(outputPathTemplate, "index", index)
+	while outputPath.exists():
+		index += 1
+		outputPath = SubstituteInPath(outputPathTemplate, "index", index)
+
+	image.save(GetScreen(), str(outputPath))
