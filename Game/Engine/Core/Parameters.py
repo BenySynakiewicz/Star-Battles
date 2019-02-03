@@ -66,7 +66,7 @@ Parameters = SimpleNamespace(
 	BigTrajectoryDeviation = 0.06,
 
 	TripleShotBonusProbability = 0.03,
-	TwoBombsBonusProbability = 0.01,
+	TwoBombsBonusProbability = 0.06,
 	QuickerShieldBonusProbability = 0.02,
 	ShootAroundBonusProbability = 0.01,
 	CargoProbability = 0.01,

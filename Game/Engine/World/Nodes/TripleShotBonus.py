@@ -39,7 +39,7 @@ class TripleShotBonus(MovingNode):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Gem 1", Vector(0, Parameters.BonusSpeed), 2)
+		super().__init__(scene, "Bonus 1", Vector(0, Parameters.BonusSpeed), 2)
 
 		self.SetCollisions({"Bonuses"}, set())
 

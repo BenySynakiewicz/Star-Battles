@@ -27,7 +27,7 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Utilities.Direction import Direction
-from Engine.Utilities.General import GetScreen, GetScreenDimensions
+from Engine.Utilities.General import GetScreenDimensions
 from Engine.Utilities.General import GetDecision
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.MovingNode import MovingNode

@@ -12,8 +12,9 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 - Added a new bonus.
 - Improved and optimized collisions.
 - Made shields impossible to penetrate by anything (bonuses included).
-- Significant visual improvements.
-- Minor audio improvements.
+- Changed the font from *Roboto Condensed* to *Exo 2*.
+- Major visual overhaul.
+- Minor audio additions.
 
 ### Version 1.1
 
@@ -40,11 +41,11 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 
 ### Images
 
-- **Background**: [www.GodsAndIdols.com](https://www.GodsAndIdols.com).
-- **Explosions**: [Skorpio](https://opengameart.org/content/sci-fi-effects).
-- **Player's ship, enemies' ships, bullets, bombs, cargo**: [Kenney.nl](https://kenney.nl/).
+- **Background**: [Rawdanitsu](https://opengameart.org/content/space-backgrounds-7).
+- **Explosions, bonuses**: [Skorpio](https://opengameart.org/content/sci-fi-effects).
+- **Cargo**: [Kenney.nl](https://kenney.nl/).
 - **Shields**: [Bonsaiheldin](http://bonsaiheld.org/).
-- **Gems (bonuses)**: [sunburn](https://opengameart.org/content/loot).
+- **Bullets, bombs, player's ship, enemies' ships**: [UnLuckY Studio](https://opengameart.org/content/complete-spaceship-game-art-pack).
 
 ### Sounds
 
@@ -53,7 +54,7 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 
 ### Fonts
 
-The one and only font used by Star Battles is [Roboto Condensed](https://fonts.google.com/specimen/Roboto+Condensed), created by Christian Roberstson.
+The one and only font used by Star Battles is [Exo 2](https://fonts.google.com/specimen/Exo+2), created by Natanael Gama.
 
 ## Notes
 

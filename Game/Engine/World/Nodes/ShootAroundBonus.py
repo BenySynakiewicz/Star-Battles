@@ -39,7 +39,7 @@ class ShootAroundBonus(MovingNode):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Gem 4", Vector(0, Parameters.BonusSpeed), 2)
+		super().__init__(scene, "Bonus 4", Vector(0, Parameters.BonusSpeed), 2)
 
 		self.SetCollisions({"Bonuses"}, set())
 

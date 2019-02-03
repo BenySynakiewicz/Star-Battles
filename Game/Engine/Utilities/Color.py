@@ -39,8 +39,8 @@ Color = SimpleNamespace(
 	Grey     = (100, 100, 100),
 	DarkGrey = ( 30,  30,  30),
 
-	Green = ( 50, 255,  50),
-	Red   = (255,  50,  50),
-	Blue  = ( 50,  50, 255),
+	Green = ( 25, 255,  25),
+	Red   = (255,  25,  50),
+	Blue  = ( 25,  25, 255),
 
 )

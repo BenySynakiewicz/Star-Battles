@@ -43,9 +43,9 @@ class Resources(metaclass = Singleton):
 	def __init__(self):
 
 		self._fonts = {
-			"Title" : font.Font("Resources/Fonts/Roboto Condensed Light.ttf", 96),
-			"Big"   : font.Font("Resources/Fonts/Roboto Condensed Light.ttf", 48),
-			"Medium": font.Font("Resources/Fonts/Roboto Condensed.ttf"      , 18),
+			"Title" : font.Font("Resources/Fonts/Exo 2 Light.ttf", 96),
+			"Big"   : font.Font("Resources/Fonts/Exo 2 Light.ttf", 48),
+			"Medium": font.Font("Resources/Fonts/Exo 2.ttf"      , 18),
 		}
 
 		self._backgrounds = {
@@ -56,15 +56,69 @@ class Resources(metaclass = Singleton):
 
 			"Bullet (Green)": Sprite(["Resources/Images/Bullet (Green).png"]),
 			"Bullet (Red)"  : Sprite(["Resources/Images/Bullet (Red).png"]  ),
-			"Player"        : Sprite(["Resources/Images/Player.png"]        , True),
-			"Enemy"         : Sprite(["Resources/Images/Enemy.png"]         , True),
-			"Bomb"          : Sprite(["Resources/Images/Bomb.png"]          , True),
 			"Shield"        : Sprite(["Resources/Images/Shield.png"]        ),
-			"Gem 1"         : Sprite(["Resources/Images/Gem 1.png"]         , True),
-			"Gem 2"         : Sprite(["Resources/Images/Gem 2.png"]         , True),
-			"Gem 3"         : Sprite(["Resources/Images/Gem 3.png"]         , True),
-			"Gem 4"         : Sprite(["Resources/Images/Gem 4.png"]         , True),
 			"Cargo"         : Sprite(["Resources/Images/Cargo.png"]         , True),
+
+			"Bonus 1": Sprite([
+				"Resources/Images/Bonus 1/1.png",
+				"Resources/Images/Bonus 1/2.png",
+				"Resources/Images/Bonus 1/3.png",
+				"Resources/Images/Bonus 1/4.png",
+				"Resources/Images/Bonus 1/5.png",
+				"Resources/Images/Bonus 1/6.png",
+			]),
+
+			"Bonus 2": Sprite([
+				"Resources/Images/Bonus 2/1.png",
+				"Resources/Images/Bonus 2/2.png",
+				"Resources/Images/Bonus 2/3.png",
+				"Resources/Images/Bonus 2/4.png",
+				"Resources/Images/Bonus 2/5.png",
+				"Resources/Images/Bonus 2/6.png",
+			]),
+
+			"Bonus 3": Sprite([
+				"Resources/Images/Bonus 3/1.png",
+				"Resources/Images/Bonus 3/2.png",
+				"Resources/Images/Bonus 3/3.png",
+				"Resources/Images/Bonus 3/4.png",
+				"Resources/Images/Bonus 3/5.png",
+				"Resources/Images/Bonus 3/6.png",
+			]),
+
+			"Bonus 4": Sprite([
+				"Resources/Images/Bonus 4/1.png",
+				"Resources/Images/Bonus 4/2.png",
+				"Resources/Images/Bonus 4/3.png",
+				"Resources/Images/Bonus 4/4.png",
+				"Resources/Images/Bonus 4/5.png",
+				"Resources/Images/Bonus 4/6.png",
+			]),
+
+			"Player": Sprite([
+				"Resources/Images/Player/1.png",
+				"Resources/Images/Player/2.png",
+				"Resources/Images/Player/3.png",
+				"Resources/Images/Player/4.png",
+				"Resources/Images/Player/5.png",
+				"Resources/Images/Player/6.png",
+				"Resources/Images/Player/7.png",
+				"Resources/Images/Player/8.png",
+			], True, framesPerSecond = 6),
+
+			"Enemy": Sprite([
+				"Resources/Images/Enemy/1.png",
+				"Resources/Images/Enemy/2.png",
+				"Resources/Images/Enemy/3.png",
+				"Resources/Images/Enemy/4.png",
+				"Resources/Images/Enemy/5.png",
+			], True, framesPerSecond = 6),
+
+			"Bomb": Sprite([
+				"Resources/Images/Bomb/1.png",
+				"Resources/Images/Bomb/2.png",
+				"Resources/Images/Bomb/3.png",
+			], True, framesPerSecond = 6),
 
 			"Explosion": Sprite([
 				"Resources/Images/Explosion/1.png",

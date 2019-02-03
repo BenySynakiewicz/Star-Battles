@@ -39,7 +39,7 @@ class QuickerShieldBonus(MovingNode):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Gem 3", Vector(0, Parameters.BonusSpeed), 2)
+		super().__init__(scene, "Bonus 3", Vector(0, Parameters.BonusSpeed), 2)
 
 		self.SetCollisions({"Bonuses"}, set())
 
