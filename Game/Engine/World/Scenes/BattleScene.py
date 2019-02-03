@@ -84,11 +84,11 @@ class BattleScene(Scene):
 	def UpdateBonusDescriptionText(self):
 
 		if self.Player._bonuses.TripleShot:
-			description = "TRIPLE SHOT bonus is active"
+			description = "TRIPLE SHOT bonus is now active"
 		elif self.Player._bonuses.TwoBombs:
-			description = "TWO BOMBS bonus is active"
+			description = "TWO BOMBS bonus is now active"
 		elif self.Player._bonuses.QuickerShield:
-			description = "QUICKER SHIELD bonus is active"
+			description = "QUICKER SHIELD bonus is now active"
 		else:
 			description = None
 
