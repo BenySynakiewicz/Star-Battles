@@ -27,8 +27,7 @@
 from Engine.Utilities.Color import Color
 from Engine.Utilities.Vector import Vector
 
-from random import random
-
+from numpy import random
 from pygame import display, font, Surface, SRCALPHA
 
 ##
@@ -41,9 +40,17 @@ def Blit(surface, image, position = Vector()):
 
 	surface.blit(image, tuple(position))
 
-def Decision(probability):
+def GetDecision(possibilities):
 
-	return random() < probability
+	options, probabilities = zip(*possibilities.items())
+
+	options = list(options)
+	probabilities = list(probabilities)
+
+	options.append(None)
+	probabilities.append(1 - sum(probabilities))
+
+	return random.choice(options, 1, p = probabilities)
 
 def GetDimensions(surface):
 

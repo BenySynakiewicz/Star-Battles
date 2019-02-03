@@ -28,7 +28,7 @@ from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.General import GetScreen, GetScreenDimensions
-from Engine.Utilities.General import Decision
+from Engine.Utilities.General import GetDecision
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.MovingNode import MovingNode
 from Engine.World.Nodes.BulletFromEnemy import BulletFromEnemy
@@ -38,8 +38,6 @@ from Engine.World.Nodes.TripleShotBonus import TripleShotBonus
 from Engine.World.Nodes.TwoBombsBonus import TwoBombsBonus
 from Engine.World.Nodes.QuickerShieldBonus import QuickerShieldBonus
 from Engine.World.Utilities.Positioning import AtBottom
-
-import pygame
 
 ##
 #
@@ -51,7 +49,7 @@ class Enemy(MovingNode):
 
 	def __init__(self, scene, verticalOffset, row, direction):
 
-		super().__init__(scene, "Enemy", Vector(+Parameters.EnemySpeed, 0) if Direction.Right == direction else Vector(-Parameters.EnemySpeed, 0), 1)
+		super().__init__(scene, "Enemy", Vector(+Parameters.EnemySpeed if Direction.Right == direction else -Parameters.EnemySpeed, 0), 1)
 
 		self.SetCollisions({"Participants"}, {"BulletFromEnemy"})
 
@@ -95,7 +93,7 @@ class Enemy(MovingNode):
 		if self._isDestroyed and self._sprite.IsFinished():
 			self.Terminate()
 
-		if not self._isDestroyed and Decision(self.GetTimer("Shot") / 200000):
+		if not self._isDestroyed and "Shoot" == GetDecision({"Shoot": self.GetTimer("Shot") / 200000}):
 			self.Shoot()
 
 	def OnCollision(self, node):
@@ -104,37 +102,21 @@ class Enemy(MovingNode):
 
 	def OnTermination(self):
 
-		if Decision(Parameters.TripleShotBonusProbability):
+		possibilities = {
+			"TripleShotBonus"   : Parameters.TripleShotBonusProbability,
+			"TwoBombsBonus"     : Parameters.TwoBombsBonusProbability,
+			"QuickerShieldBonus": Parameters.QuickerShieldBonusProbability,
+			"ShootAroundBonus"  : Parameters.ShootAroundBonusProbability,
+			"Cargo"             : Parameters.CargoProbability,
+		}
 
-			bonus = TripleShotBonus(self._scene)
-			bonus.SetRelativePosition(self, AtBottom)
-	
-			self._scene.AppendNode(bonus)
+		decision = GetDecision(possibilities)
+		if not decision:
+			return
 
-		elif Decision(Parameters.TwoBombsBonusProbability):
+		bonusNodeName = decision[0]
 
-			bonus = TwoBombsBonus(self._scene)
-			bonus.SetRelativePosition(self, AtBottom)
-	
-			self._scene.AppendNode(bonus)
+		bonusNode = globals()[bonusNodeName](self._scene)
+		bonusNode.SetRelativePosition(self, AtBottom)
 
-		elif Decision(Parameters.QuickerShieldBonusProbability):
-
-			bonus = QuickerShieldBonus(self._scene)
-			bonus.SetRelativePosition(self, AtBottom)
-	
-			self._scene.AppendNode(bonus)
-
-		elif Decision(Parameters.ShootAroundBonusProbability):
-
-			bonus = ShootAroundBonus(self._scene)
-			bonus.SetRelativePosition(self, AtBottom)
-	
-			self._scene.AppendNode(bonus)
-
-		elif Decision(Parameters.CargoProbability):
-
-			cargo = Cargo(self._scene)
-			cargo.SetRelativePosition(self, AtBottom)
-	
-			self._scene.AppendNode(cargo)
+		self._scene.AppendNode(bonusNode)

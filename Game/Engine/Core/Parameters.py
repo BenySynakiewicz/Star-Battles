@@ -65,11 +65,11 @@ Parameters = SimpleNamespace(
 	SmallTrajectoryDeviation = 0.03,
 	BigTrajectoryDeviation = 0.06,
 
-	TripleShotBonusProbability = 0.030,
-	TwoBombsBonusProbability = 0.003,
-	QuickerShieldBonusProbability = 0.006,
-	ShootAroundBonusProbability = 0.003,
-	CargoProbability = 0.010,
+	TripleShotBonusProbability = 0.03,
+	TwoBombsBonusProbability = 0.01,
+	QuickerShieldBonusProbability = 0.02,
+	ShootAroundBonusProbability = 0.01,
+	CargoProbability = 0.01,
 
 	BulletEnergyRegeneration = 0.225,
 	BombEnergyRegeneration = 0.015,
