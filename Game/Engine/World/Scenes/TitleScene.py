@@ -53,11 +53,11 @@ class TitleScene(Scene):
 		self._creator = RenderText(f"Created by {Parameters.Creator}", Resources().GetFont("Medium"))
 		self._version = RenderText(f"Version {Parameters.Version}", Resources().GetFont("Medium"))
 		self._instruction = RenderText(
-			"Press the UP arrow key to shoot a bullet." "\n"
-			"Press the LEFT and RIGHT arrow keys to move." "\n"
-			"Press the SPACE key to shoot a bomb." "\n"
-			"Press the SPACE key again to detonate the bomb." "\n"
-			"Press the DOWN arrow key to activate the shield.",
+			"Press the UP arrow to shoot a bullet." "\n"
+			"Press the LEFT and RIGHT arrows to move." "\n"
+			"Press SPACE to shoot a bomb." "\n"
+			"Press SPACE again to detonate the bomb." "\n"
+			"Press the DOWN arrow to activate the shield.",
 			Resources().GetFont("Medium")
 		)
 

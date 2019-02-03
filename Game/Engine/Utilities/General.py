@@ -27,6 +27,9 @@
 from Engine.Utilities.Color import Color
 from Engine.Utilities.Vector import Vector
 
+from pathlib import Path
+
+from natsort import natsorted, ns
 from numpy import random
 from pygame import display, font, Surface, SRCALPHA
 
@@ -36,9 +39,19 @@ from pygame import display, font, Surface, SRCALPHA
 #
 ##
 
-def Blit(surface, image, position = Vector()):
+def Blit(surface, image, position):
 
 	surface.blit(image, tuple(position))
+
+def FindFiles(path = None, recursively = False, suffixes = None):
+
+	path = Path(path) if path else Path()
+	allFiles = [item for item in path.glob("**/*" if recursively else "*") if item.is_file()]
+
+	suffixes = [suffix.lower() for suffix in suffixes] if suffixes else None
+	filePaths = allFiles if not suffixes else [item for item in allFiles if item.suffix.lower() in suffixes]
+
+	return natsorted(filePaths, key = lambda x: str(x), alg = ns.IGNORECASE)
 
 def GetDecision(possibilities):
 

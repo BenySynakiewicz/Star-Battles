@@ -26,9 +26,10 @@
 
 from Engine.Core.Parameters import Parameters
 from Engine.Media.Utilities.SurfaceProcessor import InterpolateToDimensions, InterpolateToScale
-from Engine.Utilities.General import Blit, GetDimensions
+from Engine.Utilities.General import Blit, FindFiles, GetDimensions
 
 from copy import copy
+from pathlib import Path
 
 from pygame import image, mask, surfarray, transform
 
@@ -40,14 +41,17 @@ from pygame import image, mask, surfarray, transform
 
 class Sprite:
 
-	def __init__(self, paths, shadows: bool = False, framesPerSecond: int = 40):
+	def __init__(self, path, shadows: bool = False, framesPerSecond: int = 40):
 
-		self._surfaces = [image.load(path).convert_alpha() for path in paths]
+		path = Path(path)
+		filePaths = FindFiles(path, recursively = False, suffixes = [".png"]) if path.is_dir() else [path]
+
+		self._surfaces = [image.load(str(filePath)).convert_alpha() for filePath in filePaths]
 		self._masks = [mask.from_surface(surface) for surface in self._surfaces]
-		self._shadows = None
 
 		self._framesPerSecond = framesPerSecond
 
+		self._shadows = None
 		if shadows:
 			self.CreateShadow()
 

@@ -58,4 +58,9 @@ The one and only font used by Star Battles is [Exo 2](https://fonts.google.com/s
 
 ## Notes
 
-Tested with **Python 3.7.2**, **pygame 1.9.4** and **NumPy 1.16.0**.
+Tested with:
+
+- **Python 3.7.2**,
+- **pygame 1.9.4**,
+- **NumPy 1.16.0**,
+- **natsort 5.5.0**.

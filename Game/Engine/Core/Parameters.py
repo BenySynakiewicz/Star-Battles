@@ -73,7 +73,7 @@ Parameters = SimpleNamespace(
 	BulletEnergyRegeneration = 0.225,
 	BombEnergyRegeneration = 0.015,
 	ShieldEnergyRegeneration = 0.025,
-	ShieldEnergyUsage = 0.050,
-	LowerShieldEnergyUsage = 0.025,
+	ShieldEnergyUsage = 0.075,
+	LowerShieldEnergyUsage = 0.050,
 
 )

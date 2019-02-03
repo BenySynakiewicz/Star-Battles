@@ -175,9 +175,13 @@ class Player(Node):
 
 		super().Update(milisecondsPassed)
 
+		shieldEnergyChange = Parameters.ShieldEnergyRegeneration
+		if self.ShieldIsUp:
+			shieldEnergyChange -= Parameters.ShieldEnergyUsage if not self._bonuses.QuickerShield else Parameters.LowerShieldEnergyUsage
+
 		self.ChangeBulletEnergy(milisecondsPassed * Parameters.BulletEnergyRegeneration)
 		self.ChangeBombEnergy(milisecondsPassed * Parameters.BombEnergyRegeneration)
-		self.ChangeShieldEnergy(-(milisecondsPassed * (Parameters.ShieldEnergyUsage if not self._bonuses.QuickerShield else Parameters.LowerShieldEnergyUsage)) if self.ShieldIsUp else (milisecondsPassed * Parameters.ShieldEnergyRegeneration))
+		self.ChangeShieldEnergy(milisecondsPassed * shieldEnergyChange)
 
 		if not self.Energy.Shield:
 			self.ShieldIsUp = False

@@ -54,105 +54,23 @@ class Resources(metaclass = Singleton):
 
 		self._sprites = {
 
-			"Bullet (Green)": Sprite(["Resources/Images/Bullet (Green).png"]),
-			"Bullet (Red)"  : Sprite(["Resources/Images/Bullet (Red).png"]  ),
-			"Shield"        : Sprite(["Resources/Images/Shield.png"]        ),
-
-			"Bonus 1": Sprite([
-				"Resources/Images/Bonus 1/1.png",
-				"Resources/Images/Bonus 1/2.png",
-				"Resources/Images/Bonus 1/3.png",
-				"Resources/Images/Bonus 1/4.png",
-				"Resources/Images/Bonus 1/5.png",
-				"Resources/Images/Bonus 1/6.png",
-			]),
-
-			"Bonus 2": Sprite([
-				"Resources/Images/Bonus 2/1.png",
-				"Resources/Images/Bonus 2/2.png",
-				"Resources/Images/Bonus 2/3.png",
-				"Resources/Images/Bonus 2/4.png",
-				"Resources/Images/Bonus 2/5.png",
-				"Resources/Images/Bonus 2/6.png",
-			]),
-
-			"Bonus 3": Sprite([
-				"Resources/Images/Bonus 3/1.png",
-				"Resources/Images/Bonus 3/2.png",
-				"Resources/Images/Bonus 3/3.png",
-				"Resources/Images/Bonus 3/4.png",
-				"Resources/Images/Bonus 3/5.png",
-				"Resources/Images/Bonus 3/6.png",
-			]),
-
-			"Bonus 4": Sprite([
-				"Resources/Images/Bonus 4/1.png",
-				"Resources/Images/Bonus 4/2.png",
-				"Resources/Images/Bonus 4/3.png",
-				"Resources/Images/Bonus 4/4.png",
-				"Resources/Images/Bonus 4/5.png",
-				"Resources/Images/Bonus 4/6.png",
-			]),
-
-			"Player": Sprite([
-				"Resources/Images/Player/1.png",
-				"Resources/Images/Player/2.png",
-				"Resources/Images/Player/3.png",
-				"Resources/Images/Player/4.png",
-				"Resources/Images/Player/5.png",
-				"Resources/Images/Player/6.png",
-				"Resources/Images/Player/7.png",
-				"Resources/Images/Player/8.png",
-			], True, framesPerSecond = 6),
-
-			"Enemy": Sprite([
-				"Resources/Images/Enemy/1.png",
-				"Resources/Images/Enemy/2.png",
-				"Resources/Images/Enemy/3.png",
-				"Resources/Images/Enemy/4.png",
-				"Resources/Images/Enemy/5.png",
-			], True, framesPerSecond = 6),
-
-			"Bomb": Sprite([
-				"Resources/Images/Bomb/1.png",
-				"Resources/Images/Bomb/2.png",
-				"Resources/Images/Bomb/3.png",
-			], True, framesPerSecond = 6),
-
-			"Explosion": Sprite([
-				"Resources/Images/Explosion/1.png",
-				"Resources/Images/Explosion/2.png",
-				"Resources/Images/Explosion/3.png",
-				"Resources/Images/Explosion/4.png",
-				"Resources/Images/Explosion/5.png",
-				"Resources/Images/Explosion/6.png",
-				"Resources/Images/Explosion/7.png",
-				"Resources/Images/Explosion/8.png",
-				"Resources/Images/Explosion/9.png",
-				"Resources/Images/Explosion/10.png",
-				"Resources/Images/Explosion/11.png",
-				"Resources/Images/Explosion/12.png",
-				"Resources/Images/Explosion/13.png",
-				"Resources/Images/Explosion/14.png",
-				"Resources/Images/Explosion/15.png",
-			]),
-
-			"Absorption": Sprite([
-				"Resources/Images/Absorption/1.png",
-				"Resources/Images/Absorption/2.png",
-				"Resources/Images/Absorption/3.png",
-				"Resources/Images/Absorption/4.png",
-				"Resources/Images/Absorption/5.png",
-				"Resources/Images/Absorption/6.png",
-				"Resources/Images/Absorption/7.png",
-				"Resources/Images/Absorption/8.png",
-				"Resources/Images/Absorption/9.png",
-			]),
+			"Bullet (Green)": Sprite("Resources/Images/Bullet (Green).png"),
+			"Bullet (Red)"  : Sprite("Resources/Images/Bullet (Red).png"  ),
+			"Shield"        : Sprite("Resources/Images/Shield.png"        ),
+			"Bonus 1"       : Sprite("Resources/Images/Bonus 1/"          ),
+			"Bonus 2"       : Sprite("Resources/Images/Bonus 2/"          ),
+			"Bonus 3"       : Sprite("Resources/Images/Bonus 3/"          ),
+			"Bonus 4"       : Sprite("Resources/Images/Bonus 4/"          ),
+			"Player"        : Sprite("Resources/Images/Player/"           , shadows = True, framesPerSecond = 6),
+			"Enemy"         : Sprite("Resources/Images/Enemy/"            , shadows = True, framesPerSecond = 6),
+			"Bomb"          : Sprite("Resources/Images/Bomb/"             , shadows = True, framesPerSecond = 6),
+			"Explosion"     : Sprite("Resources/Images/Explosion/"        ),
+			"Absorption"    : Sprite("Resources/Images/Absorption/"       ),
 
 		}
 
 		self._sprites["Small Shield"] = self._sprites["Shield"].GetScaledCopy(Vector(80, 80))
-		self._sprites["Small Explosion"] = self._sprites["Explosion"].GetScaledCopy(Vector(100, 100))
+		self._sprites["Small Explosion"] = self._sprites["Explosion"].GetScaledCopy(Vector(125, 125))
 		self._sprites["Very Small Explosion"] = self._sprites["Explosion"].GetScaledCopy(Vector(15, 15))
 
 		self._sounds = {
