@@ -43,6 +43,7 @@ Parameters = SimpleNamespace(
 
 	MaximumFrameRate = 120,
 
+	ScreenshotFilePath = Path("Screenshot.png"),
 	HighscoreFilePath = Path("Highscore.txt"),
 
 	SmallMargin = 4,

@@ -57,7 +57,8 @@ class TitleScene(Scene):
 			"Press the LEFT and RIGHT arrows to move." "\n"
 			"Press SPACE to shoot a bomb." "\n"
 			"Press SPACE again to detonate the bomb." "\n"
-			"Press the DOWN arrow to activate the shield.",
+			"Press the DOWN arrow to activate the shield." "\n"
+			"Press F12 to take a screenshot.",
 			Resources().GetFont("Medium")
 		)
 
