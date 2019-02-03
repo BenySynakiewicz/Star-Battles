@@ -49,7 +49,7 @@ Parameters = SimpleNamespace(
 	MediumMargin = 8,
 	Margin = 12,
 
-	BarHeight = 8,
+	BarHeight = 6,
 	ShadowDistance = Vector(3, 3),
 
 	PlayerSpeed = 8,
