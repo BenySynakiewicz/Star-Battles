@@ -209,14 +209,11 @@ class Player(Node):
 			"TwoBombsBonus"     : Player.EnableTwoBombsBonus,
 			"QuickerShieldBonus": Player.EnableQuickerShieldBonus,
 			"ShootAroundBonus"  : Player.EnableShootAroundBonus,
-			"Cargo"             : None,
 		}
 
 		if nodeName in absorbableNodes:
 
-			functionCall = absorbableNodes[nodeName]
-			if functionCall:
-				functionCall(self)
+			absorbableNodes[nodeName](self)
 
 			# Create and show the visual effect and play the sound.
 

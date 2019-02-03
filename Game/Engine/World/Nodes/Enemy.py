@@ -32,7 +32,6 @@ from Engine.Utilities.General import GetDecision
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.MovingNode import MovingNode
 from Engine.World.Nodes.BulletFromEnemy import BulletFromEnemy
-from Engine.World.Nodes.Cargo import Cargo
 from Engine.World.Nodes.ShootAroundBonus import ShootAroundBonus
 from Engine.World.Nodes.TripleShotBonus import TripleShotBonus
 from Engine.World.Nodes.TwoBombsBonus import TwoBombsBonus
@@ -107,7 +106,6 @@ class Enemy(MovingNode):
 			"TwoBombsBonus"     : Parameters.TwoBombsBonusProbability,
 			"QuickerShieldBonus": Parameters.QuickerShieldBonusProbability,
 			"ShootAroundBonus"  : Parameters.ShootAroundBonusProbability,
-			"Cargo"             : Parameters.CargoProbability,
 		}
 
 		decision = GetDecision(possibilities)

@@ -57,7 +57,6 @@ class Resources(metaclass = Singleton):
 			"Bullet (Green)": Sprite(["Resources/Images/Bullet (Green).png"]),
 			"Bullet (Red)"  : Sprite(["Resources/Images/Bullet (Red).png"]  ),
 			"Shield"        : Sprite(["Resources/Images/Shield.png"]        ),
-			"Cargo"         : Sprite(["Resources/Images/Cargo.png"]         , True),
 
 			"Bonus 1": Sprite([
 				"Resources/Images/Bonus 1/1.png",

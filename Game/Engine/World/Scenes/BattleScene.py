@@ -168,10 +168,6 @@ class BattleScene(Scene):
 				State().UpdateCurrentScore(+Parameters.EnemyValue)
 				self.UpdateScoreText()
 
-			if node._terminated and "Cargo" == type(node).__name__:
-				State().UpdateCurrentScore(+Parameters.CargoValue)
-				self.UpdateScoreText()
-
 		self._nodes[:] = filter(lambda node: not node._terminated, self._nodes)
 
 		# Find collisions.

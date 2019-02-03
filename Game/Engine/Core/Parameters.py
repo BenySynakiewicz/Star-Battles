@@ -69,7 +69,6 @@ Parameters = SimpleNamespace(
 	TwoBombsBonusProbability = 0.06,
 	QuickerShieldBonusProbability = 0.02,
 	ShootAroundBonusProbability = 0.01,
-	CargoProbability = 0.01,
 
 	BulletEnergyRegeneration = 0.225,
 	BombEnergyRegeneration = 0.015,

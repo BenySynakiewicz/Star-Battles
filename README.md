@@ -8,7 +8,7 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 
 ### Version 1.2
 
-- Added cargo (catching it noticeably increases the score).
+- Minor improvements all around.
 - Added a new bonus.
 - Improved and optimized collisions.
 - Made shields impossible to penetrate by anything (bonuses included).
