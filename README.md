@@ -1,10 +1,15 @@
-# Star Battles 1.2
+# Star Battles 1.3
 
 ![Screenshot](/Screenshot.jpeg?raw=true)
 
 A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invaders), created for the purpose of learning the basics of the [pygame](https://www.pygame.org/) framework.
 
 ## Changelog
+
+### Version 1.3
+
+- **BEING-DONE**: Reworked and optimized resource caching.
+- Minor visual improvements.
 
 ### Version 1.2
 
@@ -43,7 +48,6 @@ A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_
 
 - **Background**: [Rawdanitsu](https://opengameart.org/content/space-backgrounds-7).
 - **Explosions, bonuses**: [Skorpio](https://opengameart.org/content/sci-fi-effects).
-- **Cargo**: [Kenney.nl](https://kenney.nl/).
 - **Shields**: [Bonsaiheldin](http://bonsaiheld.org/).
 - **Bullets, bombs, player's ship, enemies' ships**: [UnLuckY Studio](https://opengameart.org/content/complete-spaceship-game-art-pack).
 
