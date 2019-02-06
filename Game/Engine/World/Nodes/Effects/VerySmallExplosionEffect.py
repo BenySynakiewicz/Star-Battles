@@ -25,8 +25,10 @@
 ##
 
 from Engine.Core.Resources import Resources
+from Engine.Media.Concepts.SpriteInstance import SpriteInstance
 from Engine.World.Concepts.Node import Node
 from Engine.World.Utilities.Positioning import AtSameCenter
+from Engine.Utilities.Vector import Vector
 
 ##
 #
@@ -38,7 +40,7 @@ class VerySmallExplosionEffect(Node):
 
 	def __init__(self, scene, parentNode):
 
-		super().__init__(scene, "Very Small Explosion", +1)
+		super().__init__(scene, "Explosion", +1, spriteDimensions = Vector(15, 15))
 
 		self._sprite.SetLooping(False)
 

@@ -60,10 +60,11 @@ class Bomb(MovingNode):
 
 		super().Render()
 
-		Resources().GetSprite("Small Shield").Blit(
+		smallShieldSprite = Resources().GetSprite("Shield", dimensions = Vector(80, 80))
+		smallShieldSprite.Blit(
 			0,
 			GetScreen(),
-			AtSameCenter(self.GetPosition(), self.GetDimensions(), Resources().GetSprite("Small Shield").GetDimensions()),
+			AtSameCenter(self.GetPosition(), self.GetDimensions(), smallShieldSprite.GetDimensions()),
 		)
 
 	def OnCollision(self, node):

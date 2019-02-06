@@ -67,7 +67,7 @@ class Enemy(MovingNode):
 		if self._isDestroyed:
 			return
 
-		self.ReplaceSprite("Small Explosion", False)
+		self.ReplaceSprite("Explosion", loop = False, dimensions = Vector(125, 125))
 		Resources().GetSound("Destruction").Play()
 
 		self.AppendTimer("Destruction")

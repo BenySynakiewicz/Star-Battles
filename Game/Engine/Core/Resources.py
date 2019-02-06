@@ -42,47 +42,48 @@ class Resources(metaclass = Singleton):
 
 	def __init__(self):
 
-		self._fonts = {
-			"Title" : font.Font("Resources/Fonts/Exo 2 Light.ttf", 96),
-			"Big"   : font.Font("Resources/Fonts/Exo 2 Light.ttf", 48),
-			"Medium": font.Font("Resources/Fonts/Exo 2.ttf"      , 18),
-		}
+		# Initialize the caches.
 
-		self._backgrounds = {
-			"Background": LoadBackground("Resources/Images/Background.jpeg"),
-		}
+		self._fonts = {}
+		self._sprites = {}
+		self._backgrounds = {}
+		self._sounds = {}
 
-		self._sprites = {
+		# Load fonts.
 
-			"Bullet (Green)": Sprite("Resources/Images/Bullet (Green).png"),
-			"Bullet (Red)"  : Sprite("Resources/Images/Bullet (Red).png"  ),
-			"Shield"        : Sprite("Resources/Images/Shield.png"        ),
-			"Bonus 1"       : Sprite("Resources/Images/Bonus 1/"          ),
-			"Bonus 2"       : Sprite("Resources/Images/Bonus 2/"          ),
-			"Bonus 3"       : Sprite("Resources/Images/Bonus 3/"          ),
-			"Bonus 4"       : Sprite("Resources/Images/Bonus 4/"          ),
-			"Player"        : Sprite("Resources/Images/Player/"           , shadows = True, framesPerSecond = 6),
-			"Enemy"         : Sprite("Resources/Images/Enemy/"            , shadows = True, framesPerSecond = 6),
-			"Bomb"          : Sprite("Resources/Images/Bomb/"             , shadows = True, framesPerSecond = 6),
-			"Explosion"     : Sprite("Resources/Images/Explosion/"        ),
-			"Absorption"    : Sprite("Resources/Images/Absorption/"       ),
+		self._LoadFont("Title" , "Resources/Fonts/Exo 2 Light.ttf", 96)
+		self._LoadFont("Big"   , "Resources/Fonts/Exo 2 Light.ttf", 48)
+		self._LoadFont("Medium", "Resources/Fonts/Exo 2.ttf"      , 18)
 
-		}
+		# Load backgrounds.
 
-		self._sprites["Small Shield"] = self._sprites["Shield"].GetScaledCopy(Vector(80, 80))
-		self._sprites["Small Explosion"] = self._sprites["Explosion"].GetScaledCopy(Vector(125, 125))
-		self._sprites["Very Small Explosion"] = self._sprites["Explosion"].GetScaledCopy(Vector(15, 15))
+		self._LoadBackground("Background", "Resources/Images/Background.jpeg")
 
-		self._sounds = {
+		# Load sprites.
 
-			"Bomb"       : Sound("Resources/Sounds/Bomb.ogg"       , range( 1, 3)),
-			"Bullet"     : Sound("Resources/Sounds/Bullet.ogg"     , range( 3, 17)),
-			"Destruction": Sound("Resources/Sounds/Destruction.ogg", range(18, 19)),
-			"Explosion"  : Sound("Resources/Sounds/Explosion.ogg"  , range(20, 21)),
-			"Shield"     : Sound("Resources/Sounds/Shield.ogg"     , range(22, 24)),
-			"Absorption" : Sound("Resources/Sounds/Absorption.ogg" , range(25, 26)),
+		self._LoadSprite("Bullet (Green)", "Resources/Images/Bullet (Green).png")
+		self._LoadSprite("Bullet (Red)", "Resources/Images/Bullet (Red).png")
+		self._LoadSprite("Shield", "Resources/Images/Shield.png")
+		self._LoadSprite("Bonus 1", "Resources/Images/Bonus 1/")
+		self._LoadSprite("Bonus 2", "Resources/Images/Bonus 2/")
+		self._LoadSprite("Bonus 3", "Resources/Images/Bonus 3/")
+		self._LoadSprite("Bonus 4", "Resources/Images/Bonus 4/")
+		self._LoadSprite("Player", "Resources/Images/Player/", shadows = True, framesPerSecond = 6)
+		self._LoadSprite("Enemy", "Resources/Images/Enemy/", shadows = True, framesPerSecond = 6)
+		self._LoadSprite("Bomb", "Resources/Images/Bomb/", shadows = True, framesPerSecond = 6)
+		self._LoadSprite("Explosion", "Resources/Images/Explosion/")
+		self._LoadSprite("Absorption", "Resources/Images/Absorption/")
 
-		}
+		# Load sounds.
+
+		self._LoadSound("Bomb", "Resources/Sounds/Bomb.ogg", range( 1,  3))
+		self._LoadSound("Bullet", "Resources/Sounds/Bullet.ogg", range( 3, 17))
+		self._LoadSound("Destruction", "Resources/Sounds/Destruction.ogg", range(18, 19))
+		self._LoadSound("Explosion", "Resources/Sounds/Explosion.ogg", range(20, 21))
+		self._LoadSound("Shield", "Resources/Sounds/Shield.ogg", range(22, 24))
+		self._LoadSound("Absorption", "Resources/Sounds/Absorption.ogg", range(25, 26))
+
+		# Load music.
 
 		mixer.music.load("Resources/Sounds/Ambience.ogg")
 
@@ -94,20 +95,67 @@ class Resources(metaclass = Singleton):
 
 		return self._backgrounds[identifier]
 
-	def GetSprite(self, identifier):
+	def GetSprite(self, identifier, dimensions = None, rotation = None):
 
-		return self._sprites[identifier]
+		return self._sprites[identifier].Get(dimensions, rotation)
 
 	def GetSound(self, identifier):
 
 		return self._sounds[identifier]
 
+	def _LoadFont(self, name, path, height):
+
+		self._fonts[name] = font.Font(path, height)
+
+	def _LoadSprite(self, name, path, shadows = False, framesPerSecond = 40):
+
+		self._sprites[name] = SpriteCollection(path, shadows, framesPerSecond)
+
+	def _LoadBackground(self, name, path):
+
+		self._backgrounds[name] = transform.smoothscale(image.load(path), tuple(GetScreenDimensions())).convert_alpha()
+
+	def _LoadSound(self, name, path, channels):
+
+		self._sounds[name] = Sound(path, channels)
+
 ##
 #
-# Utilities.
+# Classes.
 #
 ##
 
-def LoadBackground(path):
+class SpriteCollection:
 
-	return transform.smoothscale(image.load(path), tuple(GetScreenDimensions())).convert_alpha()
+	def __init__(self, path, shadows = False, framesPerSecond = 40):
+
+		self._source = Sprite(path, shadows, framesPerSecond)
+		self._variants = {}
+
+	def Get(self, dimensions = None, rotation = None):
+
+		if not dimensions and not rotation:
+			return self._source
+
+		sourceDimensions = self._source.GetDimensions()
+		sourceRotation = 0
+
+		if dimensions == sourceDimensions and rotation == sourceRotation:
+			return self._source
+
+		variant = (dimensions, rotation)
+		if variant in self._variants:
+			return self._variants[variant]
+
+		newVariant = None
+		if (dimensions and dimensions != sourceDimensions) and (rotation and rotation != sourceRotation):
+			newVariant = self._source.GetScaledCopy(dimensions)
+			newVariant = newVariant.GetRotatedCopy(rotation)
+		elif dimensions and dimensions != sourceDimensions:
+			newVariant = self._source.GetScaledCopy(dimensions)
+		elif rotation and rotation != sourceRotation:
+			newVariant = self._source.GetRotatedCopy(rotation)
+
+		self._variants[variant] = newVariant
+
+		return self._variants[variant]

@@ -76,6 +76,22 @@ class Vector:
 
 		return iter([self.X, self.Y])
 
+	def __key(self):
+		return (self.X, self.Y)
+
+	def __hash__(self):
+		return hash(self.__key())
+
+	def __eq__(self, other):
+		return isinstance(self, type(other)) and self.__key() == other.__key()
+
+	# def __eq__(self, vector):
+
+		# if isinstance(vector, Vector):
+			# return self.X == vector.X and self.Y == vector.Y
+
+		# return False
+
 	def __add__(self, vector):
 
 		return Vector(self.X + vector.X, self.Y + vector.Y)

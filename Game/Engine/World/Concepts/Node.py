@@ -43,7 +43,7 @@ from pygame import Rect
 
 class Node(Timed):
 
-	def __init__(self, scene, sprite, zIndex = 0):
+	def __init__(self, scene, sprite, zIndex = 0, spriteDimensions = None, spriteRotation = None):
 
 		super().__init__()
 
@@ -52,7 +52,8 @@ class Node(Timed):
 		self._collisionExceptions = set()
 		self._terminated = False
 
-		self._sprite = SpriteInstance(Resources().GetSprite(sprite))
+		self._spriteName = sprite
+		self._sprite = SpriteInstance(Resources().GetSprite(sprite, spriteDimensions, spriteRotation))
 		self._zIndex = zIndex
 
 		self._position = Vector()
@@ -115,9 +116,9 @@ class Node(Timed):
 		self._collisionClasses = collisionClasses
 		self._collisionExceptions = collisionExceptions
 
-	def ReplaceSprite(self, sprite, loop = True):
+	def ReplaceSprite(self, sprite, loop = True, dimensions = None, rotation = None):
 
-		self._sprite = SpriteInstance(Resources().GetSprite(sprite), loop)
+		self._sprite = SpriteInstance(Resources().GetSprite(sprite, dimensions, rotation), loop)
 
 		self._position += self._dimensions // 2
 		self._dimensions = self._sprite.GetDimensions()
@@ -133,7 +134,8 @@ class Node(Timed):
 
 	def SetRotation(self, angle):
 
-		self._sprite.SetRotation(angle)
+		self.ReplaceSprite(self._spriteName, loop = False, dimensions = None, rotation = angle)
+		# self._sprite.SetRotation(angle)
 
 	def Terminate(self):
 
