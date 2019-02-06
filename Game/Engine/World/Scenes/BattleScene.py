@@ -224,7 +224,7 @@ class BattleScene(Scene):
 
 			screen,
 
-			Vector(Parameters.Margin, barVerticalPosition),
+			Vector(0 * barDimensions.X, barVerticalPosition),
 			barDimensions,
 
 			Color.Green if (100 == self.Player.Energy.Bullet) else Color.Black,
@@ -238,7 +238,7 @@ class BattleScene(Scene):
 
 			screen,
 
-			Vector(Parameters.Margin + barDimensions.X, barVerticalPosition),
+			Vector(1 * barDimensions.X, barVerticalPosition),
 			barDimensions,
 
 			Color.Red if (100 == self.Player.Energy.Bomb) else Color.Black,
@@ -252,7 +252,7 @@ class BattleScene(Scene):
 
 			screen,
 
-			Vector(Parameters.Margin + 2 * barDimensions.X, barVerticalPosition),
+			Vector(2 * barDimensions.X, barVerticalPosition),
 			barDimensions,
 
 			Color.Blue,
