@@ -25,7 +25,7 @@
 ##
 
 from Engine.Core.Resources import Resources
-from Engine.Utilities.General import GetScreen
+from Engine.Utilities.General import Blit, GetScreen
 from Engine.World.Utilities.Timed import Timed
 
 ##
@@ -63,7 +63,7 @@ class Scene(Timed):
 
 	def Render(self):
 
-		GetScreen().blit(Resources().GetBackground(self._background), (0, 0))
+		Blit(GetScreen(), Resources().GetBackground(self._background))
 
 		for node in self._nodes:
 			node.Render()

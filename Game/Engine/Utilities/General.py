@@ -40,7 +40,7 @@ from pygame import display, font, image, Surface, SRCALPHA
 #
 ##
 
-def Blit(surface, image, position):
+def Blit(surface, image, position = Vector()):
 
 	surface.blit(image, tuple(position))
 
