@@ -42,50 +42,30 @@ class Resources(metaclass = Singleton):
 
 	def __init__(self):
 
-		# Initialize the caches.
-
 		self._fonts = {}
 		self._sprites = {}
 		self._backgrounds = {}
 		self._sounds = {}
 
-		# Load fonts.
+	def LoadFont(self, name, path, height):
 
-		self._LoadFont("Title" , "Resources/Fonts/Exo 2 Light.ttf", 96)
-		self._LoadFont("Big"   , "Resources/Fonts/Exo 2 Light.ttf", 48)
-		self._LoadFont("Medium", "Resources/Fonts/Exo 2.ttf"      , 18)
+		self._fonts[name] = font.Font(path, height)
 
-		# Load backgrounds.
+	def LoadSprite(self, name, path, shadows = False, framesPerSecond = 40):
 
-		self._LoadBackground("Background", "Resources/Images/Background.jpeg")
+		self._sprites[name] = SpriteCollection(path, shadows, framesPerSecond)
 
-		# Load sprites.
+	def LoadBackground(self, name, path):
 
-		self._LoadSprite("Bullet (Green)", "Resources/Images/Bullet (Green).png")
-		self._LoadSprite("Bullet (Red)", "Resources/Images/Bullet (Red).png")
-		self._LoadSprite("Shield", "Resources/Images/Shield.png")
-		self._LoadSprite("Bonus 1", "Resources/Images/Bonus 1/")
-		self._LoadSprite("Bonus 2", "Resources/Images/Bonus 2/")
-		self._LoadSprite("Bonus 3", "Resources/Images/Bonus 3/")
-		self._LoadSprite("Bonus 4", "Resources/Images/Bonus 4/")
-		self._LoadSprite("Player", "Resources/Images/Player/", shadows = True, framesPerSecond = 6)
-		self._LoadSprite("Enemy", "Resources/Images/Enemy/", shadows = True, framesPerSecond = 6)
-		self._LoadSprite("Bomb", "Resources/Images/Bomb/", shadows = True, framesPerSecond = 6)
-		self._LoadSprite("Explosion", "Resources/Images/Explosion/")
-		self._LoadSprite("Absorption", "Resources/Images/Absorption/")
+		self._backgrounds[name] = transform.smoothscale(image.load(path), tuple(GetScreenDimensions())).convert_alpha()
 
-		# Load sounds.
+	def LoadSound(self, name, path, channels):
 
-		self._LoadSound("Bomb", "Resources/Sounds/Bomb.ogg", range( 1,  3))
-		self._LoadSound("Bullet", "Resources/Sounds/Bullet.ogg", range( 3, 17))
-		self._LoadSound("Destruction", "Resources/Sounds/Destruction.ogg", range(18, 19))
-		self._LoadSound("Explosion", "Resources/Sounds/Explosion.ogg", range(20, 21))
-		self._LoadSound("Shield", "Resources/Sounds/Shield.ogg", range(22, 24))
-		self._LoadSound("Absorption", "Resources/Sounds/Absorption.ogg", range(25, 26))
+		self._sounds[name] = Sound(path, channels)
 
-		# Load music.
+	def LoadMusic(self, path):
 
-		mixer.music.load("Resources/Sounds/Ambience.ogg")
+		mixer.music.load(path)
 
 	def GetFont(self, identifier):
 
@@ -102,22 +82,6 @@ class Resources(metaclass = Singleton):
 	def GetSound(self, identifier):
 
 		return self._sounds[identifier]
-
-	def _LoadFont(self, name, path, height):
-
-		self._fonts[name] = font.Font(path, height)
-
-	def _LoadSprite(self, name, path, shadows = False, framesPerSecond = 40):
-
-		self._sprites[name] = SpriteCollection(path, shadows, framesPerSecond)
-
-	def _LoadBackground(self, name, path):
-
-		self._backgrounds[name] = transform.smoothscale(image.load(path), tuple(GetScreenDimensions())).convert_alpha()
-
-	def _LoadSound(self, name, path, channels):
-
-		self._sounds[name] = Sound(path, channels)
 
 ##
 #
