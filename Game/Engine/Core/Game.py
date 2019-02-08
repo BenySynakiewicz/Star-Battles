@@ -110,40 +110,46 @@ class Game:
 
 	def _InitializeResources(self):
 
+		Resources().Paths.Fonts = "Resources/Fonts"
+		Resources().Paths.Sprites = "Resources/Sprites"
+		Resources().Paths.Backgrounds = "Resources/Backgrounds"
+		Resources().Paths.Sounds = "Resources/Sounds"
+		Resources().Paths.Music = "Resources/Music"
+
 		# Load fonts.
 
-		Resources().LoadFont("Title", "Resources/Fonts/Exo 2 Light.ttf", 96)
-		Resources().LoadFont("Big", "Resources/Fonts/Exo 2 Light.ttf", 48)
-		Resources().LoadFont("Medium", "Resources/Fonts/Exo 2.ttf", 18)
+		Resources().LoadFont("Exo 2 Light.ttf")
+		Resources().LoadFont("Exo 2 Light.ttf")
+		Resources().LoadFont("Exo 2.ttf")
 
 		# Load backgrounds.
 
-		Resources().LoadBackground("Background", "Resources/Images/Background.jpeg")
+		Resources().LoadBackground("Background.jpeg")
 
 		# Load sprites.
 
-		Resources().LoadSprite("Bullet (Green)", "Resources/Images/Bullet (Green).png")
-		Resources().LoadSprite("Bullet (Red)", "Resources/Images/Bullet (Red).png")
-		Resources().LoadSprite("Shield", "Resources/Images/Shield.png")
-		Resources().LoadSprite("Bonus 1", "Resources/Images/Bonus 1/")
-		Resources().LoadSprite("Bonus 2", "Resources/Images/Bonus 2/")
-		Resources().LoadSprite("Bonus 3", "Resources/Images/Bonus 3/")
-		Resources().LoadSprite("Bonus 4", "Resources/Images/Bonus 4/")
-		Resources().LoadSprite("Player", "Resources/Images/Player/", shadows = True, framesPerSecond = 6)
-		Resources().LoadSprite("Enemy", "Resources/Images/Enemy/", shadows = True, framesPerSecond = 6)
-		Resources().LoadSprite("Bomb", "Resources/Images/Bomb/", shadows = True, framesPerSecond = 6)
-		Resources().LoadSprite("Explosion", "Resources/Images/Explosion/")
-		Resources().LoadSprite("Absorption", "Resources/Images/Absorption/")
+		Resources().LoadSprite("Bullet (Green).png")
+		Resources().LoadSprite("Bullet (Red).png")
+		Resources().LoadSprite("Shield.png")
+		Resources().LoadSprite("Bonus 1")
+		Resources().LoadSprite("Bonus 2")
+		Resources().LoadSprite("Bonus 3")
+		Resources().LoadSprite("Bonus 4")
+		Resources().LoadSprite("Player", shadows = True, framesPerSecond = 6)
+		Resources().LoadSprite("Enemy", shadows = True, framesPerSecond = 6)
+		Resources().LoadSprite("Bomb", shadows = True, framesPerSecond = 6)
+		Resources().LoadSprite("Explosion")
+		Resources().LoadSprite("Absorption")
 
 		# Load sounds.
 
-		Resources().LoadSound("Bomb", "Resources/Sounds/Bomb.ogg", range( 1,  3))
-		Resources().LoadSound("Bullet", "Resources/Sounds/Bullet.ogg", range( 3, 17))
-		Resources().LoadSound("Destruction", "Resources/Sounds/Destruction.ogg", range(18, 19))
-		Resources().LoadSound("Explosion", "Resources/Sounds/Explosion.ogg", range(20, 21))
-		Resources().LoadSound("Shield", "Resources/Sounds/Shield.ogg", range(22, 24))
-		Resources().LoadSound("Absorption", "Resources/Sounds/Absorption.ogg", range(25, 26))
+		Resources().LoadSound("Bomb.ogg", range( 1,  3))
+		Resources().LoadSound("Bullet.ogg", range( 3, 17))
+		Resources().LoadSound("Destruction.ogg", range(18, 19))
+		Resources().LoadSound("Explosion.ogg", range(20, 21))
+		Resources().LoadSound("Shield.ogg", range(22, 24))
+		Resources().LoadSound("Absorption.ogg", range(25, 26))
 
 		# Load music.
 
-		Resources().LoadMusic("Resources/Sounds/Ambience.ogg")
+		Resources().LoadMusic("Ambience.ogg")

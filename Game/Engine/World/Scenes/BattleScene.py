@@ -79,7 +79,7 @@ class BattleScene(Scene):
 
 	def UpdateScoreText(self):
 
-		self._scoreText = RenderText(f"{State().GetCurrentScore()} points", Resources().GetFont("Medium"))
+		self._scoreText = RenderText(f"{State().GetCurrentScore()} points", Resources().GetFont("Exo 2", Parameters.SmallTextHeight))
 
 	def UpdateBonusDescriptionText(self):
 
@@ -92,7 +92,7 @@ class BattleScene(Scene):
 		else:
 			description = None
 
-		self._bonusDescriptionText = RenderText(description, Resources().GetFont("Medium")) if description else None
+		self._bonusDescriptionText = RenderText(description, Resources().GetFont("Exo 2", Parameters.SmallTextHeight)) if description else None
 
 	def SpawnEnemies(self):
 

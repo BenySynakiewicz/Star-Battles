@@ -50,18 +50,18 @@ class EndGameScene(Scene):
 		currentScore = State().GetCurrentScore()
 		highestScore = State().GetHighestScore()
 
-		self._title = RenderText(f"You've earned {currentScore} points!", Resources().GetFont("Title"))
+		self._title = RenderText(f"You've earned {currentScore} points!", Resources().GetFont("Exo 2 Light", Parameters.BigTextHeight))
 		self._message = RenderText(
 			f"Your record remains {highestScore} points."
 				if currentScore < highestScore
 				else
 			f"You've beaten your previous record of {highestScore} points!",
-			Resources().GetFont("Big")
+			Resources().GetFont("Exo 2 Light", Parameters.MediumTextHeight)
 		)
 		self._instruction = RenderText(
 			"Press the SPACE key to start the game one more time." "\n"
 			"Press the ESC key to quit the game.",
-			Resources().GetFont("Medium")
+			Resources().GetFont("Exo 2", Parameters.SmallTextHeight)
 		)
 
 	# Inherited methods.

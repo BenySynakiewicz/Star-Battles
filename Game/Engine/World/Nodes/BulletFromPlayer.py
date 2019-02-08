@@ -40,7 +40,7 @@ class BulletFromPlayer(MovingNode):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Bullet (Green)", Vector(0, -Parameters.BulletSpeed))
+		super().__init__(scene, "Bullet (Green).png", Vector(0, -Parameters.BulletSpeed))
 
 		self.SetCollisions({"Participants"}, {"BulletFromPlayer", "Player"})
 

@@ -77,4 +77,8 @@ Parameters = SimpleNamespace(
 	ShieldEnergyUsage = 0.075,
 	LowerShieldEnergyUsage = 0.050,
 
+	SmallTextHeight = 18,
+	MediumTextHeight = 48,
+	BigTextHeight = 96,
+
 )

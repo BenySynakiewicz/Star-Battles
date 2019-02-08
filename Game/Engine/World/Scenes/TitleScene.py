@@ -48,10 +48,10 @@ class TitleScene(Scene):
 
 		State().ClearCurrentScore()
 
-		self._title = RenderText(Parameters.Name, Resources().GetFont("Title"))
-		self._message = RenderText("Press any key to begin the game.", Resources().GetFont("Big"))
-		self._creator = RenderText(f"Created by {Parameters.Creator}", Resources().GetFont("Medium"))
-		self._version = RenderText(f"Version {Parameters.Version}", Resources().GetFont("Medium"))
+		self._title = RenderText(Parameters.Name, Resources().GetFont("Exo 2 Light", Parameters.BigTextHeight))
+		self._message = RenderText("Press any key to begin the game.", Resources().GetFont("Exo 2 Light", Parameters.MediumTextHeight))
+		self._creator = RenderText(f"Created by {Parameters.Creator}", Resources().GetFont("Exo 2", Parameters.SmallTextHeight))
+		self._version = RenderText(f"Version {Parameters.Version}", Resources().GetFont("Exo 2", Parameters.SmallTextHeight))
 		self._instruction = RenderText(
 			"Press the UP arrow to shoot a bullet." "\n"
 			"Press the LEFT and RIGHT arrows to move." "\n"
@@ -59,7 +59,7 @@ class TitleScene(Scene):
 			"Press SPACE again to detonate the bomb." "\n"
 			"Press the DOWN arrow to activate the shield." "\n"
 			"Press F12 to take a screenshot.",
-			Resources().GetFont("Medium")
+			Resources().GetFont("Exo 2", Parameters.SmallTextHeight)
 		)
 
 	def React(self, events, _):

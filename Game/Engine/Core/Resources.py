@@ -30,6 +30,9 @@ from Engine.Utilities.Singleton import Singleton
 from Engine.Utilities.General import GetScreenDimensions
 from Engine.Utilities.Vector import Vector
 
+from pathlib import Path
+from types import SimpleNamespace
+
 from pygame import image, font, mixer, transform
 
 ##
@@ -42,52 +45,102 @@ class Resources(metaclass = Singleton):
 
 	def __init__(self):
 
+		self.Paths = SimpleNamespace(
+			Fonts = None,
+			Sprites = None,
+			Backgrounds = None,
+			Sounds = None,
+			Music = None,
+		)
+
 		self._fonts = {}
 		self._sprites = {}
 		self._backgrounds = {}
 		self._sounds = {}
 
-	def LoadFont(self, name, path, height):
+	def LoadFont(self, path):
 
-		self._fonts[name] = font.Font(path, height)
+		loadingPath = str(Path(self.Paths.Fonts) / path) if self.Paths.Fonts else path
 
-	def LoadSprite(self, name, path, shadows = False, framesPerSecond = 40):
+		self._fonts[path] = FontCollection(loadingPath)
 
-		self._sprites[name] = SpriteCollection(path, shadows, framesPerSecond)
+	def LoadSprite(self, path, shadows = False, framesPerSecond = 40):
 
-	def LoadBackground(self, name, path):
+		loadingPath = str(Path(self.Paths.Sprites) / path) if self.Paths.Sprites else path
 
-		self._backgrounds[name] = transform.smoothscale(image.load(path), tuple(GetScreenDimensions())).convert_alpha()
+		self._sprites[path] = SpriteCollection(loadingPath, shadows, framesPerSecond)
 
-	def LoadSound(self, name, path, channels):
+	def LoadBackground(self, path):
 
-		self._sounds[name] = Sound(path, channels)
+		loadingPath = str(Path(self.Paths.Backgrounds) / path) if self.Paths.Backgrounds else path
+
+		self._backgrounds[path] = transform.smoothscale(image.load(loadingPath), tuple(GetScreenDimensions())).convert_alpha()
+
+	def LoadSound(self, path, channels):
+
+		loadingPath = str(Path(self.Paths.Sounds) / path) if self.Paths.Sounds else path
+
+		self._sounds[path] = Sound(loadingPath, channels)
 
 	def LoadMusic(self, path):
 
-		mixer.music.load(path)
+		loadingPath = str(Path(self.Paths.Music) / path) if self.Paths.Music else path
 
-	def GetFont(self, identifier):
+		mixer.music.load(loadingPath)
 
-		return self._fonts[identifier]
+	def GetFont(self, path, height):
 
-	def GetBackground(self, identifier):
+		return GetFromDictionary(self._fonts, path, [".ttf"]).Get(height)
 
-		return self._backgrounds[identifier]
+	def GetBackground(self, path):
 
-	def GetSprite(self, identifier, dimensions = None, rotation = None):
+		return GetFromDictionary(self._backgrounds, path, [".jpeg"])
 
-		return self._sprites[identifier].Get(dimensions, rotation)
+	def GetSprite(self, path, dimensions = None, rotation = None):
 
-	def GetSound(self, identifier):
+		return GetFromDictionary(self._sprites, path, [".png"]).Get(dimensions, rotation)
 
-		return self._sounds[identifier]
+	def GetSound(self, path):
+
+		return GetFromDictionary(self._sounds, path, [".ogg"])
+
+##
+#
+# Utilities.
+#
+##
+
+def GetFromDictionary(dictionary, key, suffixes):
+
+	suffixes = [""] + suffixes
+
+	for suffix in suffixes:
+
+		completedKey = key + suffix
+		if completedKey in dictionary:
+			return dictionary[completedKey]
+
+	return None
 
 ##
 #
 # Classes.
 #
 ##
+
+class FontCollection:
+
+	def __init__(self, path):
+
+		self._path = path
+		self._variants = {}
+
+	def Get(self, height):
+
+		if height not in self._variants:
+			self._variants[height] = font.Font(self._path, height)
+
+		return self._variants[height]
 
 class SpriteCollection:
 
