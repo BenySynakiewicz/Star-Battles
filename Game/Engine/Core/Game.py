@@ -118,13 +118,13 @@ class Game:
 
 		# Load fonts.
 
-		Resources().LoadFont("Exo 2 Light.ttf")
-		Resources().LoadFont("Exo 2 Light.ttf")
-		Resources().LoadFont("Exo 2.ttf")
+		# Resources().LoadFont("Exo 2 Light.ttf")
+		# Resources().LoadFont("Exo 2 Light.ttf")
+		# Resources().LoadFont("Exo 2.ttf")
 
 		# Load backgrounds.
 
-		Resources().LoadBackground("Background.jpeg")
+		# Resources().LoadBackground("Background.jpeg")
 
 		# Load sprites.
 

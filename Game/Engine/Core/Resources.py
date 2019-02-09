@@ -62,11 +62,17 @@ class Resources(metaclass = Singleton):
 
 		loadingPath = str(Path(self.Paths.Fonts) / path) if self.Paths.Fonts else path
 
+		if not Path(loadingPath).is_file():
+			loadingPath += ".ttf"
+
 		self._fonts[path] = FontCollection(loadingPath)
 
 	def LoadSprite(self, path, shadows = False, framesPerSecond = 40):
 
 		loadingPath = str(Path(self.Paths.Sprites) / path) if self.Paths.Sprites else path
+
+		if not Path(loadingPath).exists():
+			loadingPath += ".png"
 
 		self._sprites[path] = SpriteCollection(loadingPath, shadows, framesPerSecond)
 
@@ -74,11 +80,17 @@ class Resources(metaclass = Singleton):
 
 		loadingPath = str(Path(self.Paths.Backgrounds) / path) if self.Paths.Backgrounds else path
 
+		if not Path(loadingPath).is_file():
+			loadingPath += ".jpeg"
+
 		self._backgrounds[path] = transform.smoothscale(image.load(loadingPath), tuple(GetScreenDimensions())).convert_alpha()
 
 	def LoadSound(self, path, channels):
 
 		loadingPath = str(Path(self.Paths.Sounds) / path) if self.Paths.Sounds else path
+
+		if not Path(loadingPath).is_file():
+			loadingPath += ".ogg"
 
 		self._sounds[path] = Sound(loadingPath, channels)
 
@@ -86,13 +98,22 @@ class Resources(metaclass = Singleton):
 
 		loadingPath = str(Path(self.Paths.Music) / path) if self.Paths.Music else path
 
+		if not Path(loadingPath).is_file():
+			loadingPath += ".ogg"
+
 		mixer.music.load(loadingPath)
 
 	def GetFont(self, path, height):
 
+		if not path in self._fonts:
+			self.LoadFont(path)
+
 		return GetFromDictionary(self._fonts, path, [".ttf"]).Get(height)
 
 	def GetBackground(self, path):
+
+		if not path in self._backgrounds:
+			self.LoadBackground(path)
 
 		return GetFromDictionary(self._backgrounds, path, [".jpeg"])
 
