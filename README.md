@@ -2,13 +2,14 @@
 
 ![Screenshot](/Screenshot.jpeg?raw=true)
 
-A very simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invaders), created for the purpose of learning the basics of the [pygame](https://www.pygame.org/) framework.
+A simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invaders), created for the purpose of learning the basics of the [pygame](https://www.pygame.org/) framework.
 
 ## Changelog
 
 ### Version 1.3
 
 - **BEING-DONE**: Reworked and optimized resource caching.
+- Added support for mouse input (the game can now be played using solely the mouse).
 - Minor visual improvements.
 
 ### Version 1.2
