@@ -68,11 +68,20 @@ class Sprite:
 		if self._shadows:
 			return
 
-		self._shadows = [InterpolateToScale(surface, 1.05) for surface in self._surfaces]
+		self._shadows = [InterpolateToScale(surface, 1.025) for surface in self._surfaces]
 
 		for shadow in self._shadows:
-			surfarray.pixels3d(shadow)[:] = 0
-		
+
+			# Make the shadow black.
+
+			pixels = surfarray.pixels3d(shadow)
+			pixels[:] = 0
+
+			# Make the shadow semi-transparent.
+
+			alpha = surfarray.pixels_alpha(shadow)
+			alpha[alpha > 0] = 120
+
 	def GetDimensions(self):
 
 		return GetDimensions(self._surfaces[0])

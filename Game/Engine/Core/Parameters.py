@@ -52,7 +52,7 @@ Parameters = SimpleNamespace(
 	HugeMargin = 12 * 12,
 
 	BarHeight = 4,
-	ShadowDistance = Vector(3, 3),
+	ShadowDistance = Vector(4, 4),
 
 	PlayerSpeed = 8,
 	BulletSpeed = 0.300,
