@@ -83,15 +83,15 @@ class BattleScene(Scene):
 
 	def UpdateScoreText(self):
 
-		self._scoreText = RenderText(f"{State().GetCurrentScore()} points", Resources().GetFont("Exo 2", Parameters.SmallTextHeight))
+		self._scoreText = RenderText(f"{State().GetScoreManager().GetCurrentScore()} points", Resources().GetFont("Exo 2", Parameters.SmallTextHeight))
 
 	def UpdateBonusDescriptionText(self):
 
-		if self.Player._bonuses.TripleShot:
+		if State().GetBonusManager().IsTripleShotEnabled():
 			description = "TRIPLE SHOT bonus is now active"
-		elif self.Player._bonuses.TwoBombs:
+		elif State().GetBonusManager().IsTwoBombsEnabled():
 			description = "TWO BOMBS bonus is now active"
-		elif self.Player._bonuses.QuickerShield:
+		elif State().GetBonusManager().IsQuickerShieldEnabled():
 			description = "QUICKER SHIELD bonus is now active"
 		else:
 			description = None
@@ -100,7 +100,7 @@ class BattleScene(Scene):
 
 	def SpawnEnemies(self):
 
-		currentScore = State().GetCurrentScore()
+		currentScore = State().GetScoreManager().GetCurrentScore()
 		verticalOffset = 2 * Parameters.Margin + GetDimensions(self._scoreText).Y
 
 		# In the first row...
@@ -187,7 +187,7 @@ class BattleScene(Scene):
 		for node in self._nodes:
 
 			if node._terminated and "Enemy" == type(node).__name__ and node.DestroyedByPlayer:
-				State().UpdateCurrentScore(+Parameters.EnemyValue)
+				State().GetScoreManager().Update(+Parameters.EnemyValue)
 				self.UpdateScoreText()
 
 		self._nodes[:] = filter(lambda node: not node._terminated, self._nodes)

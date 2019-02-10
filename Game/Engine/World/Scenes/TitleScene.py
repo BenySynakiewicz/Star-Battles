@@ -46,7 +46,7 @@ class TitleScene(Scene):
 
 		super().__init__("Background")
 
-		State().ClearCurrentScore()
+		State().Clear()
 
 		self._title = RenderText(Parameters.Name, Resources().GetFont("Exo 2 Light", Parameters.BigTextHeight))
 		self._message = RenderText("Press any key to begin the game.", Resources().GetFont("Exo 2 Light", Parameters.MediumTextHeight))

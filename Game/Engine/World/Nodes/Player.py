@@ -26,6 +26,7 @@
 
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
+from Engine.Core.State import State
 from Engine.World.Concepts.Node import Node
 from Engine.World.Nodes.Effects.AbsorptionEffect import AbsorptionEffect
 from Engine.World.Nodes.Bomb import Bomb
@@ -60,44 +61,8 @@ class Player(Node):
 			Shield = 100,
 		)
 
-		self._bonuses = SimpleNamespace(
-			TripleShot = False,
-			TwoBombs = False,
-			QuickerShield = False,
-		)
-
 		self.__bombs = []
 		self.ShieldIsUp = False
-
-	def EnableTripleShotBonus(self):
-
-		self._bonuses.TripleShot = True
-		self._bonuses.TwoBombs = False
-		self._bonuses.QuickerShield = False
-
-		self._scene.UpdateBonusDescriptionText()
-
-	def EnableTwoBombsBonus(self):
-
-		self._bonuses.TripleShot = False
-		self._bonuses.TwoBombs = True
-		self._bonuses.QuickerShield = False
-
-		self._scene.UpdateBonusDescriptionText()
-
-	def EnableQuickerShieldBonus(self):
-
-		self._bonuses.TripleShot = False
-		self._bonuses.TwoBombs = False
-		self._bonuses.QuickerShield = True
-
-		self._scene.UpdateBonusDescriptionText()
-
-	def EnableShootAroundBonus(self):
-
-		self.ShootAround()
-
-		self._scene.UpdateBonusDescriptionText()
 
 	def ChangeBulletEnergy(self, change):
 
@@ -128,7 +93,7 @@ class Player(Node):
 
 		self._ShootSomething("BulletFromPlayer")
 
-		if self._bonuses.TripleShot:
+		if State().GetBonusManager().IsTripleShotEnabled():
 			self._ShootSomething("BulletFromPlayer", +10)
 			self._ShootSomething("BulletFromPlayer", -10)
 
@@ -149,7 +114,7 @@ class Player(Node):
 			if self.Energy.Bomb < 100:
 				return
 
-			if not self._bonuses.TwoBombs:
+			if not State().GetBonusManager().IsTwoBombsEnabled():
 
 				bomb = self._ShootSomething("Bomb")
 				self.__bombs.append(bomb)
@@ -177,7 +142,7 @@ class Player(Node):
 
 		shieldEnergyChange = Parameters.ShieldEnergyRegeneration
 		if self.ShieldIsUp:
-			shieldEnergyChange -= Parameters.ShieldEnergyUsage if not self._bonuses.QuickerShield else Parameters.LowerShieldEnergyUsage
+			shieldEnergyChange -= Parameters.ShieldEnergyUsage if not State().GetBonusManager().IsQuickerShieldEnabled() else Parameters.LowerShieldEnergyUsage
 
 		self.ChangeBulletEnergy(milisecondsPassed * Parameters.BulletEnergyRegeneration)
 		self.ChangeBombEnergy(milisecondsPassed * Parameters.BombEnergyRegeneration)
@@ -208,16 +173,25 @@ class Player(Node):
 		# Absorp dropped items.
 
 		nodeName = type(node).__name__
-		absorbableNodes = {
-			"TripleShotBonus"   : Player.EnableTripleShotBonus,
-			"TwoBombsBonus"     : Player.EnableTwoBombsBonus,
-			"QuickerShieldBonus": Player.EnableQuickerShieldBonus,
-			"ShootAroundBonus"  : Player.EnableShootAroundBonus,
+
+		longTimeBonuses = {
+			"TripleShotBonus"   : State().GetBonusManager().EnableTripleShot,
+			"TwoBombsBonus"     : State().GetBonusManager().EnableTwoBombs,
+			"QuickerShieldBonus": State().GetBonusManager().EnableQuickerShield,
 		}
 
-		if nodeName in absorbableNodes:
+		oneTimeBonuses = {
+			"ShootAroundBonus": Player.ShootAround,
+		}
 
-			absorbableNodes[nodeName](self)
+		if nodeName in longTimeBonuses or nodeName in oneTimeBonuses:
+
+			if nodeName in longTimeBonuses:
+				longTimeBonuses[nodeName]()
+			else:
+				oneTimeBonuses[nodeName](self)
+
+			self._scene.UpdateBonusDescriptionText()
 
 			# Create and show the visual effect and play the sound.
 

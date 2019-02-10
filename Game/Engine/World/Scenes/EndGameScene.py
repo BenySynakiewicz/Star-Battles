@@ -50,8 +50,9 @@ class EndGameScene(Scene):
 
 		State().SaveToFile()
 
-		currentScore = State().GetCurrentScore()
-		highestScore = State().GetHighestScore()
+		scoreManager = State().GetScoreManager()
+		currentScore = scoreManager.GetCurrentScore()
+		highestScore = scoreManager.GetHighestScore()
 
 		self._title = RenderText(f"You've earned {currentScore} points!", Resources().GetFont("Exo 2 Light", Parameters.BigTextHeight))
 		self._message = RenderText(
