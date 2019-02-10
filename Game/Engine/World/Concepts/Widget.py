@@ -24,7 +24,10 @@
 #
 ##
 
-from Engine.World.Concepts.Node import Node
+from Engine.Utilities.General import Blit, GetDimensions, GetScreen
+from Engine.Utilities.Vector import Vector
+
+from pygame import mouse, Rect
 
 ##
 #
@@ -32,8 +35,44 @@ from Engine.World.Concepts.Node import Node
 #
 ##
 
-class Widget(Node):
+class Widget:
 
-	def __init__(self, scene, sprite, zIndex = 0, spriteDimensions = None, spriteRotation = None):
+	# The constructor.
 
-		super().__init__(scene, sprite, zIndex, spriteDimensions, spriteRotation)
+	def __init__(self):
+
+		self._surface = None
+
+		self._position = Vector()
+		self._dimensions = Vector()
+
+	# Accessors.
+
+	def GetPosition(self): return self._position
+	def GetDimensions(self): return self._dimensions
+
+	# Operations.
+
+	def SetPosition(self, position):
+
+		self._position = position
+
+	def SetSurface(self, surface):
+
+		self._surface = surface
+		self._dimensions = GetDimensions(self._surface)
+
+	# Utilities.
+
+	def IsBeingPointedAt(self):
+
+		mouseCursorPosition = mouse.get_pos()
+		rectangle = Rect(tuple(self.GetPosition()), tuple(self.GetDimensions()))
+
+		return rectangle.collidepoint(mouseCursorPosition)
+
+	# Rendering.
+
+	def Render(self):
+
+		Blit(GetScreen(), self._surface, self._position)

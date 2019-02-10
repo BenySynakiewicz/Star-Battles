@@ -27,3 +27,7 @@
 def IsIndexable(value):
 
 	return hasattr(value, "__getitem__")
+
+def IsIterable(value):
+
+	return hasattr(value, "__iter__")

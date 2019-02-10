@@ -24,7 +24,7 @@
 #
 ##
 
-from enum import auto, Enum
+from enum import auto, IntEnum
 
 ##
 #
@@ -32,9 +32,10 @@ from enum import auto, Enum
 #
 ##
 
-class Direction(Enum):
+class Direction(IntEnum):
 
-	Left = auto()
+	Left = -1
+	Right = +1
+
 	Top = auto()
-	Right = auto()
 	Bottom = auto()

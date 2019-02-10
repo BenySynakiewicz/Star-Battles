@@ -30,13 +30,19 @@ from Engine.Utilities.Direction import Direction
 from Engine.Utilities.General import GetScreenDimensions
 from Engine.Utilities.General import GetDecision
 from Engine.Utilities.Vector import Vector
-from Engine.World.Concepts.MovingNode import MovingNode
-from Engine.World.Nodes.BulletFromEnemy import BulletFromEnemy
-from Engine.World.Nodes.ShootAroundBonus import ShootAroundBonus
-from Engine.World.Nodes.TripleShotBonus import TripleShotBonus
-from Engine.World.Nodes.TwoBombsBonus import TwoBombsBonus
-from Engine.World.Nodes.QuickerShieldBonus import QuickerShieldBonus
+from Engine.World.Concepts.Node import Node
+from Engine.World.Nodes.Weapons.BulletFromEnemy import BulletFromEnemy
+from Engine.World.Nodes.Other.Bonus import Bonus
 from Engine.World.Utilities.Positioning import AtBottom
+
+##
+#
+# Globals.
+#
+##
+
+ExplosionDimensions = Vector(125, 125)
+ShootingProbabilityDivisor = 200000
 
 ##
 #
@@ -44,36 +50,45 @@ from Engine.World.Utilities.Positioning import AtBottom
 #
 ##
 
-class Enemy(MovingNode):
+class Enemy(Node):
+
+	# The constructor.
 
 	def __init__(self, scene, verticalOffset, row, direction):
 
-		super().__init__(scene, "Enemy", Vector(+Parameters.EnemySpeed if Direction.Right == direction else -Parameters.EnemySpeed, 0), 1)
+		# Initialize the node.
 
-		self.SetCollisions({"Participants"}, {"BulletFromEnemy"})
+		super().__init__(scene, "Enemy", movementVector = Vector(direction * Parameters.EnemySpeed, 0), zIndex = 1)
 
-		self.Direction = direction
+		self._collisionClasses = {"Participants"}
+		self._collisionExceptions = {"BulletFromEnemy"}
 
-		self._position.X = -(self._dimensions.X - 1) if (Direction.Right == self.Direction) else (GetScreenDimensions().X - 1)
+		self._position.X = -(self._dimensions.X - 1) if Direction.Right == direction else (GetScreenDimensions().X - 1)
 		self._position.Y = verticalOffset + row * (self._dimensions.Y + Parameters.Margin)
 
-		self.AppendTimer("Shot")
-		self.DestroyedByPlayer = False
+		# Initialize new member variables.
 
 		self._isDestroyed = False
+
+		self.AppendTimer("Shot")
+
+	# Accessors.
+
+	def IsDestroyedByPlayer(self): return self._isDestroyed
+
+	# Operations.
 
 	def Destroy(self):
 
 		if self._isDestroyed:
 			return
 
-		self.ReplaceSprite("Explosion", loop = False, dimensions = Vector(125, 125))
+		self.ReplaceSprite("Explosion", dimensions = ExplosionDimensions, loop = False)
 		Resources().GetSound("Destruction").Play()
 
-		self.AppendTimer("Destruction")
-
-		self.DestroyedByPlayer = True
 		self._isDestroyed = True
+
+	# Weapons.
 
 	def Shoot(self):
 
@@ -83,7 +98,7 @@ class Enemy(MovingNode):
 		self._scene.Append(bullet)
 		self.ClearTimer("Shot")
 
-	# Inherited methods.
+	# Updating.
 
 	def Update(self, milisecondsPassed):
 
@@ -92,8 +107,10 @@ class Enemy(MovingNode):
 		if self._isDestroyed and self._sprite.IsFinished():
 			self.Terminate()
 
-		if not self._isDestroyed and "Shoot" == GetDecision({"Shoot": self.GetTimer("Shot") / 200000}):
+		if not self._isDestroyed and "Shoot" == GetDecision({"Shoot": self.GetTimer("Shot") / ShootingProbabilityDivisor}):
 			self.Shoot()
+
+	# Callbacks.
 
 	def OnCollision(self, node):
 
@@ -112,9 +129,16 @@ class Enemy(MovingNode):
 		if not decision:
 			return
 
-		bonusNodeName = decision[0]
+		spriteIndices = {
+			"TripleShotBonus"   : 1,
+			"TwoBombsBonus"     : 2,
+			"QuickerShieldBonus": 3,
+			"ShootAroundBonus"  : 4,
+		}
 
-		bonusNode = globals()[bonusNodeName](self._scene)
+		bonusName = decision[0]
+
+		bonusNode = Bonus(self._scene, spriteIndices[bonusName], bonusName)
 		bonusNode.SetRelativePosition(self, AtBottom)
 
 		self._scene.Append(bonusNode)

@@ -27,7 +27,8 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Utilities.Vector import Vector
-from Engine.World.Concepts.MovingNode import MovingNode
+from Engine.World.Concepts.Node import Node
+from Engine.World.Nodes.Other.Effect import Effect
 
 ##
 #
@@ -35,17 +36,20 @@ from Engine.World.Concepts.MovingNode import MovingNode
 #
 ##
 
-class QuickerShieldBonus(MovingNode):
+class BulletFromPlayer(Node):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Bonus 3", Vector(0, Parameters.BonusSpeed), 2)
+		super().__init__(scene, "Bullet (Green).png", movementVector = Vector(0, -Parameters.BulletSpeed))
 
-		self.SetCollisions({"Bonuses"}, set())
+		self._collisionClasses = {"Participants"}
+		self._collisionExceptions = {"BulletFromPlayer", "Player"}
+
+		Resources().GetSound("Bullet").Play()
 
 	# Inherited methods.
 
 	def OnCollision(self, node):
 
-		if "Player" == type(node).__name__:
-			self.Terminate()
+		self._scene.Append(Effect(self._scene, "Explosion", self, dimensions = Vector(15, 15)))
+		self.Terminate()

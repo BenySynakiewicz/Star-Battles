@@ -32,8 +32,6 @@ from Engine.Utilities.General import GetScreen
 from Engine.World.Utilities.Positioning import IsOutsideScreen
 from Engine.World.Utilities.Timed import Timed
 
-from copy import copy
-
 from pygame import Rect, Surface
 
 ##
@@ -44,49 +42,48 @@ from pygame import Rect, Surface
 
 class Node(Timed):
 
-	def __init__(self, scene, sprite, zIndex = 0, spriteDimensions = None, spriteRotation = None):
+	# The constructor.
+
+	def __init__(self, scene, sprite = None, dimensions = None, rotation = None, movementVector = None, zIndex = 0):
 
 		super().__init__()
 
 		self._scene = scene
+
+		self._name = type(self).__name__
+
 		self._collisionClasses = set()
 		self._collisionExceptions = set()
 		self._terminated = False
 
 		self._spriteName = sprite
-		self._sprite = SpriteInstance(Resources().GetSprite(sprite, spriteDimensions, spriteRotation)) if self._spriteName else None
-		self._zIndex = zIndex
+		self._sprite = SpriteInstance(Resources().GetSprite(sprite, dimensions, rotation)) if self._spriteName else None
 
 		self._position = Vector()
 		self._dimensions = self._sprite.GetDimensions() if self._sprite else None
 
-	def IsTerminated(self):
+		self._movementVector = movementVector
+		self._movementStopped = False
 
-		return self._terminated
+		self._zIndex = zIndex
 
-	def GetSpriteInstance(self):
+	# Accessors.
 
-		return self._sprite
+	def IsTerminated(self): return self._terminated
+	def GetName(self): return self._name
+	def GetPosition(self): return self._position
+	def GetDimensions(self): return self._dimensions
+	def GetCollisions(self): return (self._collisionClasses, self._collisionExceptions)
+	def GetMovementVector(self): return self._movementVector
+	def GetZIndex(self): return self._zIndex
 
-	def GetPosition(self):
-
-		return self._position
-
-	def GetDimensions(self):
-
-		return self._dimensions
-
-	def GetRectangle(self):
-
-		return Rect(tuple(self.GetPosition()), tuple(self.GetDimensions()))
+	# Utilities.
 
 	def GetCenter(self):
 
-		return self.GetPosition() + (self.GetDimensions() / 2)
+		return self._position + (self._dimensions / 2)
 
-	def GetCollisions(self):
-
-		return (self._collisionClasses, self._collisionExceptions)
+	# Collision handling.
 
 	def DoesCollideWith(self, other):
 
@@ -116,35 +113,24 @@ class Node(Timed):
 
 		return otherMask.overlap(mask, (offsetX, offsetY))
 
-	def SetCollisions(self, collisionClasses, collisionExceptions):
+	# Sprite and geometry management.
 
-		self._collisionClasses = collisionClasses
-		self._collisionExceptions = collisionExceptions
+	def ReplaceSprite(self, sprite, dimensions = None, rotation = None, loop = True):
 
-	def ReplaceSprite(self, sprite, loop = True, dimensions = None, rotation = None):
+		if isinstance(sprite, Surface): self._sprite = SpriteInstance(Sprite(sprite))
+		elif isinstance(sprite, Sprite): self._sprite = SpriteInstance(sprite)
+		elif isinstance(sprite, SpriteInstance): self._sprite = sprite
+		else: self._sprite = SpriteInstance(Resources().GetSprite(sprite, dimensions, rotation), loop)
 
-		if isinstance(sprite, Surface):
-			self._sprite = SpriteInstance(Sprite(sprite))
-		elif isinstance(sprite, Sprite):
-			self._sprite = SpriteInstance(sprite)
-		elif isinstance(sprite, SpriteInstance):
-			self._sprite = sprite
-		else:
-			self._sprite = SpriteInstance(Resources().GetSprite(sprite, dimensions, rotation), loop)
+		hadDimensions = bool(self._dimensions)
 
-		hadSetDimensions = bool(self._dimensions)
-
-		if hadSetDimensions:
-			self._position += self._dimensions // 2
-
+		if hadDimensions: self._position += self._dimensions / 2
 		self._dimensions = self._sprite.GetDimensions()
-
-		if hadSetDimensions:
-			self._position -= self._dimensions // 2
+		if hadDimensions: self._position -= self._dimensions / 2
 
 	def SetPosition(self, position):
 
-		self._position = copy(position)
+		self._position = Vector(*position)
 
 	def SetRelativePosition(self, node, relation):
 
@@ -153,7 +139,18 @@ class Node(Timed):
 	def SetRotation(self, angle):
 
 		self.ReplaceSprite(self._spriteName, loop = False, dimensions = None, rotation = angle)
-		# self._sprite.SetRotation(angle)
+
+	# Movement management.
+
+	def SetMovementVector(self, movementVector):
+
+		self._movementVector = movementVector
+
+	def EnableMovement(self, enable = True):
+
+		self._movementStopped = not enable
+
+	# Other operations.
 
 	def Terminate(self):
 
@@ -161,10 +158,20 @@ class Node(Timed):
 
 		self.OnTermination()
 
+	# Callbacks.
+
+	def OnCollision(self, node): pass
+	def OnTermination(self): pass
+
+	# Updating and rendering.
+
 	def Update(self, milisecondsPassed):
 
 		self._sprite.Update(milisecondsPassed)
 		self.UpdateTimers(milisecondsPassed)
+
+		if self._movementVector and not self._movementStopped:
+			self._position += self._movementVector * milisecondsPassed
 
 		if IsOutsideScreen(self._position, self._dimensions):
 			self.Terminate()
@@ -172,11 +179,3 @@ class Node(Timed):
 	def Render(self):
 
 		self._sprite.Blit(GetScreen(), self._position)
-
-	def OnCollision(self, node):
-
-		pass
-
-	def OnTermination(self):
-
-		pass

@@ -26,6 +26,7 @@
 
 from Engine.Core.Resources import Resources
 from Engine.Utilities.General import Blit, GetScreen
+from Engine.Utilities.Language import IsIterable
 from Engine.World.Concepts.Node import Node
 from Engine.World.Concepts.Widget import Widget
 from Engine.World.Utilities.Timed import Timed
@@ -38,6 +39,8 @@ from Engine.World.Utilities.Timed import Timed
 
 class Scene(Timed):
 
+	# The constructor.
+
 	def __init__(self, background):
 
 		super().__init__()
@@ -49,16 +52,22 @@ class Scene(Timed):
 
 		self._nextScene = self
 
-	def Append(self, node):
+	# Basic operations.
 
-		if isinstance(node, Widget):
+	def Show(self):
 
-			self._widgets.append(node)
+		pass
 
-		elif isinstance(node, Node):
+	def Append(self, value):
 
-			self._nodes.append(node)
-			self._nodes.sort(key = lambda x: x._zIndex)
+		value = [value] if not IsIterable(value) else value
+
+		self._widgets += [x for x in value if isinstance(x, Widget)]
+		self._nodes += [x for x in value if isinstance(x, Node)]
+
+		self._nodes.sort(key = lambda x: x.GetZIndex())
+
+	# Reacting, updating and rendering.
 
 	def React(self, events, keys):
 
@@ -83,7 +92,3 @@ class Scene(Timed):
 		self.React(events, keys)
 		self.Update(milisecondsPassed)
 		self.Render()
-
-	def Show(self):
-
-		pass

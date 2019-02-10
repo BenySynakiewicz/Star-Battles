@@ -33,23 +33,35 @@ from Engine.World.Utilities.Positioning import AtSameCenter
 #
 ##
 
-class AbsorptionEffect(Node):
+class Effect(Node):
 
-	def __init__(self, scene, parentNode):
+	# The constructor.
 
-		super().__init__(scene, "Absorption", -2)
+	def __init__(self, scene, spriteName, parentNode, follow = False, dimensions = None, collisionClasses = set()):
 
+		# Initialize the node.
+
+		super().__init__(scene, spriteName, dimensions = dimensions, zIndex = -2)
+
+		self._collisionClasses = collisionClasses
 		self._sprite.SetLooping(False)
 
-		self._parentNode = parentNode
+		# Initialize new member variables.
 
-	# Inherited methods.
+		self._parentNode = parentNode
+		self._followParent = follow
+
+		if self._parentNode:
+			self.SetRelativePosition(self._parentNode, AtSameCenter)
+
+	# Updating.
 
 	def Update(self, milisecondsPassed):
 
 		super().Update(milisecondsPassed)
 
-		self.SetRelativePosition(self._parentNode, AtSameCenter)
+		if self._parentNode and self._followParent:
+			self.SetRelativePosition(self._parentNode, AtSameCenter)
 
 		if self._sprite.IsFinished():
 			self.Terminate()

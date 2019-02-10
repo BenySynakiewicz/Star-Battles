@@ -28,8 +28,8 @@ from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Utilities.General import GetScreen
 from Engine.Utilities.Vector import Vector
-from Engine.World.Concepts.MovingNode import MovingNode
-from Engine.World.Nodes.Effects.ExplosionEffect import ExplosionEffect
+from Engine.World.Concepts.Node import Node
+from Engine.World.Nodes.Other.Effect import Effect
 from Engine.World.Utilities.Positioning import AtSameCenter
 
 ##
@@ -38,19 +38,20 @@ from Engine.World.Utilities.Positioning import AtSameCenter
 #
 ##
 
-class Bomb(MovingNode):
+class Bomb(Node):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Bomb", Vector(0, -Parameters.BombSpeed))
+		super().__init__(scene, "Bomb", movementVector = Vector(0, -Parameters.BombSpeed))
 
-		self.SetCollisions({"Participants"}, {"Bomb"})
+		self._collisionClasses = {"Participants"}
+		self._collisionExceptions = {"Bomb"}
 
 		Resources().GetSound("Bomb").Play()
 
 	def Explode(self):
 
-		self._scene.Append(ExplosionEffect(self._scene, self))
+		self._scene.Append(Effect(self._scene, "Explosion", self, collisionClasses = {"Participants"}))
 
 		self.Terminate()
 
@@ -73,6 +74,4 @@ class Bomb(MovingNode):
 			return
 
 		if not self._terminated:
-
-			self._scene.Append(ExplosionEffect(self._scene, self))
 			self.Explode()

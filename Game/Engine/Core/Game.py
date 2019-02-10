@@ -142,6 +142,7 @@ class Game:
 		Resources().LoadSprite("Bonus 4")
 		Resources().LoadSprite("Player", shadows = True, framesPerSecond = 6)
 		Resources().LoadSprite("Enemy", shadows = True, framesPerSecond = 6)
+		Resources().LoadSprite("Saucer.png", shadows = True)
 		Resources().LoadSprite("Bomb", shadows = True, framesPerSecond = 6)
 		Resources().LoadSprite("Explosion")
 		Resources().LoadSprite("Absorption")

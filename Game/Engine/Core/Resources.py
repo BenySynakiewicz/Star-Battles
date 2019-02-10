@@ -119,7 +119,9 @@ class Resources(metaclass = Singleton):
 
 	def GetSprite(self, path, dimensions = None, rotation = None):
 
-		return GetFromDictionary(self._sprites, path, [".png"]).Get(dimensions, rotation)
+		spriteCollection = GetFromDictionary(self._sprites, path, [".png"])
+
+		return spriteCollection.Get(dimensions, rotation) if spriteCollection else None
 
 	def GetSound(self, path):
 
@@ -132,6 +134,9 @@ class Resources(metaclass = Singleton):
 ##
 
 def GetFromDictionary(dictionary, key, suffixes):
+
+	if not key:
+		return None
 
 	suffixes = [""] + suffixes
 

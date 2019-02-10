@@ -27,11 +27,11 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Core.State import State
+from Engine.Logic.BattleManager import BattleManager
 from Engine.Media.Utilities.SurfaceProcessor import Desaturate
 from Engine.World.Concepts.Scene import Scene
-from Engine.World.Nodes.Effects.AbsorptionEffect import AbsorptionEffect
-from Engine.World.Nodes.Player import Player
-from Engine.World.Nodes.Enemy import Enemy
+from Engine.World.Nodes.Participants.Player import Player
+from Engine.World.Nodes.Participants.Enemy import Enemy
 from Engine.World.Scenes.EndGameScene import EndGameScene
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.Vector import Vector
@@ -79,7 +79,10 @@ class BattleScene(Scene):
 		)
 
 		self.Append(self.Player)
-		self.AppendTimer("Enemy")
+
+		# Initialize the battle manager.
+
+		self._battleManager = BattleManager(self, 2 * Parameters.Margin + GetDimensions(self._scoreText).Y)
 
 	def Show(self):
 
@@ -101,34 +104,6 @@ class BattleScene(Scene):
 			description = None
 
 		self._bonusDescriptionText = RenderText(description, Resources().GetFont("Exo 2", Parameters.SmallTextHeight)) if description else None
-
-	def SpawnEnemies(self):
-
-		currentScore = State().GetScoreManager().GetCurrentScore()
-		verticalOffset = 2 * Parameters.Margin + GetDimensions(self._scoreText).Y
-
-		# In the first row...
-
-		self.Append(Enemy(self, verticalOffset, 0, Direction.Right))
-
-		# In the sceond row...
-
-		if currentScore >= 100:
-			self.Append(Enemy(self, verticalOffset, 1, Direction.Left))
-
-		# In the third row...
-
-		if currentScore >= 500:
-			self.Append(Enemy(self, verticalOffset, 2, Direction.Right))
-
-		# In the fourth row...
-
-		if currentScore >= 1500:
-			self.Append(Enemy(self, verticalOffset, 3, Direction.Left))
-
-		# Clear the timer.
-
-		self.ClearTimer("Enemy")
 
 	def React(self, events, keys):
 
@@ -163,7 +138,7 @@ class BattleScene(Scene):
 			self.Player.Move(Direction.Right)
 
 		rightMouseButton = mouse.get_pressed()[2]
-		self.Player.ShieldIsUp = bool(keys[K_DOWN] or rightMouseButton)
+		self.Player._shieldUp = bool(keys[K_DOWN] or rightMouseButton)
 
 		# Process mouse input.
 
@@ -181,20 +156,19 @@ class BattleScene(Scene):
 			self._nextScene = EndGameScene()
 			return
 
-		# Add enemies.
-
-		if self.GetTimer("Enemy") // 1000 > 0:
-			self.SpawnEnemies()
-
 		# Remove terminated nodes (and update the score).
 
 		for node in self._nodes:
 
-			if node._terminated and "Enemy" == type(node).__name__ and node.DestroyedByPlayer:
+			if node._terminated and "Enemy" == type(node).__name__ and node.IsDestroyedByPlayer():
 				State().GetScoreManager().Update(+Parameters.EnemyValue)
 				self.UpdateScoreText()
 
 		self._nodes[:] = filter(lambda node: not node._terminated, self._nodes)
+
+		# Update the battle manager.
+
+		self._battleManager.Update(milisecondsPassed)
 
 		# Find collisions.
 
@@ -253,8 +227,8 @@ class BattleScene(Scene):
 			Vector(0 * barDimensions.X, barVerticalPosition),
 			barDimensions,
 
-			Color.Green if (100 == self.Player.Energy.Bullet) else Color.Black,
-			self.Player.Energy.Bullet,
+			Color.Green if (100 == self.Player.GetBulletEnergy()) else Color.Black,
+			self.Player.GetBulletEnergy(),
 
 		)
 
@@ -267,8 +241,8 @@ class BattleScene(Scene):
 			Vector(1 * barDimensions.X, barVerticalPosition),
 			barDimensions,
 
-			Color.Red if (100 == self.Player.Energy.Bomb) else Color.Black,
-			self.Player.Energy.Bomb,
+			Color.Red if (100 == self.Player.GetBombEnergy()) else Color.Black,
+			self.Player.GetBombEnergy(),
 
 		)
 
@@ -282,6 +256,6 @@ class BattleScene(Scene):
 			barDimensions,
 
 			Color.Blue,
-			self.Player.Energy.Shield,
+			self.Player.GetShieldEnergy(),
 
 		)

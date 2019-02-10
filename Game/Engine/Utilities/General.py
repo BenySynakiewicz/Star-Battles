@@ -58,6 +58,9 @@ def GetDecision(possibilities):
 
 def GetDimensions(surface):
 
+	if not surface:
+		return None
+
 	return Vector(surface.get_width(), surface.get_height())
 
 def GetScreen():

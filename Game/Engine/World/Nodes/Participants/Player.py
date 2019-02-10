@@ -28,18 +28,14 @@ from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Core.State import State
 from Engine.World.Concepts.Node import Node
-from Engine.World.Nodes.Effects.AbsorptionEffect import AbsorptionEffect
-from Engine.World.Nodes.Bomb import Bomb
-from Engine.World.Nodes.BulletFromPlayer import BulletFromPlayer
-from Engine.World.Utilities.Positioning import AtTop
+from Engine.World.Nodes.Other.Effect import Effect
+from Engine.World.Nodes.Weapons.Bomb import Bomb
+from Engine.World.Nodes.Weapons.BulletFromPlayer import BulletFromPlayer
+from Engine.World.Utilities.Positioning import AtSameCenter, AtTop
 from Engine.Utilities.Direction import Direction
-from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import GetScreen, GetScreenDimensions
 
-from types import SimpleNamespace
-
 from numpy import clip
-import pygame
 
 ##
 #
@@ -49,32 +45,41 @@ import pygame
 
 class Player(Node):
 
+	# The constructor.
+
 	def __init__(self, scene):
 
-		super().__init__(scene, "Player", 1)
+		# Initialize the node.
 
-		self.SetCollisions({"Participants", "Bonuses"}, {"BulletFromPlayer"})
+		super().__init__(scene, "Player", zIndex = 1)
 
-		self.Energy = SimpleNamespace(
-			Bullet = 100,
-			Bomb = 100,
-			Shield = 100,
-		)
+		self._collisionClasses = {"Participants", "Bonuses"}
+		self._collisionExceptions = {"BulletFromPlayer"}
+
+		# Initialize new member variables.
+
+		self._bulletEnergy = 100
+		self._bombEnergy = 100
+		self._shieldEnergy = 100
 
 		self.__bombs = []
-		self.ShieldIsUp = False
 
-	def ChangeBulletEnergy(self, change):
+		self._shieldUp = False
 
-		self.Energy.Bullet = clip(self.Energy.Bullet + change, 0, 100)
+	# Accessors.
 
-	def ChangeBombEnergy(self, change):
+	def GetBulletEnergy(self): return self._bulletEnergy
+	def GetBombEnergy(self): return self._bombEnergy
+	def GetShieldEnergy(self): return self._shieldEnergy
+	def IsShieldUp(self): return self._shieldUp
 
-		self.Energy.Bomb = clip(self.Energy.Bomb + change, 0, 100)
+	# Basic operations.
 
-	def ChangeShieldEnergy(self, change):
+	def ChangeBulletEnergy(self, change): self._bulletEnergy = clip(self._bulletEnergy + change, 0, 100)
+	def ChangeBombEnergy(self, change): self._bombEnergy = clip(self._bombEnergy + change, 0, 100)
+	def ChangeShieldEnergy(self, change): self._shieldEnergy = clip(self._shieldEnergy + change, 0, 100)
 
-		self.Energy.Shield = clip(self.Energy.Shield + change, 0, 100)
+	# Movement.
 
 	def Move(self, direction, amount = Parameters.PlayerSpeed):
 
@@ -86,9 +91,11 @@ class Player(Node):
 
 		)
 
+	# Using weapons.
+
 	def Shoot(self):
 
-		if self.Energy.Bullet < 100:
+		if self._bulletEnergy < 100:
 			return
 
 		self._ShootSomething("BulletFromPlayer")
@@ -111,7 +118,7 @@ class Player(Node):
 
 		if not self.__bombs:
 
-			if self.Energy.Bomb < 100:
+			if self._bombEnergy < 100:
 				return
 
 			if not State().GetBonusManager().IsTwoBombsEnabled():
@@ -121,10 +128,10 @@ class Player(Node):
 
 			else:
 
-				leftBomb = self._ShootSomething("Bomb", +10)
+				leftBomb = self._ShootSomething("Bomb", +15)
 				self.__bombs.append(leftBomb)
 
-				rightBomb = self._ShootSomething("Bomb", -10)
+				rightBomb = self._ShootSomething("Bomb", -15)
 				self.__bombs.append(rightBomb)
 
 			self.ChangeBombEnergy(-100)
@@ -134,37 +141,45 @@ class Player(Node):
 			for bomb in self.__bombs:
 				bomb.Explode()
 
-	# Inherited methods.
+	# Updating and rendering.
 
 	def Update(self, milisecondsPassed):
 
 		super().Update(milisecondsPassed)
 
 		shieldEnergyChange = Parameters.ShieldEnergyRegeneration
-		if self.ShieldIsUp:
+		if self._shieldUp:
 			shieldEnergyChange -= Parameters.ShieldEnergyUsage if not State().GetBonusManager().IsQuickerShieldEnabled() else Parameters.LowerShieldEnergyUsage
 
 		self.ChangeBulletEnergy(milisecondsPassed * Parameters.BulletEnergyRegeneration)
 		self.ChangeBombEnergy(milisecondsPassed * Parameters.BombEnergyRegeneration)
 		self.ChangeShieldEnergy(milisecondsPassed * shieldEnergyChange)
 
-		if not self.Energy.Shield:
-			self.ShieldIsUp = False
+		if not self._shieldEnergy:
+			self._shieldUp = False
 
-		self.__bombs[:] = filter(lambda x: not x._terminated, self.__bombs)
+		self.__bombs[:] = filter(lambda x: not x.IsTerminated(), self.__bombs)
 
 	def Render(self):
 
 		super().Render()
 
-		if self.ShieldIsUp:
-			Resources().GetSprite("Shield").Blit(0, GetScreen(), self._position - Vector(15, 15))
+		if self._shieldUp:
+
+			# Render the shield.
+
+			sprite = Resources().GetSprite("Shield")
+			dimensions = sprite.GetDimensions()
+
+			sprite.Blit(0, GetScreen(), AtSameCenter(self.GetPosition(), self.GetDimensions(), dimensions))
+
+	# Callbacks.
 
 	def OnCollision(self, node):
 
 		# The shield is inpenetrable. Skip any collisions if the thing's up.
 
-		if self.ShieldIsUp:
+		if self._shieldUp:
 
 			Resources().GetSound("Shield").Play()
 
@@ -172,7 +187,7 @@ class Player(Node):
 
 		# Absorp dropped items.
 
-		nodeName = type(node).__name__
+		nodeName = node.GetName()
 
 		longTimeBonuses = {
 			"TripleShotBonus"   : State().GetBonusManager().EnableTripleShot,
@@ -186,26 +201,27 @@ class Player(Node):
 
 		if nodeName in longTimeBonuses or nodeName in oneTimeBonuses:
 
-			if nodeName in longTimeBonuses:
-				longTimeBonuses[nodeName]()
-			else:
-				oneTimeBonuses[nodeName](self)
+			if nodeName in longTimeBonuses: longTimeBonuses[nodeName]()
+			else: oneTimeBonuses[nodeName](self)
 
 			self._scene.UpdateBonusDescriptionText()
 
 			# Create and show the visual effect and play the sound.
 
-			self._scene.Append(AbsorptionEffect(self._scene, self))
+			self._scene.Append(Effect(self._scene, "Absorption", self, follow = True))
 			Resources().GetSound("Absorption").Play()
 
 			return
 
 		# If the colliding node is not absorbable - destroy the Player.
 
-		Resources().GetSound("Destruction").Play()
 		self.Terminate()
 
-	# Private methods.
+	def OnTermination(self):
+
+		Resources().GetSound("Destruction").Play()
+
+	# Utilities.
 
 	def _ShootSomething(self, somethingsName, angle = None):
 

@@ -25,10 +25,8 @@
 ##
 
 from Engine.Core.Parameters import Parameters
-from Engine.Core.Resources import Resources
 from Engine.Utilities.Vector import Vector
-from Engine.World.Concepts.MovingNode import MovingNode
-from Engine.World.Nodes.Effects.VerySmallExplosionEffect import VerySmallExplosionEffect
+from Engine.World.Concepts.Node import Node
 
 ##
 #
@@ -36,19 +34,22 @@ from Engine.World.Nodes.Effects.VerySmallExplosionEffect import VerySmallExplosi
 #
 ##
 
-class BulletFromEnemy(MovingNode):
+class Bonus(Node):
 
-	def __init__(self, scene):
+	# The constructor.
 
-		super().__init__(scene, "Bullet (Red).png", Vector(0, Parameters.BulletSpeed))
+	def __init__(self, scene, spriteIndex, name):
 
-		self.SetCollisions({"Participants"}, {"BulletFromEnemy", "Enemy"})
+		# Initialize the node.
 
-		Resources().GetSound("Bullet").Play()
+		super().__init__(scene, f"Bonus {spriteIndex}", movementVector = Vector(0, Parameters.BonusSpeed), zIndex = 2)
 
-	# Inherited methods.
+		self._name = name
+		self._collisionClasses = {"Bonuses"}
+
+	# Callbacks.
 
 	def OnCollision(self, node):
 
-		self._scene.Append(VerySmallExplosionEffect(self._scene, self))
-		self.Terminate()
+		if "Player" == node.GetName():
+			self.Terminate()

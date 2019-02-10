@@ -24,7 +24,11 @@
 #
 ##
 
+from Engine.Core.Parameters import Parameters
+from Engine.Core.Resources import Resources
+from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.Node import Node
+from Engine.World.Nodes.Other.Effect import Effect
 
 ##
 #
@@ -32,38 +36,20 @@ from Engine.World.Concepts.Node import Node
 #
 ##
 
-class MovingNode(Node):
+class BulletFromEnemy(Node):
 
-	def __init__(self, scene, sprite, movementVector, zIndex = 0):
+	def __init__(self, scene):
 
-		super().__init__(scene, sprite, zIndex)
+		super().__init__(scene, "Bullet (Red).png", movementVector = Vector(0, Parameters.BulletSpeed))
 
-		self._movementVector = movementVector
-		self._stopped = False
+		self._collisionClasses = {"Participants"}
+		self._collisionExceptions = {"BulletFromEnemy", "Enemy"}
 
-	def GetMovementVector(self):
+		Resources().GetSound("Bullet").Play()
 
-		return self._movementVector
+	# Inherited methods.
 
-	def SetMovementVector(self, movementVector):
+	def OnCollision(self, node):
 
-		self._movementVector = movementVector
-
-	def SetRotationToMovementVector(self):
-
-		self.SetRotation(self._movementVector.GetAngle())
-
-	def Update(self, milisecondsPassed):
-
-		super().Update(milisecondsPassed)
-
-		if not self._stopped:
-			self._position += self._movementVector * milisecondsPassed
-
-	def StartMoving(self):
-
-		self._stopped = False
-
-	def StopMoving(self):
-
-		self._stopped = True
+		self._scene.Append(Effect(self._scene, "Explosion", self, dimensions = Vector(15, 15)))
+		self.Terminate()
