@@ -8,9 +8,10 @@ A simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invad
 
 ### Version 1.3
 
-- **BEING-DONE**: Reworked and optimized resource caching.
 - Added support for mouse input (the game can now be played using solely the mouse).
+- Significant changes in the UI.
 - Minor visual improvements.
+- Reworked resource caching.
 
 ### Version 1.2
 
