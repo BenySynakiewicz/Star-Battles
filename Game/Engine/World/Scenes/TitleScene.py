@@ -37,7 +37,7 @@ from sys import exit
 
 from pygame import (
 	mouse,
-	KEYDOWN, MOUSEBUTTONDOWN,
+	MOUSEBUTTONDOWN,
 )
 
 ##
@@ -47,6 +47,8 @@ from pygame import (
 ##
 
 class TitleScene(Scene):
+
+	# The constructor.
 
 	def __init__(self):
 
@@ -77,11 +79,13 @@ class TitleScene(Scene):
 		self.Append(self._newGameButton)
 		self.Append(self._quitButton)
 
-	# Inherited methods.
+	# Basic operations..
 
 	def Show(self):
 
 		mouse.set_visible(True)
+
+	# Reacting and rendering.
 
 	def React(self, events, _):
 

@@ -27,14 +27,13 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Core.State import State
-from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import Blit, GetDimensions, GetScreen, RenderText
+from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.Scene import Scene
 from Engine.World.Widgets.Button import Button
 
 from pygame import (
 	mouse,
-	KEYDOWN, K_SPACE,
 	MOUSEBUTTONDOWN,
 )
 
@@ -45,6 +44,8 @@ from pygame import (
 ##
 
 class EndGameScene(Scene):
+
+	# The constructor.
 
 	def __init__(self):
 
@@ -71,30 +72,25 @@ class EndGameScene(Scene):
 
 		titleFont = Resources().GetFont("Exo 2 Light", Parameters.BigTextHeight)
 		messageFont = Resources().GetFont("Exo 2 Light", Parameters.MediumTextHeight)
+		buttonFont = Resources().GetFont("Exo 2 Light", Parameters.MediumTextHeight)
 
 		self._title = RenderText(titleMessage, titleFont)
 		self._message = RenderText(message, messageFont)
 
-		buttonFont = Resources().GetFont("Exo 2 Light", Parameters.BiggishTextHeight)
-
 		self._continueButton = Button(self, "Continue", buttonFont)
+		self._continueButton.SetMinimumWidth(Parameters.ButtonWidth)
+
 		self.Append(self._continueButton)
 
-	# Inherited methods.
+	# Basic operations.
 
 	def Show(self):
 
 		mouse.set_visible(True)
 
+	# Reacting and rendering.
+
 	def React(self, events, keys):
-
-		# for event in events:
-
-			# if (KEYDOWN == event.type and K_SPACE == event.key) or MOUSEBUTTONDOWN == event.type:
-
-				# self._nextScene = None
-
-				# return
 
 		for event in events:
 
@@ -105,24 +101,35 @@ class EndGameScene(Scene):
 
 	def Render(self):
 
-		Scene.Render(self)
+		super().Render()
 
 		# Retrieve the screen.
 
 		screen = GetScreen()
 		screenDimensions = GetDimensions(screen)
 
-		# Calculate the positions of the texts.
+		# Calculate the positions of texts and buttons.
 
-		titlePosition = (screenDimensions - GetDimensions(self._title)) // 2
-		titlePosition.Y = Parameters.HugeMargin
+		titleDimensions = GetDimensions(self._title)
+		messageDimensions = GetDimensions(self._message)
+		continueButtonDimensions = self._continueButton.GetDimensions()
 
-		messagePosition = (screenDimensions - GetDimensions(self._message)) // 2
-		messagePosition.Y = titlePosition.Y + self._title.get_height()
+		titleAndMessageBundleHeight = titleDimensions.Y + messageDimensions.Y
 
-		self._continueButton.SetPosition(Vector((screenDimensions.X - self._continueButton.GetDimensions().X) / 2, messagePosition.Y + GetDimensions(self._message).Y + 4 * Parameters.Margin))
+		titlePosition = Vector(
+			(screenDimensions.X - titleDimensions.X) / 2,
+			(screenDimensions.Y - Parameters.Margin - continueButtonDimensions.Y - titleAndMessageBundleHeight) / 2,
+		)
 
-		# Position the continue button.
+		messagePosition = Vector(
+			(screenDimensions.X - messageDimensions.X) / 2,
+			titlePosition.Y + titleDimensions.Y,
+		)
+
+		self._continueButton.SetPosition(Vector(
+			(screenDimensions.X - continueButtonDimensions.X) / 2,
+			screenDimensions.Y - Parameters.Margin - continueButtonDimensions.Y,
+		))
 
 		# Blit the texts.
 
