@@ -65,7 +65,17 @@ class Button(Widget):
 		self._activeSurface = None
 		self._inactiveSurface = None
 
+		self._minimumWidth = None
+
 		# Generate (and set) the surfaces.
+
+		self._GenerateSprites()
+
+	# Operations.
+
+	def SetMinimumWidth(self, minimumWidth):
+
+		self._minimumWidth = minimumWidth
 
 		self._GenerateSprites()
 
@@ -87,6 +97,8 @@ class Button(Widget):
 		# Create both surfaces.
 
 		surfaceDimensions = textSurfaceDimensions + (Padding * 2)
+		if self._minimumWidth:
+			surfaceDimensions.X = max(self._minimumWidth, surfaceDimensions.X)
 
 		self._activeSurface = Surface(tuple(surfaceDimensions), SRCALPHA)
 		self._inactiveSurface = self._activeSurface.copy()
@@ -96,8 +108,10 @@ class Button(Widget):
 
 		# Draw text on both surfaces.
 
-		Blit(self._activeSurface, textSurface, Padding)
-		Blit(self._inactiveSurface, textSurface, Padding)
+		textPosition = Vector((surfaceDimensions.X - textSurfaceDimensions.X) / 2, Padding.Y)
+
+		Blit(self._activeSurface, textSurface, textPosition)
+		Blit(self._inactiveSurface, textSurface, textPosition)
 
 		# Set the inactive surface as the current surface.
 

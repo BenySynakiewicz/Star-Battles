@@ -78,9 +78,12 @@ Parameters = SimpleNamespace(
 	ShieldEnergyUsage = 0.075,
 	LowerShieldEnergyUsage = 0.050,
 
-	SmallTextHeight = 18,
-	MediumTextHeight = 48,
-	BiggishTextHeight = 64,
-	BigTextHeight = 96,
+	SmallTextHeight = 20,
+	MediumTextHeight = 50,
+	BiggishTextHeight = 60,
+	BigTextHeight = 90,
+	HugeTextHeight = 150,
+
+	ButtonWidth = 300
 
 )

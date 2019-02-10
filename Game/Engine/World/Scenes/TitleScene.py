@@ -27,11 +27,11 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Core.State import State
+from Engine.Utilities.General import Blit, GetDimensions, GetScreen, RenderText
+from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.Scene import Scene
 from Engine.World.Scenes.BattleScene import BattleScene
 from Engine.World.Widgets.Button import Button
-from Engine.Utilities.Vector import Vector
-from Engine.Utilities.General import Blit, GetDimensions, GetScreen, RenderText
 
 from sys import exit
 
@@ -56,17 +56,23 @@ class TitleScene(Scene):
 
 		State().Clear()
 
-		# Create texts and buttons.
+		# Create texts.
 
-		titleFont = Resources().GetFont("Exo 2 Light", Parameters.BigTextHeight)
+		titleFont = Resources().GetFont("Exo 2 Light", Parameters.HugeTextHeight)
 		creatorFont = Resources().GetFont("Exo 2", Parameters.SmallTextHeight)
-		buttonFont = Resources().GetFont("Exo 2 Light", Parameters.BiggishTextHeight)
+		buttonFont = Resources().GetFont("Exo 2 Light", Parameters.MediumTextHeight)
 
 		self._title = RenderText(Parameters.Name, titleFont)
-		self._creator = RenderText(f"Created by {Parameters.Creator}" "\n" f"Version {Parameters.Version}", creatorFont, alignRight = True)
+		self._creator = RenderText(f"Created by {Parameters.Creator}", creatorFont)
+		self._version = RenderText(f"Version {Parameters.Version}", creatorFont, alignRight = True)
+
+		# Create buttons.
 
 		self._newGameButton = Button(self, "New Game", buttonFont)
 		self._quitButton = Button(self, "Quit", buttonFont)
+
+		buttons = [self._newGameButton, self._quitButton]
+		[x.SetMinimumWidth(Parameters.ButtonWidth) for x in buttons]
 
 		self.Append(self._newGameButton)
 		self.Append(self._quitButton)
@@ -97,17 +103,40 @@ class TitleScene(Scene):
 		screen = GetScreen()
 		screenDimensions = GetDimensions(screen)
 
-		# Calculate the positions of the texts.
+		# Calculate the positions of texts and buttons.
 
-		titlePosition = (screenDimensions - GetDimensions(self._title)) / 2
-		titlePosition.Y = Parameters.HugeMargin
+		titleDimensions = GetDimensions(self._title)
+		versionDimensions = GetDimensions(self._version)
+		newGameButtonDimensions = self._newGameButton.GetDimensions()
+		quitButtonDimensions = self._newGameButton.GetDimensions()
 
-		creatorPosition = Vector(screenDimensions.X - GetDimensions(self._creator).X - Parameters.Margin, Parameters.Margin)
+		titlePosition = Vector(
+			(screenDimensions.X - titleDimensions.X) / 2,
+			(screenDimensions.Y - Parameters.Margin - newGameButtonDimensions.Y - titleDimensions.Y) / 2,
+		)
 
-		self._newGameButton.SetPosition(Vector((screenDimensions.X - self._newGameButton.GetDimensions().X) / 2, titlePosition.Y + GetDimensions(self._title).Y + 4 * Parameters.Margin))
-		self._quitButton.SetPosition(Vector((screenDimensions.X - self._quitButton.GetDimensions().X) / 2, self._newGameButton.GetPosition().Y + self._newGameButton.GetDimensions().Y + Parameters.Margin))
+		creatorPosition = Vector(
+			Parameters.Margin,
+			Parameters.Margin,
+		)
+
+		versionPosition = Vector(
+			screenDimensions.X - versionDimensions.X - Parameters.Margin,
+			Parameters.Margin,
+		)
+
+		self._newGameButton.SetPosition(Vector(
+			Parameters.Margin,
+			screenDimensions.Y - Parameters.Margin - newGameButtonDimensions.Y,
+		))
+
+		self._quitButton.SetPosition(Vector(
+			screenDimensions.X - Parameters.Margin - quitButtonDimensions.X,
+			screenDimensions.Y - Parameters.Margin - quitButtonDimensions.Y,
+		))
 
 		# Blit the texts.
 
 		Blit(screen, self._title, titlePosition)
 		Blit(screen, self._creator, creatorPosition)
+		Blit(screen, self._version, versionPosition)
