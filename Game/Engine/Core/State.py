@@ -50,7 +50,7 @@ class State(metaclass = Singleton):
 			return
 
 		with open(Parameters.HighscoreFilePath, "r") as file:
-			self._highestScore = int(file.read())
+			self._scoreManager.SetHighestScore(int(file.read()))
 
 	def SaveToFile(self):
 
@@ -72,3 +72,5 @@ class State(metaclass = Singleton):
 
 		self._bonusManager.Clear()
 		self._scoreManager.Clear()
+
+		self.LoadFromFile()

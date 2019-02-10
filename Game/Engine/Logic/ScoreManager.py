@@ -26,18 +26,23 @@
 
 class ScoreManager:
 
+	# The constructor.
+
 	def __init__(self):
 
 		self._currentScore = 0
 		self._highestScore = 0
 
-	def GetCurrentScore(self):
+	# Accessors.
 
-		return self._currentScore
+	def GetCurrentScore(self): return self._currentScore
+	def GetHighestScore(self): return self._highestScore
 
-	def GetHighestScore(self):
+	# Basic operations.
 
-		return self._highestScore
+	def SetHighestScore(self, score):
+
+		self._highestScore = score
 
 	def Update(self, change):
 
