@@ -208,7 +208,7 @@ class Player(Node):
 
 			# Create and show the visual effect and play the sound.
 
-			self._scene.Append(Effect(self._scene, "Absorption", self, follow = True))
+			self._scene.Append(Effect(self._scene, "Absorption", self, follow = True, zIndex = -1))
 			Resources().GetSound("Absorption").Play()
 
 			return

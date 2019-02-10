@@ -37,11 +37,20 @@ class Effect(Node):
 
 	# The constructor.
 
-	def __init__(self, scene, spriteName, parentNode, follow = False, dimensions = None, collisionClasses = set()):
+	def __init__(
+		self,
+		scene,
+		spriteName,
+		parentNode,
+		follow = False,
+		dimensions = None,
+		collisionClasses = set(),
+		zIndex = 3
+	):
 
 		# Initialize the node.
 
-		super().__init__(scene, spriteName, dimensions = dimensions, zIndex = -2)
+		super().__init__(scene, spriteName, dimensions = dimensions, zIndex = zIndex)
 
 		self._collisionClasses = collisionClasses
 		self._sprite.SetLooping(False)
