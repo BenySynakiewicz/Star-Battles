@@ -26,7 +26,8 @@
 
 from Engine.Core.Parameters import Parameters
 from Engine.Media.Utilities.SurfaceProcessor import InterpolateToDimensions, InterpolateToScale
-from Engine.Utilities.General import Blit, FindFiles, GetDimensions
+from Engine.Utilities.Filesystem import FindFiles
+from Engine.Utilities.General import Blit, GetDimensions
 
 from copy import copy
 from pathlib import Path

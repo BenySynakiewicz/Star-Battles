@@ -24,21 +24,27 @@
 #
 ##
 
-from types import SimpleNamespace
+from pathlib import Path
+from string import Template
+
+from natsort import natsorted, ns
 
 ##
 #
-# Globals.
+# Functions.
 #
 ##
 
-Color = SimpleNamespace(
+def FindFiles(path = None, recursively = False, suffixes = None):
 
-	Black    = (0  , 0  , 0  ),
-	White    = (255, 255, 255),
+	path = path if isinstance(path, Path) else Path(path or ".")
+	allFiles = [file for file in path.glob("**/*" if recursively else "*") if file.is_file()]
 
-	Green = (25 , 255, 25 ),
-	Red   = (255, 25 , 25 ),
-	Blue  = (25 , 25 , 255),
+	suffixes = [suffix.lower() for suffix in suffixes] if suffixes else None
+	files = allFiles if not suffixes else [file for file in allFiles if file.suffix.lower() in suffixes]
 
-)
+	return natsorted(files, key = lambda path: str(path), alg = ns.IGNORECASE)
+
+def SubstituteInPath(path, identifier, value):
+
+	return Path(Template(str(path)).substitute({identifier: value}))

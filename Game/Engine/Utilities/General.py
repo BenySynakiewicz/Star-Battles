@@ -40,19 +40,9 @@ from pygame import display, font, image, Surface, SRCALPHA
 #
 ##
 
-def Blit(surface, image, position = Vector()):
+def Blit(destination, source, position = Vector()):
 
-	surface.blit(image, tuple(position))
-
-def FindFiles(path = None, recursively = False, suffixes = None):
-
-	path = Path(path) if path else Path()
-	allFiles = [item for item in path.glob("**/*" if recursively else "*") if item.is_file()]
-
-	suffixes = [suffix.lower() for suffix in suffixes] if suffixes else None
-	filePaths = allFiles if not suffixes else [item for item in allFiles if item.suffix.lower() in suffixes]
-
-	return natsorted(filePaths, key = lambda x: str(x), alg = ns.IGNORECASE)
+	destination.blit(source, tuple(position))
 
 def GetDecision(possibilities):
 
@@ -97,10 +87,6 @@ def RenderText(text, font, color = Color.White, alignRight = False):
 		verticalCursor += surface.get_height()
 
 	return destination
-
-def SubstituteInPath(path, identifier, value):
-
-	return Path(Template(str(path)).substitute({identifier: value}))
 
 def TakeScreenshot():
 
