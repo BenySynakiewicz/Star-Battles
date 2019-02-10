@@ -46,6 +46,8 @@ from Engine.World.Utilities.Positioning import AtBottom
 ExplosionDimensions = Vector(200, 200)
 ShootingProbabilityDivisor = 200000
 
+MaximumHealth = 500
+
 ##
 #
 # The main class.
@@ -70,7 +72,7 @@ class Saucer(Node):
 
 		# Initialize new member variables.
 
-		self._health = 100
+		self._health = MaximumHealth
 		self._isDestroyed = False
 
 		self.AppendTimer("Shot")
@@ -127,7 +129,7 @@ class Saucer(Node):
 				barDimensions,
 
 				Color.Red,
-				self._health,
+				(self._health / MaximumHealth) * 100,
 
 			)
 
