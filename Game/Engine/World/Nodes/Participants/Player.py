@@ -31,11 +31,22 @@ from Engine.World.Concepts.Node import Node
 from Engine.World.Nodes.Other.Effect import Effect
 from Engine.World.Nodes.Weapons.Bomb import Bomb
 from Engine.World.Nodes.Weapons.BulletFromPlayer import BulletFromPlayer
-from Engine.World.Utilities.Positioning import AtSameCenter, AtTop
+from Engine.World.Utilities.Positioning import AtSameCenter, AtTop, AtBottom
+from Engine.Utilities.Color import Color
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.General import GetScreen, GetScreenDimensions
+from Engine.Utilities.GUI import DrawBar
+from Engine.Utilities.Vector import Vector
 
 from numpy import clip
+
+##
+#
+# Globals.
+#
+##
+
+MaximumHealth = 100
 
 ##
 #
@@ -57,6 +68,8 @@ class Player(Node):
 		self._collisionExceptions = {"BulletFromPlayer"}
 
 		# Initialize new member variables.
+
+		self._health = MaximumHealth
 
 		self._bulletEnergy = 100
 		self._bombEnergy = 100
@@ -173,6 +186,21 @@ class Player(Node):
 
 			sprite.Blit(0, GetScreen(), AtSameCenter(self.GetPosition(), self.GetDimensions(), dimensions))
 
+		# Render the health bar.
+
+		barDimensions = Vector(self.GetDimensions().X, Parameters.HealthBarHeight)
+		DrawBar(
+
+			GetScreen(),
+
+			self._position - (0, barDimensions.Y + Parameters.SmallMargin) + ((self._dimensions.X - barDimensions.X) / 2, 0),
+			barDimensions,
+
+			Color.Red,
+			(self._health / MaximumHealth) * 100,
+
+		)
+
 	# Callbacks.
 
 	def OnCollision(self, node):
@@ -215,7 +243,12 @@ class Player(Node):
 
 		# If the colliding node is not absorbable - destroy the Player.
 
-		self.Terminate()
+		# self.Terminate()
+
+		self._health = max(0, self._health - 5)
+
+		if not self._health:
+			self.Terminate()
 
 	def OnTermination(self):
 

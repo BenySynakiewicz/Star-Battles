@@ -120,12 +120,12 @@ class Saucer(Node):
 
 		if not self._isDestroyed:
 
-			barDimensions = Vector(self.GetDimensions().X, Parameters.BarHeight)
+			barDimensions = Vector(self.GetDimensions().X, Parameters.HealthBarHeight)
 			DrawBar(
 
 				GetScreen(),
 
-				self.GetPosition() - (0, barDimensions.Y + Parameters.SmallMargin),
+				self._position - (0, barDimensions.Y + Parameters.SmallMargin) + ((self._dimensions.X - barDimensions.X) / 2, 0),
 				barDimensions,
 
 				Color.Red,
