@@ -95,6 +95,7 @@ class EndGameScene(Scene):
 			if MOUSEBUTTONDOWN == event.type:
 
 				if self._continueButton.IsBeingPointedAt():
+					self._continueButton.Click()
 					self._nextScene = None
 
 	def Render(self):

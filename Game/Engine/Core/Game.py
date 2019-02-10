@@ -48,7 +48,7 @@ class Game:
 
 	def __init__(self):
 
-		self._InitializeComponents(frequency = 44100, channels = 26)
+		self._InitializeComponents(frequency = 44100, channels = 28)
 		self._InitializeWindow(f"{Parameters.Name} (by {Parameters.Creator})")
 		self._InitializeResources()
 
@@ -159,6 +159,7 @@ class Game:
 		Resources().LoadSound("Explosion.ogg", range(20, 21))
 		Resources().LoadSound("Shield.ogg", range(22, 24))
 		Resources().LoadSound("Absorption.ogg", range(25, 26))
+		Resources().LoadSound("Click.ogg", range(27, 28))
 
 		# Load music.
 

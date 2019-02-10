@@ -92,8 +92,10 @@ class TitleScene(Scene):
 			if MOUSEBUTTONDOWN == event.type:
 
 				if self._newGameButton.IsBeingPointedAt():
+					self._newGameButton.Click()
 					self._nextScene = BattleScene()
 				elif self._quitButton.IsBeingPointedAt():
+					self._quitButton.Click()
 					exit()
 
 	def Render(self):

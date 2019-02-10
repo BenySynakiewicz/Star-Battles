@@ -24,6 +24,7 @@
 #
 ##
 
+from Engine.Core.Resources import Resources
 from Engine.Utilities.Color import Color
 from Engine.Utilities.General import Blit, GetDimensions, RenderText
 from Engine.Utilities.Rendering import RenderRoundedRectangle
@@ -56,6 +57,8 @@ class Button(Widget):
 
 		# Initialize the member variables.
 
+		self._onClick = None
+
 		self._text = text
 		self._font = font
 
@@ -73,11 +76,22 @@ class Button(Widget):
 
 	# Operations.
 
+	def SetOnClickFunction(self, function):
+
+		self._onClick = function
+
 	def SetMinimumWidth(self, minimumWidth):
 
 		self._minimumWidth = minimumWidth
 
 		self._GenerateSprites()
+
+	def Click(self):
+
+		if self._onClick:
+			self._onClick()
+
+		Resources().GetSound("Click").Play()
 
 	# Updating.
 
