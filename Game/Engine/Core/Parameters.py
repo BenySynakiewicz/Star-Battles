@@ -49,6 +49,7 @@ Parameters = SimpleNamespace(
 	SmallMargin = 4,
 	MediumMargin = 8,
 	Margin = 12,
+	HugeMargin = 12 * 12,
 
 	BarHeight = 4,
 	ShadowDistance = Vector(3, 3),

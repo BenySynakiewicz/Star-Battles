@@ -30,6 +30,7 @@ from Engine.Core.State import State
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import Blit, GetDimensions, GetScreen, RenderText
 from Engine.World.Concepts.Scene import Scene
+from Engine.World.Widgets.Button import Button
 
 from pygame import (
 	mouse,
@@ -49,25 +50,35 @@ class EndGameScene(Scene):
 
 		super().__init__("Screenshot")
 
+		# Save the game state.
+
 		State().SaveToFile()
+
+		# Prepare the texts.
 
 		scoreManager = State().GetScoreManager()
 		currentScore = scoreManager.GetCurrentScore()
 		highestScore = scoreManager.GetHighestScore()
 
-		self._title = RenderText(f"You've earned {currentScore} points!", Resources().GetFont("Exo 2 Light", Parameters.BigTextHeight))
-		self._message = RenderText(
+		titleMessage = f"You've earned {currentScore} points!"
+		message = (
 			f"Your record remains {highestScore} points."
-				if currentScore < highestScore
-				else
-			f"You've beaten your previous record of {highestScore} points!",
-			Resources().GetFont("Exo 2 Light", Parameters.MediumTextHeight)
+			if currentScore < highestScore else
+			f"You've beaten your previous record of {highestScore} points!"
 		)
-		self._instruction = RenderText(
-			"Press the SPACE key to start the game one more time." "\n"
-			"Press the ESC key to quit the game.",
-			Resources().GetFont("Exo 2", Parameters.SmallTextHeight)
-		)
+
+		# Initialize the texts and the buttons.
+
+		titleFont = Resources().GetFont("Exo 2 Light", Parameters.BigTextHeight)
+		messageFont = Resources().GetFont("Exo 2 Light", Parameters.MediumTextHeight)
+
+		self._title = RenderText(titleMessage, titleFont)
+		self._message = RenderText(message, messageFont)
+
+		buttonFont = Resources().GetFont("Exo 2 Light", Parameters.BiggishTextHeight)
+
+		self._continueButton = Button(self, "Continue", buttonFont)
+		self.AppendNode(self._continueButton)
 
 	# Inherited methods.
 
@@ -77,13 +88,20 @@ class EndGameScene(Scene):
 
 	def React(self, events, keys):
 
+		# for event in events:
+
+			# if (KEYDOWN == event.type and K_SPACE == event.key) or MOUSEBUTTONDOWN == event.type:
+
+				# self._nextScene = None
+
+				# return
+
 		for event in events:
 
-			if (KEYDOWN == event.type and K_SPACE == event.key) or MOUSEBUTTONDOWN == event.type:
+			if MOUSEBUTTONDOWN == event.type:
 
-				self._nextScene = None
-
-				return
+				if self._continueButton.IsBeingPointedAt():
+					self._nextScene = None
 
 	def Render(self):
 
@@ -97,14 +115,16 @@ class EndGameScene(Scene):
 		# Calculate the positions of the texts.
 
 		titlePosition = (screenDimensions - GetDimensions(self._title)) // 2
+		titlePosition.Y = Parameters.HugeMargin
 
 		messagePosition = (screenDimensions - GetDimensions(self._message)) // 2
 		messagePosition.Y = titlePosition.Y + self._title.get_height()
 
-		instructionPosition = Vector(Parameters.Margin, screenDimensions.Y - Parameters.Margin - self._instruction.get_height())
+		self._continueButton.SetPosition(Vector((screenDimensions.X - self._continueButton.GetDimensions().X) / 2, messagePosition.Y + GetDimensions(self._message).Y + 4 * Parameters.Margin))
+
+		# Position the continue button.
 
 		# Blit the texts.
 
 		Blit(screen, self._title, titlePosition)
 		Blit(screen, self._message, messagePosition)
-		Blit(screen, self._instruction, instructionPosition)

@@ -81,11 +81,7 @@ class TitleScene(Scene):
 
 		for event in events:
 
-			if KEYDOWN == event.type:
-
-				self._nextScene = BattleScene()
-
-			elif MOUSEBUTTONDOWN == event.type:
+			if MOUSEBUTTONDOWN == event.type:
 
 				if self._newGameButton.IsBeingPointedAt():
 					self._nextScene = BattleScene()
