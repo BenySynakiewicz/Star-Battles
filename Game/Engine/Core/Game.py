@@ -162,4 +162,6 @@ class Game:
 
 		# Load music.
 
-		Resources().LoadMusic("Ambience.ogg")
+		Resources().LoadMusic("Punch Deck - Catharsis.ogg")
+		Resources().LoadMusic("Punch Deck - By Force.ogg")
+		Resources().LoadMusic("Punch Deck - Destabilized.ogg")

@@ -56,6 +56,7 @@ A simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invad
 
 ### Sounds
 
+- **Music**: [Punch Deck](https://www.reddit.com/r/gamedev/comments/ak1iqz/i_make_orchestral_electronic_music_that_im_giving/).
 - **Bullets, bombs**: [Michel Baradari](https://opengameart.org/content/4-projectile-launches).
 - **Other sounds**: [The Sonniss GameAudioGDC Bundle 2018](https://www.reddit.com/r/gamedev/comments/85kzjw/30gb_of_high_quality_sound_effects_the_sonniss/).
 
