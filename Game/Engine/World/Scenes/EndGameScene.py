@@ -32,6 +32,7 @@ from Engine.Utilities.General import Blit, GetDimensions, GetScreen, RenderText
 from Engine.World.Concepts.Scene import Scene
 
 from pygame import (
+	mouse,
 	KEYDOWN, K_SPACE,
 	MOUSEBUTTONDOWN,
 )
@@ -69,6 +70,10 @@ class EndGameScene(Scene):
 		)
 
 	# Inherited methods.
+
+	def Show(self):
+
+		mouse.set_visible(True)
 
 	def React(self, events, keys):
 

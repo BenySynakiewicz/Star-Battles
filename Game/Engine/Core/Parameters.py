@@ -79,6 +79,7 @@ Parameters = SimpleNamespace(
 
 	SmallTextHeight = 18,
 	MediumTextHeight = 48,
+	BiggishTextHeight = 64,
 	BigTextHeight = 96,
 
 )

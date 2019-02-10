@@ -25,6 +25,7 @@
 ##
 
 from Engine.Core.Resources import Resources
+from Engine.Media.Concepts.Sprite import Sprite
 from Engine.Media.Concepts.SpriteInstance import SpriteInstance
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import GetScreen
@@ -33,7 +34,7 @@ from Engine.World.Utilities.Timed import Timed
 
 from copy import copy
 
-from pygame import Rect
+from pygame import Rect, Surface
 
 ##
 #
@@ -53,11 +54,11 @@ class Node(Timed):
 		self._terminated = False
 
 		self._spriteName = sprite
-		self._sprite = SpriteInstance(Resources().GetSprite(sprite, spriteDimensions, spriteRotation))
+		self._sprite = SpriteInstance(Resources().GetSprite(sprite, spriteDimensions, spriteRotation)) if self._spriteName else None
 		self._zIndex = zIndex
 
 		self._position = Vector()
-		self._dimensions = self._sprite.GetDimensions()
+		self._dimensions = self._sprite.GetDimensions() if self._sprite else None
 
 	def IsTerminated(self):
 
@@ -74,6 +75,10 @@ class Node(Timed):
 	def GetDimensions(self):
 
 		return self._dimensions
+
+	def GetRectangle(self):
+
+		return Rect(tuple(self.GetPosition()), tuple(self.GetDimensions()))
 
 	def GetCenter(self):
 
@@ -118,11 +123,24 @@ class Node(Timed):
 
 	def ReplaceSprite(self, sprite, loop = True, dimensions = None, rotation = None):
 
-		self._sprite = SpriteInstance(Resources().GetSprite(sprite, dimensions, rotation), loop)
+		if isinstance(sprite, Surface):
+			self._sprite = SpriteInstance(Sprite(sprite))
+		elif isinstance(sprite, Sprite):
+			self._sprite = SpriteInstance(sprite)
+		elif isinstance(sprite, SpriteInstance):
+			self._sprite = sprite
+		else:
+			self._sprite = SpriteInstance(Resources().GetSprite(sprite, dimensions, rotation), loop)
 
-		self._position += self._dimensions // 2
+		hadSetDimensions = bool(self._dimensions)
+
+		if hadSetDimensions:
+			self._position += self._dimensions // 2
+
 		self._dimensions = self._sprite.GetDimensions()
-		self._position -= self._dimensions // 2
+
+		if hadSetDimensions:
+			self._position -= self._dimensions // 2
 
 	def SetPosition(self, position):
 

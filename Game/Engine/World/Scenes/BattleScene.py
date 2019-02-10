@@ -81,6 +81,10 @@ class BattleScene(Scene):
 		self.AppendNode(self.Player)
 		self.AppendTimer("Enemy")
 
+	def Show(self):
+
+		mouse.set_visible(False)
+
 	def UpdateScoreText(self):
 
 		self._scoreText = RenderText(f"{State().GetScoreManager().GetCurrentScore()} points", Resources().GetFont("Exo 2", Parameters.SmallTextHeight))

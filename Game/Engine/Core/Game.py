@@ -57,6 +57,8 @@ class Game:
 		# Intialize the first scene and play the music.
 
 		scene = TitleScene()
+		scene.Show()
+
 		mixer.music.play()
 
 		# Enter the main loop.
@@ -81,9 +83,14 @@ class Game:
 
 			scene.Execute(events, keys, timeSincePreviousFrame)
 
-			scene = scene._nextScene
-			if not scene:
-				scene = TitleScene()
+			if scene._nextScene != scene:
+				scene = scene._nextScene or TitleScene()
+				scene.Show()
+
+			# scene = scene._nextScene
+			# if not scene:
+				# scene = TitleScene()
+				# scene.Show()
 
 			display.flip()
 
@@ -105,8 +112,6 @@ class Game:
 
 		display.set_mode((0, 0), DOUBLEBUF | FULLSCREEN | HWSURFACE)
 		display.set_caption(title)
-
-		mouse.set_visible(False)
 
 	def _InitializeResources(self):
 

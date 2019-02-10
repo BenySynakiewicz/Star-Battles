@@ -31,7 +31,7 @@ from Engine.Utilities.General import Blit, FindFiles, GetDimensions
 from copy import copy
 from pathlib import Path
 
-from pygame import image, mask, surfarray, transform
+from pygame import image, mask, Surface, surfarray, transform
 
 ##
 #
@@ -41,12 +41,19 @@ from pygame import image, mask, surfarray, transform
 
 class Sprite:
 
-	def __init__(self, path, shadows: bool = False, framesPerSecond: int = 40):
+	def __init__(self, pathOrSurface, shadows: bool = False, framesPerSecond: int = 40):
 
-		path = Path(path)
-		filePaths = FindFiles(path, recursively = False, suffixes = [".png"]) if path.is_dir() else [path]
+		if isinstance(pathOrSurface, Surface):
 
-		self._surfaces = [image.load(str(filePath)).convert_alpha() for filePath in filePaths]
+			self._surfaces = [pathOrSurface]
+
+		else:
+
+			path = Path(pathOrSurface)
+			filePaths = FindFiles(path, recursively = False, suffixes = [".png"]) if path.is_dir() else [path]
+
+			self._surfaces = [image.load(str(filePath)).convert_alpha() for filePath in filePaths]
+
 		self._masks = [mask.from_surface(surface) for surface in self._surfaces]
 
 		self._framesPerSecond = framesPerSecond

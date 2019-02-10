@@ -78,7 +78,7 @@ def GetScreenDimensions():
 
 	return GetDimensions(GetScreen())
 
-def RenderText(text, font, color = Color.White):
+def RenderText(text, font, color = Color.White, alignRight = False):
 
 	lines = text.splitlines()
 	surfaces = [font.render(line, True, color) for line in lines]
@@ -90,7 +90,10 @@ def RenderText(text, font, color = Color.White):
 	verticalCursor = 0
 
 	for surface in surfaces:
-		destination.blit(surface, (0, verticalCursor))
+
+		horizontalCursor = (width - surface.get_width()) if alignRight else 0
+
+		destination.blit(surface, (horizontalCursor, verticalCursor))
 		verticalCursor += surface.get_height()
 
 	return destination

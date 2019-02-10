@@ -45,6 +45,10 @@ class Scene(Timed):
 
 		self._background = background
 
+	def Show(self):
+
+		pass
+
 	def AppendNode(self, node):
 
 		self._nodes.append(node)
