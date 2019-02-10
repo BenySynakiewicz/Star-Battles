@@ -106,13 +106,17 @@ class TitleScene(Scene):
 		# Calculate the positions of texts and buttons.
 
 		titleDimensions = GetDimensions(self._title)
+		creatorDimensions = GetDimensions(self._creator)
 		versionDimensions = GetDimensions(self._version)
 		newGameButtonDimensions = self._newGameButton.GetDimensions()
 		quitButtonDimensions = self._newGameButton.GetDimensions()
 
+		upperTextsHeight = max([creatorDimensions.Y, versionDimensions.Y])
+		lowerButtonsHeight = max([newGameButtonDimensions.Y, quitButtonDimensions.Y])
+
 		titlePosition = Vector(
 			(screenDimensions.X - titleDimensions.X) / 2,
-			(screenDimensions.Y - Parameters.Margin - newGameButtonDimensions.Y - titleDimensions.Y) / 2,
+			(screenDimensions.Y - Parameters.Margin - lowerButtonsHeight - titleDimensions.Y + upperTextsHeight) / 2,
 		)
 
 		creatorPosition = Vector(
