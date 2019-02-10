@@ -39,7 +39,11 @@ from Engine.Utilities.Color import Color
 from Engine.Utilities.General import Blit, GetDimensions, GetScreen, GetScreenDimensions, RenderText
 from Engine.Utilities.GUI import DrawBar
 
-from pygame import KEYDOWN, K_UP, K_DOWN, K_RIGHT, K_LEFT, K_SPACE
+from pygame import (
+	mouse,
+	KEYDOWN, K_UP, K_DOWN, K_RIGHT, K_LEFT, K_SPACE,
+	MOUSEBUTTONDOWN,
+)
 
 ##
 #
@@ -126,13 +130,25 @@ class BattleScene(Scene):
 
 		# Process events.
 
-		for event in [event for event in events if KEYDOWN == event.type]:
+		for event in events:
 
-			if K_UP == event.key:
-				self.Player.Shoot()
+			if KEYDOWN == event.type:
 
-			elif K_SPACE == event.key:
-				self.Player.ShootBomb()
+				if K_UP == event.key:
+					self.Player.Shoot()
+
+				elif K_SPACE == event.key:
+					self.Player.ShootBomb()
+
+			elif MOUSEBUTTONDOWN == event.type:
+
+				leftButton, middleButton, rightButton = mouse.get_pressed()
+
+				if leftButton:
+					self.Player.Shoot()
+
+				elif middleButton:
+					self.Player.ShootBomb()
 
 		# Process pressed keys.
 
@@ -142,7 +158,13 @@ class BattleScene(Scene):
 		elif keys[K_RIGHT]:
 			self.Player.Move(Direction.Right)
 
-		self.Player.ShieldIsUp = bool(keys[K_DOWN])
+		rightMouseButton = mouse.get_pressed()[2]
+		self.Player.ShieldIsUp = bool(keys[K_DOWN] or rightMouseButton)
+
+		# Process mouse input.
+
+		mouseMovement = mouse.get_rel()
+		self.Player.Move(Direction.Right, mouseMovement[0])
 
 	def Update(self, milisecondsPassed):
 

@@ -32,7 +32,7 @@ from Engine.World.Scenes.BattleScene import BattleScene
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import Blit, GetDimensions, GetScreen, RenderText
 
-from pygame import KEYDOWN
+from pygame import KEYDOWN, MOUSEBUTTONDOWN
 
 ##
 #
@@ -64,7 +64,7 @@ class TitleScene(Scene):
 
 	def React(self, events, _):
 
-		if any(KEYDOWN == event.type for event in events):
+		if any(event.type in [KEYDOWN, MOUSEBUTTONDOWN] for event in events):
 			self._nextScene = BattleScene()
 
 	def Render(self):

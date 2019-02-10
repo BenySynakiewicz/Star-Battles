@@ -111,11 +111,11 @@ class Player(Node):
 
 		self.Energy.Shield = clip(self.Energy.Shield + change, 0, 100)
 
-	def Move(self, direction):
+	def Move(self, direction, amount = Parameters.PlayerSpeed):
 
 		self._position.X = clip(
 
-			self._position.X + (+Parameters.PlayerSpeed if Direction.Right == direction else -Parameters.PlayerSpeed),
+			self._position.X + (+amount if Direction.Right == direction else -amount),
 			Parameters.Margin,
 			GetScreenDimensions().X - Parameters.Margin - self._dimensions.X
 

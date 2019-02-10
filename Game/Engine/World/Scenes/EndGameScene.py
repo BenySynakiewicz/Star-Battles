@@ -31,7 +31,10 @@ from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import Blit, GetDimensions, GetScreen, RenderText
 from Engine.World.Concepts.Scene import Scene
 
-from pygame import KEYDOWN, K_SPACE
+from pygame import (
+	KEYDOWN, K_SPACE,
+	MOUSEBUTTONDOWN,
+)
 
 ##
 #
@@ -68,10 +71,13 @@ class EndGameScene(Scene):
 
 	def React(self, events, keys):
 
-		for event in [event for event in events if KEYDOWN == event.type]:
+		for event in events:
 
-			if K_SPACE == event.key:
-				self._nextScene = None#TitleScene()
+			if (KEYDOWN == event.type and K_SPACE == event.KEY) or MOUSEBUTTONDOWN == event.type:
+
+				self._nextScene = None
+
+				return
 
 	def Render(self):
 

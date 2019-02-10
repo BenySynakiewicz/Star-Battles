@@ -24,7 +24,9 @@
 #
 ##
 
-from math import atan2, cos, pow, radians, sin, sqrt
+from Engine.Utilities.Language import IsIndexable
+
+from math import atan2, cos, radians, sin, sqrt
 
 ##
 #
@@ -34,10 +36,14 @@ from math import atan2, cos, pow, radians, sin, sqrt
 
 class Vector:
 
+	# The constructor.
+
 	def __init__(self, x = 0, y = 0):
 
 		self.X = x
 		self.Y = y
+
+	# Utilities.
 
 	def GetAngle(self):
 
@@ -50,31 +56,27 @@ class Vector:
 
 	def GetNormalized(self):
 
-		length = sqrt(pow(self.X, 2) + pow(self.Y, 2))
+		length = sqrt(self.X**2 + self.Y**2)
 
 		return Vector(self.X / length, self.Y / length)
 
 	def GetRotatedAround(self, pivot, angle):
 
-		if not angle:
-			return Vector(self.X, self.Y)
-
 		angle = radians(-angle)
+		sinus, cosinus = sin(angle), cos(angle)
 
-		sinus = sin(angle)
-		cosinus = cos(angle)
+		pivoted = self - pivot
+		rotated = pivot + Vector(cosinus * pivoted.X - sinus * pivoted.Y, sinus * pivoted.X + cosinus * pivoted.Y)
 
-		temporaryRotatedX = self.X - pivot.X
-		temporaryRotatedY = self.Y - pivot.Y
+		return rotated
 
-		rotatedX = (temporaryRotatedX * cosinus) - (temporaryRotatedY * sinus) + pivot.X
-		rotatedY = (temporaryRotatedX * sinus) + (temporaryRotatedY * cosinus) + pivot.Y
-
-		return Vector(rotatedX, rotatedY)
+	# Iterability.
 
 	def __iter__(self):
 
 		return iter([self.X, self.Y])
+
+	# Equality.
 
 	def __key(self):
 		return (self.X, self.Y)
@@ -85,29 +87,55 @@ class Vector:
 	def __eq__(self, other):
 		return isinstance(self, type(other)) and self.__key() == other.__key()
 
-	# def __eq__(self, vector):
+	# Indexability.
 
-		# if isinstance(vector, Vector):
-			# return self.X == vector.X and self.Y == vector.Y
+	def __getitem__(self, index):
 
-		# return False
+		return [self.X, self.Y][index]
 
-	def __add__(self, vector):
+	def __setitem__(self, index, value):
 
-		return Vector(self.X + vector.X, self.Y + vector.Y)
+		if   0 == index: self.X = value
+		elif 1 == index: self.Y = value
 
-	def __sub__(self, vector):
+	def __len__(self):
 
-		return Vector(self.X - vector.X, self.Y - vector.Y)
+		return 2
 
-	def __mul__(self, scalar):
+	# Arithmetic operations.
 
-		return Vector(self.X * scalar, self.Y * scalar)
+	def __neg__(self):
 
-	def __floordiv__(self, scalar):
+		return Vector(-self.X, -self.Y)
 
-		return Vector(self.X // scalar, self.Y // scalar)
+	def __add__(self, value):
 
-	def __truediv__(self, scalar):
+		if IsIndexable(value) and len(value) > 1:
+			return Vector(self.X + value[0], self.Y + value[1])
 
-		return Vector(self.X / scalar, self.Y / scalar)
+		return Vector(self.X + value, self.Y + value)
+
+	def __sub__(self, value):
+
+		return self + -value
+
+	def __mul__(self, value):
+
+		if IsIndexable(value) and len(value) > 1:
+			return Vector(self.X * value[0], self.Y * value[1])
+
+		return Vector(self.X * value, self.Y * value)
+
+	def __floordiv__(self, value):
+
+		if IsIndexable(value) and len(value) > 1:
+			return Vector(self.X // value[0], self.Y // value[1])
+
+		return Vector(self.X // value, self.Y // value)
+
+	def __truediv__(self, value):
+
+		if IsIndexable(value) and len(value) > 1:
+			return Vector(self.X / value[0], self.Y / value[1])
+
+		return Vector(self.X / value, self.Y / value)
