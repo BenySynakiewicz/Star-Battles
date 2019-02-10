@@ -52,6 +52,7 @@ A simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invad
 - **Explosions, bonuses**: [Skorpio](https://opengameart.org/content/sci-fi-effects).
 - **Shields**: [Bonsaiheldin](http://bonsaiheld.org/).
 - **Bullets, bombs, player's ship, enemies' ships**: [UnLuckY Studio](https://opengameart.org/content/complete-spaceship-game-art-pack).
+- **Cursor**:  [aroche](https://www.deviantart.com/aroche/art/Vienna-3-Rapture-90310351).
 
 ### Sounds
 

@@ -108,6 +108,8 @@ class Game:
 		mixer.init()
 		mixer.set_num_channels(channels)
 
+		mouse.set_visible(False)
+
 	def _InitializeWindow(self, title):
 
 		display.set_mode((0, 0), DOUBLEBUF | FULLSCREEN | HWSURFACE)
@@ -132,6 +134,8 @@ class Game:
 		# Resources().LoadBackground("Background.jpeg")
 
 		# Load sprites.
+
+		Resources().LoadSprite("Cursor.png", shadows = False)
 
 		Resources().LoadSprite("Bullet (Green).png")
 		Resources().LoadSprite("Bullet (Red).png")

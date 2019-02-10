@@ -27,15 +27,13 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Core.State import State
+from Engine.Media.Concepts.SpriteInstance import SpriteInstance
 from Engine.Utilities.General import Blit, GetDimensions, GetScreen, RenderText
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.Scene import Scene
 from Engine.World.Widgets.Button import Button
 
-from pygame import (
-	mouse,
-	MOUSEBUTTONDOWN,
-)
+from pygame import MOUSEBUTTONDOWN
 
 ##
 #
@@ -86,7 +84,7 @@ class EndGameScene(Scene):
 
 	def Show(self):
 
-		mouse.set_visible(True)
+		self._cursor = SpriteInstance(Resources().GetSprite("Cursor"))
 
 	# Reacting and rendering.
 
@@ -101,7 +99,7 @@ class EndGameScene(Scene):
 
 	def Render(self):
 
-		super().Render()
+		super().Render(withOverlay = False)
 
 		# Retrieve the screen.
 
@@ -135,3 +133,7 @@ class EndGameScene(Scene):
 
 		Blit(screen, self._title, titlePosition)
 		Blit(screen, self._message, messagePosition)
+
+		# Render the overlay.
+
+		super().RenderOverlay()

@@ -27,9 +27,12 @@
 from Engine.Core.Resources import Resources
 from Engine.Utilities.General import Blit, GetScreen
 from Engine.Utilities.Language import IsIterable
+from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.Node import Node
 from Engine.World.Concepts.Widget import Widget
 from Engine.World.Utilities.Timed import Timed
+
+from pygame import mouse
 
 ##
 #
@@ -49,6 +52,8 @@ class Scene(Timed):
 
 		self._nodes = []
 		self._widgets = []
+
+		self._cursor = None
 
 		self._nextScene = self
 
@@ -80,12 +85,23 @@ class Scene(Timed):
 		[node.Update(milisecondsPassed) for node in self._nodes]
 		[widget.Update(milisecondsPassed) for widget in self._widgets]
 
-	def Render(self):
+	def Render(self, withOverlay = True):
 
 		Blit(GetScreen(), Resources().GetBackground(self._background))
 
 		[node.Render() for node in self._nodes]
 		[widget.Render() for widget in self._widgets]
+
+		if withOverlay:
+			self.RenderOverlay()
+
+	def RenderOverlay(self):
+
+		if self._cursor:
+
+			mouseCursorPosition = mouse.get_pos()
+
+			self._cursor.Blit(GetScreen(), Vector(mouseCursorPosition[0], mouseCursorPosition[1]))
 
 	def Execute(self, events, keys, milisecondsPassed):
 
