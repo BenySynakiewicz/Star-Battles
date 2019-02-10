@@ -79,7 +79,7 @@ class EndGameScene(Scene):
 
 		for event in events:
 
-			if (KEYDOWN == event.type and K_SPACE == event.KEY) or MOUSEBUTTONDOWN == event.type:
+			if (KEYDOWN == event.type and K_SPACE == event.key) or MOUSEBUTTONDOWN == event.type:
 
 				self._nextScene = None
 

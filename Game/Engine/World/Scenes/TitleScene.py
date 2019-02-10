@@ -35,7 +35,10 @@ from Engine.Utilities.General import Blit, GetDimensions, GetScreen, RenderText
 
 from sys import exit
 
-from pygame import mouse, KEYDOWN, MOUSEBUTTONDOWN
+from pygame import (
+	mouse,
+	KEYDOWN, MOUSEBUTTONDOWN,
+)
 
 ##
 #
@@ -49,18 +52,26 @@ class TitleScene(Scene):
 
 		super().__init__("Background")
 
+		# Clear the game state (because we assume the game is being started anew).
+
 		State().Clear()
 
-		self._title = RenderText(Parameters.Name, Resources().GetFont("Exo 2 Light", Parameters.BigTextHeight))
-		self._creator = RenderText(
-			f"Created by {Parameters.Creator}" "\n"
-			f"Version {Parameters.Version}",
-			font = Resources().GetFont("Exo 2", Parameters.SmallTextHeight),
-			alignRight = True
-		)
+		# Create texts and buttons.
 
-		self._newGameButton = Button(self, "New Game", Resources().GetFont("Exo 2 Light", Parameters.BiggishTextHeight))
-		self._quitButton = Button(self, "Quit", Resources().GetFont("Exo 2 Light", Parameters.BiggishTextHeight))
+		titleFont = Resources().GetFont("Exo 2 Light", Parameters.BigTextHeight)
+		creatorFont = Resources().GetFont("Exo 2", Parameters.SmallTextHeight)
+		buttonFont = Resources().GetFont("Exo 2 Light", Parameters.BiggishTextHeight)
+
+		self._title = RenderText(Parameters.Name, titleFont)
+		self._creator = RenderText(f"Created by {Parameters.Creator}" "\n" f"Version {Parameters.Version}", creatorFont, alignRight = True)
+
+		self._newGameButton = Button(self, "New Game", buttonFont)
+		self._quitButton = Button(self, "Quit", buttonFont)
+
+		self.AppendNode(self._newGameButton)
+		self.AppendNode(self._quitButton)
+
+	# Inherited methods.
 
 	def Show(self):
 
@@ -76,14 +87,9 @@ class TitleScene(Scene):
 
 			elif MOUSEBUTTONDOWN == event.type:
 
-				newGameButtonRectangle = self._newGameButton.GetRectangle()
-				quitButtonRectangle = self._quitButton.GetRectangle()
-
-				mouseCursorPosition = mouse.get_pos()
-
-				if newGameButtonRectangle.collidepoint(mouseCursorPosition):
+				if self._newGameButton.IsBeingPointedAt():
 					self._nextScene = BattleScene()
-				elif quitButtonRectangle.collidepoint(mouseCursorPosition):
+				elif self._quitButton.IsBeingPointedAt():
 					exit()
 
 	def Render(self):
