@@ -195,7 +195,7 @@ class Player(Node):
 
 			# Create and show the visual effect and play the sound.
 
-			self._scene.AppendNode(AbsorptionEffect(self._scene, self))
+			self._scene.Append(AbsorptionEffect(self._scene, self))
 			Resources().GetSound("Absorption").Play()
 
 			return
@@ -221,6 +221,6 @@ class Player(Node):
 
 			node.SetRotation(angle)
 
-		self._scene.AppendNode(node)
+		self._scene.Append(node)
 
 		return node

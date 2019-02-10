@@ -78,7 +78,7 @@ class EndGameScene(Scene):
 		buttonFont = Resources().GetFont("Exo 2 Light", Parameters.BiggishTextHeight)
 
 		self._continueButton = Button(self, "Continue", buttonFont)
-		self.AppendNode(self._continueButton)
+		self.Append(self._continueButton)
 
 	# Inherited methods.
 

@@ -29,10 +29,11 @@ from Engine.Core.Resources import Resources
 from Engine.Media.Concepts.Sprite import Sprite
 from Engine.Media.Concepts.SpriteInstance import SpriteInstance
 from Engine.Utilities.Color import Color
-from Engine.Utilities.General import RenderText
+from Engine.Utilities.General import Blit, GetDimensions, GetScreen, RenderText
+from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.Node import Node
 
-from pygame import mouse
+from pygame import mouse, gfxdraw, draw, Rect, Surface
 
 ##
 #
@@ -42,26 +43,26 @@ from pygame import mouse
 
 class Button(Node):
 
-	def __init__(self, scene, text, font, inactiveColor = Color.White, activeColor = Color.Blue):
+	def __init__(self, scene, text, font, textColor = Color.White, backgroundColor = Color.Blue):
 
-		super().__init__(scene, None, 3)
+		super().__init__(scene, None)
 
 		# Initialize the member variables.
 
 		self._text = text
 		self._font = font
 
-		self._inactiveColor = inactiveColor
-		self._activeColor = activeColor
+		self._textColor = textColor
+		self._backgroundColor = backgroundColor
 
-		self._inactiveSprite = None
 		self._activeSprite = None
+		self._inactiveSprite = None
 
-		self._shownSpriteIsActive = False
+		self._isActive = False
 
-		# Generate the sprite.
+		# Generate and set the sprites.
 
-		self._GenerateSprite()
+		self._GenerateSprites()
 		self.ReplaceSprite(self._inactiveSprite)
 
 	def IsBeingPointedAt(self):
@@ -71,26 +72,46 @@ class Button(Node):
 
 		return rectangle.collidepoint(mouseCursorPosition)
 
-	def _GenerateSprite(self):
+	def _GenerateSprites(self):
 
-		activeSurface = RenderText(self._text, self._font, self._activeColor)
-		self._activeSprite = Sprite(activeSurface)
+		textSurface = RenderText(self._text, self._font, self._textColor)
+		textSurfaceDimensions = GetDimensions(textSurface)
 
-		inactiveSurface = RenderText(self._text, self._font, self._inactiveColor)
-		self._inactiveSprite = Sprite(inactiveSurface)
+		radius = Vector(15, 15)
+
+		textPosition = Vector(15, 5)
+		surfaceDimensions = textSurfaceDimensions + (textPosition * 2)
+
+		activeSurface = Surface(tuple(surfaceDimensions))
+		gfxdraw.filled_polygon(activeSurface, (
+			(0, radius.Y),
+			(radius.X, 0),
+			(surfaceDimensions.X - radius.X, 0),
+			(surfaceDimensions.X, radius.Y),
+			(surfaceDimensions.X, surfaceDimensions.Y - radius.Y),
+			(surfaceDimensions.X - radius.X, surfaceDimensions.Y),
+			(radius.X, surfaceDimensions.Y),
+			(0, surfaceDimensions.Y - radius.Y),
+		), self._backgroundColor)
+
+		inactiveSurface = Surface(tuple(surfaceDimensions))
+
+		activeSurface.set_alpha(32)
+		Blit(inactiveSurface, activeSurface)
+		activeSurface.set_alpha(255)
+
+		Blit(activeSurface, textSurface, textPosition)
+		Blit(inactiveSurface, textSurface, textPosition)
+
+		self._activeSprite = activeSurface
+		self._inactiveSprite = inactiveSurface
 
 	# Inherited methods.
 
 	def Update(self, milisecondsPassed):
 
-		isBeingPointedAt = self.IsBeingPointedAt()
+		self._isActive = self.IsBeingPointedAt()
 
-		if isBeingPointedAt and not self._shownSpriteIsActive:
+	def Render(self):
 
-			self._shownSpriteIsActive = True
-			self.ReplaceSprite(self._activeSprite)
-
-		elif not isBeingPointedAt and self._shownSpriteIsActive:
-
-			self._shownSpriteIsActive = False
-			self.ReplaceSprite(self._inactiveSprite)
+		Blit(GetScreen(), self._activeSprite if self._isActive else self._inactiveSprite, self._position)

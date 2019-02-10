@@ -78,7 +78,7 @@ class BattleScene(Scene):
 
 		)
 
-		self.AppendNode(self.Player)
+		self.Append(self.Player)
 		self.AppendTimer("Enemy")
 
 	def Show(self):
@@ -109,22 +109,22 @@ class BattleScene(Scene):
 
 		# In the first row...
 
-		self.AppendNode(Enemy(self, verticalOffset, 0, Direction.Right))
+		self.Append(Enemy(self, verticalOffset, 0, Direction.Right))
 
 		# In the sceond row...
 
 		if currentScore >= 100:
-			self.AppendNode(Enemy(self, verticalOffset, 1, Direction.Left))
+			self.Append(Enemy(self, verticalOffset, 1, Direction.Left))
 
 		# In the third row...
 
 		if currentScore >= 500:
-			self.AppendNode(Enemy(self, verticalOffset, 2, Direction.Right))
+			self.Append(Enemy(self, verticalOffset, 2, Direction.Right))
 
 		# In the fourth row...
 
 		if currentScore >= 1500:
-			self.AppendNode(Enemy(self, verticalOffset, 3, Direction.Left))
+			self.Append(Enemy(self, verticalOffset, 3, Direction.Left))
 
 		# Clear the timer.
 

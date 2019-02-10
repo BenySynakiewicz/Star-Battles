@@ -26,6 +26,8 @@
 
 from Engine.Core.Resources import Resources
 from Engine.Utilities.General import Blit, GetScreen
+from Engine.World.Concepts.Node import Node
+from Engine.World.Concepts.Widget import Widget
 from Engine.World.Utilities.Timed import Timed
 
 ##
@@ -40,19 +42,23 @@ class Scene(Timed):
 
 		super().__init__()
 
-		self._nodes = []
-		self._nextScene = self
-
 		self._background = background
 
-	def Show(self):
+		self._nodes = []
+		self._widgets = []
 
-		pass
+		self._nextScene = self
 
-	def AppendNode(self, node):
+	def Append(self, node):
 
-		self._nodes.append(node)
-		self._nodes.sort(key = lambda x: x._zIndex)
+		if isinstance(node, Widget):
+
+			self._widgets.append(node)
+
+		elif isinstance(node, Node):
+
+			self._nodes.append(node)
+			self._nodes.sort(key = lambda x: x._zIndex)
 
 	def React(self, events, keys):
 
@@ -62,18 +68,22 @@ class Scene(Timed):
 
 		self.UpdateTimers(milisecondsPassed)
 
-		for node in self._nodes:
-			node.Update(milisecondsPassed)
+		[node.Update(milisecondsPassed) for node in self._nodes]
+		[widget.Update(milisecondsPassed) for widget in self._widgets]
 
 	def Render(self):
 
 		Blit(GetScreen(), Resources().GetBackground(self._background))
 
-		for node in self._nodes:
-			node.Render()
+		[node.Render() for node in self._nodes]
+		[widget.Render() for widget in self._widgets]
 
 	def Execute(self, events, keys, milisecondsPassed):
 
 		self.React(events, keys)
 		self.Update(milisecondsPassed)
 		self.Render()
+
+	def Show(self):
+
+		pass

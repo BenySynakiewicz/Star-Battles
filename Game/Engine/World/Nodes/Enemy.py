@@ -80,7 +80,7 @@ class Enemy(MovingNode):
 		bullet = BulletFromEnemy(self._scene)
 		bullet.SetRelativePosition(self, AtBottom)
 
-		self._scene.AppendNode(bullet)
+		self._scene.Append(bullet)
 		self.ClearTimer("Shot")
 
 	# Inherited methods.
@@ -117,4 +117,4 @@ class Enemy(MovingNode):
 		bonusNode = globals()[bonusNodeName](self._scene)
 		bonusNode.SetRelativePosition(self, AtBottom)
 
-		self._scene.AppendNode(bonusNode)
+		self._scene.Append(bonusNode)

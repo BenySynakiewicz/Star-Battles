@@ -26,7 +26,7 @@
 
 from Engine.Utilities.Language import IsIndexable
 
-from math import atan2, cos, radians, sin, sqrt
+from math import atan2, cos, hypot, radians, sin
 
 ##
 #
@@ -45,6 +45,10 @@ class Vector:
 
 	# Utilities.
 
+	def GetLength(self):
+
+		return hypot(self.X, self.Y)
+
 	def GetAngle(self):
 
 		vector = Vector(0, 1)
@@ -56,9 +60,7 @@ class Vector:
 
 	def GetNormalized(self):
 
-		length = sqrt(self.X**2 + self.Y**2)
-
-		return Vector(self.X / length, self.Y / length)
+		return self / self.GetLength()
 
 	def GetRotatedAround(self, pivot, angle):
 
@@ -85,18 +87,13 @@ class Vector:
 		return hash(self.__key())
 
 	def __eq__(self, other):
-		return isinstance(self, type(other)) and self.__key() == other.__key()
+		return isinstance(self, type(other)) and self.__hash__() == other.__hash__()
 
 	# Indexability.
 
 	def __getitem__(self, index):
 
 		return [self.X, self.Y][index]
-
-	def __setitem__(self, index, value):
-
-		if   0 == index: self.X = value
-		elif 1 == index: self.Y = value
 
 	def __len__(self):
 
@@ -117,7 +114,10 @@ class Vector:
 
 	def __sub__(self, value):
 
-		return self + -value
+		if IsIndexable(value) and len(value) > 1:
+			return Vector(self.X - value[0], self.Y - value[1])
+
+		return Vector(self.X - value, self.Y - value)
 
 	def __mul__(self, value):
 

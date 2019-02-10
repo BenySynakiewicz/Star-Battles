@@ -50,5 +50,5 @@ class BulletFromPlayer(MovingNode):
 
 	def OnCollision(self, node):
 
-		self._scene.AppendNode(VerySmallExplosionEffect(self._scene, self))
+		self._scene.Append(VerySmallExplosionEffect(self._scene, self))
 		self.Terminate()

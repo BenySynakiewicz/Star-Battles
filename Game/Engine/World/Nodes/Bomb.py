@@ -50,7 +50,7 @@ class Bomb(MovingNode):
 
 	def Explode(self):
 
-		self._scene.AppendNode(ExplosionEffect(self._scene, self))
+		self._scene.Append(ExplosionEffect(self._scene, self))
 
 		self.Terminate()
 
@@ -74,5 +74,5 @@ class Bomb(MovingNode):
 
 		if not self._terminated:
 
-			self._scene.AppendNode(ExplosionEffect(self._scene, self))
+			self._scene.Append(ExplosionEffect(self._scene, self))
 			self.Explode()

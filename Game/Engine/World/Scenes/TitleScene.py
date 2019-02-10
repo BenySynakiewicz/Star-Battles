@@ -68,8 +68,8 @@ class TitleScene(Scene):
 		self._newGameButton = Button(self, "New Game", buttonFont)
 		self._quitButton = Button(self, "Quit", buttonFont)
 
-		self.AppendNode(self._newGameButton)
-		self.AppendNode(self._quitButton)
+		self.Append(self._newGameButton)
+		self.Append(self._quitButton)
 
 	# Inherited methods.
 
@@ -90,7 +90,7 @@ class TitleScene(Scene):
 
 	def Render(self):
 
-		Scene.Render(self)
+		super().Render()
 
 		# Retrieve the screen.
 
@@ -99,8 +99,8 @@ class TitleScene(Scene):
 
 		# Calculate the positions of the texts.
 
-		titlePosition = (screenDimensions - GetDimensions(self._title)) // 2
-		titlePosition.Y = 12 * Parameters.Margin
+		titlePosition = (screenDimensions - GetDimensions(self._title)) / 2
+		titlePosition.Y = Parameters.HugeMargin
 
 		creatorPosition = Vector(screenDimensions.X - GetDimensions(self._creator).X - Parameters.Margin, Parameters.Margin)
 
@@ -111,6 +111,3 @@ class TitleScene(Scene):
 
 		Blit(screen, self._title, titlePosition)
 		Blit(screen, self._creator, creatorPosition)
-
-		self._newGameButton.Render()
-		self._quitButton.Render()
