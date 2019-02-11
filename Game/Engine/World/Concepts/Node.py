@@ -64,6 +64,7 @@ class Node(Timed):
 
 		self._movementVector = movementVector
 		self._movementStopped = False
+		self._movement = None
 
 		self._zIndex = zIndex
 
@@ -120,7 +121,13 @@ class Node(Timed):
 		if isinstance(sprite, Surface): self._sprite = SpriteInstance(Sprite(sprite))
 		elif isinstance(sprite, Sprite): self._sprite = SpriteInstance(sprite)
 		elif isinstance(sprite, SpriteInstance): self._sprite = sprite
-		else: self._sprite = SpriteInstance(Resources().GetSprite(sprite, dimensions, rotation), loop)
+		else:
+			self._spriteName = sprite
+			self._sprite = SpriteInstance(
+				Resources().GetSprite(self._spriteName, dimensions, rotation),
+				currentFrame = self._sprite.GetCurrentFrame(),
+				loop = loop
+			)
 
 		hadDimensions = bool(self._dimensions)
 
@@ -149,6 +156,8 @@ class Node(Timed):
 	def EnableMovement(self, enable = True):
 
 		self._movementStopped = not enable
+		if self._movement:
+			self._movement.Enable(enable)
 
 	# Other operations.
 
@@ -167,14 +176,26 @@ class Node(Timed):
 
 	def Update(self, milisecondsPassed):
 
+		if IsOutsideScreen(self._position, self._dimensions):
+			self.Terminate()
+			return
+
 		self._sprite.Update(milisecondsPassed)
 		self.UpdateTimers(milisecondsPassed)
 
+		if self._movement and self._movement.IsEnabled():
+
+			self._movement.Update(milisecondsPassed)
+
+			currentPosition = self._movement.GetCurrentPosition()
+			self.SetPosition(currentPosition)
+
+			currentRotation = self._movement.GetCurrentRotation()
+			if currentRotation:
+				self.ReplaceSprite(self._spriteName, rotation = currentRotation)
+
 		if self._movementVector and not self._movementStopped:
 			self._position += self._movementVector * milisecondsPassed
-
-		if IsOutsideScreen(self._position, self._dimensions):
-			self.Terminate()
 
 	def Render(self):
 

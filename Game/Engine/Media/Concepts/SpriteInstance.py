@@ -39,30 +39,31 @@ from pygame import image, mask, Surface, surfarray, transform, SRCALPHA
 
 class SpriteInstance:
 
-	def __init__(self, sprite, loop = True):
+	# The constructor.
+
+	def __init__(self, sprite, currentFrame = 0, loop = True):
 
 		self._sprite = sprite
 
 		self._loop = loop
 
-		self._frame = 0
+		self._frame = currentFrame
 		self._sinceLatestFrame = 0
 
-	def GetDimensions(self):
+	# Accessors.
 
-		return self._sprite.GetDimensions()
+	def GetCurrentFrame(self): return self._frame
+	def GetDimensions(self): return self._sprite.GetDimensions()
+	def GetMask(self): return self._sprite.GetMask(self._frame)
+	def IsFinished(self): return (not self._loop) and (self._sprite.GetFrameCount() - 1 == self._frame)
 
-	def GetMask(self):
-
-		return self._sprite.GetMask(self._frame)
-
-	def IsFinished(self):
-
-		return (not self._loop) and (self._sprite.GetFrameCount() - 1 == self._frame)
+	# Basic operations.
 
 	def SetLooping(self, loop):
 
 		self._loop = loop
+
+	# Updating.
 
 	def Update(self, milisecondsPassed):
 
@@ -84,6 +85,8 @@ class SpriteInstance:
 		frameCount = self._sprite.GetFrameCount()
 		if (self._frame > frameCount - 1):
 			self._frame = (frameCount - 1) if not self._loop else (self._frame % frameCount)
+
+	# Rendering.
 
 	def Blit(self, surface, position):
 

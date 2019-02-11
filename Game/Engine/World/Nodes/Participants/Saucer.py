@@ -25,6 +25,8 @@
 ##
 
 from Engine.Core.Parameters import Parameters
+from Engine.Core.Resources import Resources
+from Engine.World.Concepts.Movement import Movement
 from Engine.World.Nodes.AbstractParticipant import AbstractParticipant
 from Engine.World.Utilities.Positioning import AtBottom
 from Engine.Utilities.Direction import Direction
@@ -54,13 +56,19 @@ class Saucer(AbstractParticipant):
 
 		# Initialize the node.
 
-		super().__init__(scene, "Saucer", 500, dropsBonus = True, movementVector = Vector(direction * Parameters.EnemySpeed, 0))
+		super().__init__(scene, "Saucer", 500, dropsBonus = True)
 
 		self._collisionClasses = {"Participants"}
 		self._collisionExceptions = {"BulletFromEnemy"}
 
-		self._position.X = -(self._dimensions.X - 1) if Direction.Right == direction else (GetScreenDimensions().X - 1)
-		self._position.Y = verticalOffset + row * (self._dimensions.Y + Parameters.Margin)
+		# Set up movement.
+
+		self._position = Vector(
+			-(self._dimensions.X - 1) if Direction.Right == direction else (GetScreenDimensions().X - 1),
+			verticalOffset + row * (self._dimensions.Y + Parameters.Margin),
+		)
+
+		self._movement = Movement(Parameters.EnemySpeed, Vector(direction, 0), startingPosition = self._position)
 
 		# Initialize new member variables.
 
@@ -74,10 +82,12 @@ class Saucer(AbstractParticipant):
 		if self._isDestroyed:
 			return
 
-		self.ReplaceSprite("Explosion", dimensions = ExplosionDimensions, loop = False)
-		Resources().GetSound("Destruction").Play()
+		if self._movement:
+			self._movement.Enable(False)
 
-		self._isDestroyed = True
+		self.ReplaceSprite("Explosion", dimensions = ExplosionDimensions, loop = False)
+
+		self.OnDestruction()
 
 	# Using weapons.
 

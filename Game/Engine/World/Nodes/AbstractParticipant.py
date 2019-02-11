@@ -96,9 +96,13 @@ class AbstractParticipant(Node):
 
 		self._OnUnprotectedCollision(node)
 
-	def OnTermination(self):
+	def OnDestruction(self):
 
 		Resources().GetSound("Destruction").Play()
+
+		self._isDestroyed = True
+
+	def OnTermination(self):
 
 		if self._dropsBonus:
 			self._DropBonus()

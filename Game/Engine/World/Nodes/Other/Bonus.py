@@ -26,6 +26,7 @@
 
 from Engine.Core.Parameters import Parameters
 from Engine.Utilities.Vector import Vector
+from Engine.World.Concepts.Movement import Movement
 from Engine.World.Concepts.Node import Node
 
 ##

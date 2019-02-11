@@ -26,7 +26,7 @@
 
 from Engine.Utilities.Language import IsIndexable
 
-from math import atan2, cos, hypot, radians, sin
+from math import atan2, cos, degrees, hypot, radians, sin
 
 ##
 #
@@ -56,7 +56,7 @@ class Vector:
 		dotProduct = vector.X * self.X + vector.Y * self.Y
 		determinant = vector.X * self.Y - vector.Y * self.X
 
-		return atan2(determinant, dotProduct)
+		return degrees(atan2(determinant, dotProduct))
 
 	def GetNormalized(self):
 
