@@ -25,6 +25,7 @@
 ##
 
 from Engine.Utilities.Color import Color
+from Engine.Utilities.Filesystem import SubstituteInPath
 from Engine.Utilities.Vector import Vector
 
 from pathlib import Path
