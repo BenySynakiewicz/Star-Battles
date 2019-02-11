@@ -82,6 +82,9 @@ class Scene(Timed):
 
 		self.UpdateTimers(milisecondsPassed)
 
+		if self._cursor:
+			self._cursor.Update(milisecondsPassed)
+
 		[node.Update(milisecondsPassed) for node in self._nodes]
 		[widget.Update(milisecondsPassed) for widget in self._widgets]
 

@@ -135,7 +135,7 @@ class Game:
 
 		# Load sprites.
 
-		Resources().LoadSprite("Cursor.png", shadows = False)
+		Resources().LoadSprite("Cursor", shadows = False, framesPerSecond = 10)
 
 		Resources().LoadSprite("Bullet (Green).png")
 		Resources().LoadSprite("Bullet (Red).png")
