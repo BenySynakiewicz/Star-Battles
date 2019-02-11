@@ -25,7 +25,7 @@
 ##
 
 from Engine.World.Concepts.Node import Node
-from Engine.World.Utilities.Positioning import AtSameCenter
+from Engine.World.Utilities.Positioners import AtSameCenter
 
 ##
 #

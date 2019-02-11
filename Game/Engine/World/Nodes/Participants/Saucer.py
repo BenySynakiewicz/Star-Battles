@@ -27,7 +27,7 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.World.Nodes.AbstractParticipant import AbstractParticipant
-from Engine.World.Utilities.Positioning import AtBottom
+from Engine.World.Utilities.Positioners import AtBottom
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.General import GetDecision, GetScreenDimensions
 from Engine.Utilities.Vector import Vector

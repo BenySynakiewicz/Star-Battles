@@ -31,7 +31,7 @@ from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.Movement import Movement
 from Engine.World.Concepts.Node import Node
 from Engine.World.Nodes.Other.Effect import Effect
-from Engine.World.Utilities.Positioning import AtSameCenter
+from Engine.World.Utilities.Positioners import AtSameCenter
 
 ##
 #

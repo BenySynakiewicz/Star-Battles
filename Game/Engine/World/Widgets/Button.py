@@ -51,7 +51,7 @@ class Button(Widget):
 
 	# The constructor.
 
-	def __init__(self, scene, text, font, textColor = Color.White, backgroundColor = Color.Blue):
+	def __init__(self, scene, text, font, textColor = Color.White, backgroundColor = Color.Blue, minimumWidth = None):
 
 		super().__init__()
 
@@ -68,7 +68,7 @@ class Button(Widget):
 		self._activeSurface = None
 		self._inactiveSurface = None
 
-		self._minimumWidth = None
+		self._minimumWidth = minimumWidth
 
 		# Generate (and set) the surfaces.
 

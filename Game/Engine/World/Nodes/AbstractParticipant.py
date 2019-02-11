@@ -31,7 +31,7 @@ from Engine.Utilities.General import GetDecision, GetScreen
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.Node import Node
 from Engine.World.Nodes.Other.Bonus import Bonus
-from Engine.World.Utilities.Positioning import AtTop, AtBottom
+from Engine.World.Utilities.Positioners import AtTop, AtBottom
 from Engine.World.Nodes.Weapons.Bomb import Bomb
 from Engine.World.Nodes.Weapons.BulletFromEnemy import BulletFromEnemy
 from Engine.World.Nodes.Weapons.BulletFromPlayer import BulletFromPlayer

@@ -28,10 +28,11 @@ from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Core.State import State
 from Engine.Media.Concepts.SpriteInstance import SpriteInstance
-from Engine.Utilities.General import GetScreenDimensions
+from Engine.Utilities.General import GetDimensions, GetScreen
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.Scene import Scene
 from Engine.World.Scenes.BattleScene import BattleScene
+from Engine.World.Utilities.WidgetPositioners import MoveToTheBottom, SpreadHorizontally
 from Engine.World.Widgets.Button import Button
 from Engine.World.Widgets.Label import Label
 
@@ -51,13 +52,17 @@ class TitleScene(Scene):
 
 	def __init__(self):
 
+		# Initialize the scene.
+
 		super().__init__("Background")
 
-		# Clear the game state (because we assume the game is being started anew).
+		self._cursor = SpriteInstance(Resources().GetSprite("Cursor"))
+
+		# Clear the game state (we assume the game is being started anew).
 
 		State().Clear()
 
-		# Create texts.
+		# Create fonts for labels and buttons.
 
 		titleFont = Resources().GetFont("Exo 2 Light", Parameters.HugeTextHeight)
 		creatorFont = Resources().GetFont("Exo 2", Parameters.SmallTextHeight)
@@ -65,89 +70,77 @@ class TitleScene(Scene):
 
 		# Create labels.
 
-		self._titleLabel = Label(self, Parameters.Name, titleFont)
-		self._creatorLabel = Label(self, f"Created by {Parameters.Creator}", creatorFont)
-		self._versionLabel = Label(self, f"Version {Parameters.Version}", creatorFont)
+		self._title = Label(self, Parameters.Name, titleFont)
+		self._creator = Label(self, f"Created by {Parameters.Creator}", creatorFont)
+		self._version = Label(self, f"Version {Parameters.Version}", creatorFont)
 
-		labels = [self._titleLabel, self._creatorLabel, self._versionLabel]
-
-		self.Append(labels)
+		labels = [self._title, self._creator, self._version]
 
 		# Create buttons.
 
-		self._newGameButton = Button(self, "New Game", buttonFont)
-		self._quitButton = Button(self, "Quit", buttonFont)
+		self._newGameButton = Button(self, "New Game", buttonFont, minimumWidth = Parameters.ButtonWidth)
+		self._newGameButton.SetOnClickFunction(self.FinishScene)
+
+		self._quitButton = Button(self, "Quit", buttonFont, minimumWidth = Parameters.ButtonWidth)
+		self._quitButton.SetOnClickFunction(self.QuitGame)
 
 		buttons = [self._newGameButton, self._quitButton]
-		[x.SetMinimumWidth(Parameters.ButtonWidth) for x in buttons]
 
-		self.Append(buttons)
+		# Append and position the widgets.
 
-		# Position the widgets.
+		self.Append(labels + buttons)
 
 		self._PositionWidgets()
 
-	# Operations..
+	# Operations.
 
-	def Show(self):
+	def FinishScene(self):
 
-		self._cursor = SpriteInstance(Resources().GetSprite("Cursor"))
+		self._nextScene = BattleScene()
+
+	def QuitGame(self):
+
+		exit()
 
 	# Reacting.
 
 	def React(self, events, _):
 
-		for event in events:
+		for event in [x for x in events if MOUSEBUTTONDOWN == x.type]:
 
-			if MOUSEBUTTONDOWN == event.type:
-
-				if self._newGameButton.IsBeingPointedAt():
-					self._newGameButton.Click()
-					self._nextScene = BattleScene()
-				elif self._quitButton.IsBeingPointedAt():
-					self._quitButton.Click()
-					exit()
+			if self._newGameButton.IsBeingPointedAt(): self._newGameButton.Click()
+			elif self._quitButton.IsBeingPointedAt(): self._quitButton.Click()
 
 	# Utilities.
 
 	def _PositionWidgets(self):
 
-		# Retrieve the screen dimensions.
+		# Retrieve the screen and its dimensions.
 
-		screenDimensions = GetScreenDimensions()
+		screen = GetScreen()
+		screenDimensions = GetDimensions(screen)
 
-		# Calculate the positions of texts and buttons.
+		# Position the top labels.
 
-		titleDimensions = self._titleLabel.GetDimensions()
-		creatorDimensions = self._creatorLabel.GetDimensions()
-		versionDimensions = self._versionLabel.GetDimensions()
-		newGameButtonDimensions = self._newGameButton.GetDimensions()
-		quitButtonDimensions = self._newGameButton.GetDimensions()
+		labels = [self._creator, self._version]
 
-		upperTextsHeight = max([creatorDimensions.Y, versionDimensions.Y])
-		lowerButtonsHeight = max([newGameButtonDimensions.Y, quitButtonDimensions.Y])
+		SpreadHorizontally(screen, labels, Parameters.Margin, Parameters.Margin)
 
-		self._titleLabel.SetPosition(Vector(
-			(screenDimensions.X - titleDimensions.X) / 2,
-			(screenDimensions.Y - Parameters.Margin - lowerButtonsHeight - titleDimensions.Y + upperTextsHeight) / 2,
-		))
+		# Position the buttons.
 
-		self._creatorLabel.SetPosition(Vector(
-			Parameters.Margin,
-			Parameters.Margin,
-		))
+		buttons = [self._newGameButton, self._quitButton]
 
-		self._versionLabel.SetPosition(Vector(
-			screenDimensions.X - versionDimensions.X - Parameters.Margin,
-			Parameters.Margin,
-		))
+		SpreadHorizontally(screen, buttons, 0, Parameters.Margin)
+		MoveToTheBottom(screen, buttons, Parameters.Margin)
 
-		self._newGameButton.SetPosition(Vector(
-			Parameters.Margin,
-			screenDimensions.Y - Parameters.Margin - newGameButtonDimensions.Y,
-		))
+		# Position the title.
 
-		self._quitButton.SetPosition(Vector(
-			screenDimensions.X - Parameters.Margin - quitButtonDimensions.X,
-			screenDimensions.Y - Parameters.Margin - quitButtonDimensions.Y,
+		labelsPartHeight = Parameters.Margin + max([x.GetDimensions().Y for x in labels])
+		buttonsPartHeight = Parameters.Margin + max([x.GetDimensions().Y for x in buttons])
+
+		titleDimensions = self._title.GetDimensions()
+
+		self._title.SetPosition(Vector(
+			(screenDimensions - titleDimensions).X / 2,
+			labelsPartHeight + (screenDimensions.Y - titleDimensions.Y - labelsPartHeight - buttonsPartHeight) / 2,
 		))

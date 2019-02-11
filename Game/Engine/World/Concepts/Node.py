@@ -30,7 +30,7 @@ from Engine.Media.Concepts.SpriteInstance import SpriteInstance
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import GetScreen
 from Engine.World.Concepts.Movement import Movement
-from Engine.World.Utilities.Positioning import IsOutsideScreen
+from Engine.World.Utilities.Positioners import IsOutsideScreen
 from Engine.World.Utilities.Timed import Timed
 
 from pygame import Rect, Surface

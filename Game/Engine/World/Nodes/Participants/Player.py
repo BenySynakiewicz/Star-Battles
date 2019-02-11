@@ -31,7 +31,7 @@ from Engine.Utilities.Direction import Direction
 from Engine.Utilities.General import GetScreen, GetScreenDimensions
 from Engine.World.Nodes.Other.Effect import Effect
 from Engine.World.Nodes.AbstractParticipant import AbstractParticipant
-from Engine.World.Utilities.Positioning import AtSameCenter
+from Engine.World.Utilities.Positioners import AtSameCenter
 
 from numpy import clip
 
