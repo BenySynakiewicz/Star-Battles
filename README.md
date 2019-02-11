@@ -15,6 +15,7 @@ A simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invad
 - Huge changes in the UI.
 - Various visual improvements.
 - Reworked resource caching.
+- Fixed a bug in the highscore saving.
 
 ### Version 1.2
 
@@ -40,6 +41,7 @@ A simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invad
 - **TO-DO**: Remember highscore*s*, not just the single highest score.
 - **TO-DO**: Make enemies move more creatively.
 - **TO-DO**: Clean up the code.
+- **TO-DO**: Optimize performance.
 
 ## Assets
 
