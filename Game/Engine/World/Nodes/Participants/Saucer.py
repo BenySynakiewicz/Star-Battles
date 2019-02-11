@@ -66,7 +66,7 @@ class Saucer(AbstractParticipant):
 		initialPosition.Y = verticalOffset + row * (self._dimensions.Y + Parameters.Margin)
 
 		self._movement = Movement(Parameters.EnemySpeed, [initialPosition, Vector(Parameters.Margin, initialPosition.Y)])
-		self._position = self._movement.GetCurrentPosition()
+		self._position = initialPosition
 
 		# Initialize new member variables.
 
@@ -81,7 +81,7 @@ class Saucer(AbstractParticipant):
 			return
 
 		if self._movement:
-			self._movement.Enable(False)
+			self._movement.Clear()
 
 		self.ReplaceSprite("Explosion", dimensions = ExplosionDimensions, loop = False)
 

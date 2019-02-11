@@ -28,6 +28,7 @@ from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Utilities.General import GetScreen
 from Engine.Utilities.Vector import Vector
+from Engine.World.Concepts.Movement import Movement
 from Engine.World.Concepts.Node import Node
 from Engine.World.Nodes.Other.Effect import Effect
 from Engine.World.Utilities.Positioning import AtSameCenter
@@ -42,10 +43,12 @@ class Bomb(Node):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Bomb", movementVector = Vector(0, -Parameters.BombSpeed))
+		super().__init__(scene, "Bomb")#, movementVector = Vector(0, -Parameters.BombSpeed))
 
 		self._collisionClasses = {"Participants"}
 		self._collisionExceptions = {"Bomb"}
+
+		self._movement = Movement(Parameters.BombSpeed, Vector(0, -1))
 
 		Resources().GetSound("Bomb").Play()
 

@@ -38,44 +38,74 @@ class Movement:
 
 	# The constructor.
 
-	def __init__(self, speed, route, startingPosition = None, rotateToDirection = False, enabled = True):
+	def __init__(self, speed = None, route = None):
+
+		# Initialize the member variables.
+
+		self._routeType = None
+		self._route = None
+
+		self._speed = None
+
+		self._currentWaypointIndex = None
 
 		# Initial configuration.
 
-		self._enabled = enabled
+		self.SetRoute(route)
+		self.SetSpeed(speed)
+
+	# Accessors.
+
+	def Exists(self):
+
+		if self._routeType == None:
+			return False
+
+		if self._route == None:
+			return False
+
+		if self._speed  == None:
+			return False
+
+		return True
+
+	# Basic operations.
+
+	def Set(self, speed, route):
+
+		self.SetSpeed(speed)
+		self.SetRoute(route)
+
+	def SetSpeed(self, speed):
 
 		self._speed = speed
+
+	def SetRoute(self, route):
 
 		self._routeType = RouteType.Direction if isinstance(route, Vector) else RouteType.Waypoints
 		self._route = route if (RouteType.Waypoints == self._routeType) else route.GetNormalized()
 
-		self._rotateToDirection = rotateToDirection
+		self._currentWaypointIndex = 0 if (RouteType.Waypoints == self._routeType) else None
 
-		# Current state.
+	def Clear(self):
 
-		self._currentWaypointIndex = 0
+		self._routeType = None
+		self._route = None
 
-		self._currentPosition = self._route[self._currentWaypointIndex] if (RouteType.Waypoints == self._routeType) else startingPosition
-		self._currentRotation = 0
-
-	# Accessors.
-
-	def IsEnabled(self): return self._enabled
-	def GetCurrentPosition(self): return self._currentPosition
-	def GetCurrentRotation(self): return self._currentRotation
-
-	# Basic operations.
-
-	def Enable(self, enabled):
-
-		self._enabled = enabled
+		self._currentWaypointIndex = None
 
 	# Updatings.
 
-	def Update(self, milisecondsPassed):
+	def Update(self, currentPosition, milisecondsPassed):
 
-		if not self._enabled:
+		if not self.Exists():
 			return
+
+		#
+		# Prepare the updated position.
+		#
+
+		updatedPosition = Vector(currentPosition.X, currentPosition.Y)
 
 		#
 		# If we're dealing with waypoints...
@@ -95,10 +125,10 @@ class Movement:
 
 			# Calculate and update current position.
 
-			currentVectorToNextWaypoint = nextWaypoint - self._currentPosition
+			currentVectorToNextWaypoint = nextWaypoint - currentPosition
 			currentDirectionVector = currentVectorToNextWaypoint.GetNormalized()
 
-			futurePosition = self._currentPosition + currentDirectionVector * (self._speed * milisecondsPassed)
+			futurePosition = currentPosition + currentDirectionVector * (self._speed * milisecondsPassed)
 			futureVectorToNextWaypoint = nextWaypoint - futurePosition
 
 			currentDistanceToNextWaypoint = currentVectorToNextWaypoint.GetLength()
@@ -107,24 +137,11 @@ class Movement:
 			if futureDistanceToNextWaypoint >= currentDistanceToNextWaypoint:
 
 				self._currentWaypointIndex = nextWaypointIndex
-				self._currentPosition = self._route[self._currentWaypointIndex]
+				updatedPosition = self._route[self._currentWaypointIndex]
 
-				self.Update(milisecondsPassed)
+				return self.Update(updatedPosition, milisecondsPassed)
 
-				return
-
-			self._currentPosition = futurePosition
-
-			# Calculate and update current rotation.
-
-			if self._rotateToDirection:
-
-				movementAngle = currentVectorToNextWaypoint.GetAngle()
-				self._currentRotation = movementAngle
-
-			else:
-
-				self._currentRotation = 0
+			updatedPosition = futurePosition
 
 		#
 		# If we're dealing with direction...
@@ -132,10 +149,13 @@ class Movement:
 
 		else:
 
-			self._currentPosition += self._route * (self._speed * milisecondsPassed)
+			updatedPosition = currentPosition + self._route * (self._speed * milisecondsPassed)
 
-			if self._rotateToDirection:
-				self._currentRotation = self._route.GetAngle()
+		#
+		# Return the updated position.
+		#
+
+		return updatedPosition
 
 ##
 #

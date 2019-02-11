@@ -29,6 +29,7 @@ from Engine.Media.Concepts.Sprite import Sprite
 from Engine.Media.Concepts.SpriteInstance import SpriteInstance
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.General import GetScreen
+from Engine.World.Concepts.Movement import Movement
 from Engine.World.Utilities.Positioning import IsOutsideScreen
 from Engine.World.Utilities.Timed import Timed
 
@@ -44,7 +45,7 @@ class Node(Timed):
 
 	# The constructor.
 
-	def __init__(self, scene, sprite = None, dimensions = None, rotation = None, movementVector = None, zIndex = 0):
+	def __init__(self, scene, sprite = None, dimensions = None, rotation = None, zIndex = 0):
 
 		super().__init__()
 
@@ -62,9 +63,7 @@ class Node(Timed):
 		self._position = Vector()
 		self._dimensions = self._sprite.GetDimensions() if self._sprite else None
 
-		self._movementVector = movementVector
-		self._movementStopped = False
-		self._movement = None
+		self._movement = Movement()
 
 		self._zIndex = zIndex
 
@@ -75,7 +74,7 @@ class Node(Timed):
 	def GetPosition(self): return self._position
 	def GetDimensions(self): return self._dimensions
 	def GetCollisions(self): return (self._collisionClasses, self._collisionExceptions)
-	def GetMovementVector(self): return self._movementVector
+	def GetMovement(self): return self._movement
 	def GetZIndex(self): return self._zIndex
 
 	# Utilities.
@@ -147,18 +146,6 @@ class Node(Timed):
 
 		self.ReplaceSprite(self._spriteName, loop = False, dimensions = None, rotation = angle)
 
-	# Movement management.
-
-	def SetMovementVector(self, movementVector):
-
-		self._movementVector = movementVector
-
-	def EnableMovement(self, enable = True):
-
-		self._movementStopped = not enable
-		if self._movement:
-			self._movement.Enable(enable)
-
 	# Other operations.
 
 	def Terminate(self):
@@ -183,19 +170,8 @@ class Node(Timed):
 		self._sprite.Update(milisecondsPassed)
 		self.UpdateTimers(milisecondsPassed)
 
-		if self._movement and self._movement.IsEnabled():
-
-			self._movement.Update(milisecondsPassed)
-
-			currentPosition = self._movement.GetCurrentPosition()
-			self.SetPosition(currentPosition)
-
-			currentRotation = self._movement.GetCurrentRotation()
-			if currentRotation:
-				self.ReplaceSprite(self._spriteName, rotation = currentRotation)
-
-		if self._movementVector and not self._movementStopped:
-			self._position += self._movementVector * milisecondsPassed
+		if self._movement and self._movement.Exists():
+			self.SetPosition(self._movement.Update(self._position, milisecondsPassed))
 
 	def Render(self):
 

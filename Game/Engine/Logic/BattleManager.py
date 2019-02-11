@@ -45,6 +45,8 @@ class BattleManager(Timed):
 		self._scene = scene
 		self._verticalOffset = verticalOffset
 
+		self._saucer = None
+
 		self.AppendTimer("LineEnemy")
 		self.AppendTimer("Saucer")
 
@@ -52,10 +54,24 @@ class BattleManager(Timed):
 
 		self.UpdateTimers(milisecondsPassed)
 
+		# Forget the saucer if it's terminated.
+
+		if self._saucer and self._saucer.IsTerminated():
+			self._saucer = None
+
+		# Spawn enemies.
+
 		if self.GetTimer("LineEnemy") // 1000 > 0:
 			self._SpawnLineEnemies()
 
-		if self.GetTimer("Saucer") // 10000 > 0:
+		# Spawn the saucer.
+
+		if self._saucer:
+
+			self.ClearTimer("Saucer")
+
+		elif self.GetTimer("Saucer") // 10000 > 0:
+
 			self._SpawnSaucers()
 
 	def _SpawnLineEnemies(self):
@@ -85,7 +101,8 @@ class BattleManager(Timed):
 		currentScore = State().GetScoreManager().GetCurrentScore()
 
 		# if currentScore >= 50:
-		self._scene.Append(Saucer(self._scene, self._verticalOffset, 3, Direction.Left))
+		self._saucer = Saucer(self._scene, self._verticalOffset, 3, Direction.Left)
+		self._scene.Append(self._saucer)
 
 		# Clear the timer.
 

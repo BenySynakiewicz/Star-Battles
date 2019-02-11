@@ -27,6 +27,7 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Utilities.Vector import Vector
+from Engine.World.Concepts.Movement import Movement
 from Engine.World.Concepts.Node import Node
 from Engine.World.Nodes.Other.Effect import Effect
 
@@ -40,10 +41,12 @@ class BulletFromPlayer(Node):
 
 	def __init__(self, scene):
 
-		super().__init__(scene, "Bullet (Green).png", movementVector = Vector(0, -Parameters.BulletSpeed))
+		super().__init__(scene, "Bullet (Green).png")#, movementVector = Vector(0, -Parameters.BulletSpeed))
 
 		self._collisionClasses = {"Participants"}
 		self._collisionExceptions = {"BulletFromPlayer", "Player"}
+
+		self._movement = Movement(Parameters.BulletSpeed, Vector(0, -1))
 
 		Resources().GetSound("Bullet").Play()
 

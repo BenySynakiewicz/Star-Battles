@@ -55,11 +55,11 @@ class AbstractParticipant(Node):
 
 	# The constructor.
 
-	def __init__(self, scene, sprite, health = 1, dropsBonus = True, movementVector = None):
+	def __init__(self, scene, sprite, health = 1, dropsBonus = True):
 
 		# Initialize the node.
 
-		super().__init__(scene, sprite, movementVector = movementVector, zIndex = 1)
+		super().__init__(scene, sprite, zIndex = 1)
 
 		# Initialize new member variables.
 
@@ -161,8 +161,10 @@ class AbstractParticipant(Node):
 
 			node.SetPosition(node.GetPosition().GetRotatedAround(self.GetCenter(), angle))
 
-			movementVector = (node.GetCenter() - self.GetCenter()).GetNormalized() * Parameters.BulletSpeed
-			node.SetMovementVector(movementVector)
+			movementVector = (node.GetCenter() - self.GetCenter()).GetNormalized()# * Parameters.BulletSpeed
+			node.GetMovement().SetRoute(movementVector)
+			node.GetMovement().SetSpeed(Parameters.BulletSpeed)
+			# node.SetMovementVector(movementVector)
 
 			node.SetRotation(angle)
 

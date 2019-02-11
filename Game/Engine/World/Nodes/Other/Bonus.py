@@ -43,7 +43,9 @@ class Bonus(Node):
 
 		# Initialize the node.
 
-		super().__init__(scene, f"Bonus {spriteIndex}", movementVector = Vector(0, Parameters.BonusSpeed), zIndex = 2)
+		super().__init__(scene, f"Bonus {spriteIndex}", zIndex = 2)
+
+		self._movement = Movement(Parameters.BonusSpeed, Vector(0, 1))
 
 		self._name = name
 		self._collisionClasses = {"Bonuses"}
