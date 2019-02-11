@@ -25,18 +25,11 @@
 ##
 
 from Engine.Core.Parameters import Parameters
-from Engine.Core.Resources import Resources
-from Engine.Utilities.Color import Color
-from Engine.Utilities.Direction import Direction
-from Engine.Utilities.General import GetScreenDimensions
-from Engine.Utilities.General import GetDecision, GetScreen
-from Engine.Utilities.Vector import Vector
-from Engine.World.Concepts.Node import Node
-from Engine.World.Nodes.Other.Bonus import Bonus
-from Engine.World.Nodes.Weapons.BulletFromEnemy import BulletFromEnemy
-from Engine.World.Utilities.Positioning import AtBottom
-
 from Engine.World.Nodes.AbstractParticipant import AbstractParticipant
+from Engine.World.Utilities.Positioning import AtBottom
+from Engine.Utilities.Direction import Direction
+from Engine.Utilities.General import GetDecision, GetScreenDimensions
+from Engine.Utilities.Vector import Vector
 
 ##
 #
@@ -46,8 +39,6 @@ from Engine.World.Nodes.AbstractParticipant import AbstractParticipant
 
 ExplosionDimensions = Vector(200, 200)
 ShootingProbabilityDivisor = 200000
-
-MaximumHealth = 500
 
 ##
 #
@@ -63,7 +54,7 @@ class Saucer(AbstractParticipant):
 
 		# Initialize the node.
 
-		super().__init__(scene, "Saucer", MaximumHealth, dropsBonus = True, movementVector = Vector(direction * Parameters.EnemySpeed, 0))
+		super().__init__(scene, "Saucer", 500, dropsBonus = True, movementVector = Vector(direction * Parameters.EnemySpeed, 0))
 
 		self._collisionClasses = {"Participants"}
 		self._collisionExceptions = {"BulletFromEnemy"}
@@ -92,7 +83,7 @@ class Saucer(AbstractParticipant):
 
 	def Shoot(self):
 
-		self._ShootSomething("BulletFromEnemy")
+		self._ShootSomething("BulletFromEnemy", position = AtBottom)
 
 		self.ClearTimer("Shot")
 

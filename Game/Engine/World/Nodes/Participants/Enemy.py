@@ -27,15 +27,10 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Utilities.Direction import Direction
-from Engine.Utilities.General import GetScreenDimensions
-from Engine.Utilities.General import GetDecision
+from Engine.Utilities.General import GetDecision, GetScreenDimensions
 from Engine.Utilities.Vector import Vector
-from Engine.World.Concepts.Node import Node
-from Engine.World.Nodes.Weapons.BulletFromEnemy import BulletFromEnemy
-from Engine.World.Nodes.Other.Bonus import Bonus
-from Engine.World.Utilities.Positioning import AtBottom
-
 from Engine.World.Nodes.AbstractParticipant import AbstractParticipant
+from Engine.World.Utilities.Positioning import AtBottom
 
 ##
 #
@@ -88,10 +83,8 @@ class Enemy(AbstractParticipant):
 
 	def Shoot(self):
 
-		bullet = BulletFromEnemy(self._scene)
-		bullet.SetRelativePosition(self, AtBottom)
+		self._ShootSomething("BulletFromEnemy", position = AtBottom)
 
-		self._scene.Append(bullet)
 		self.ClearTimer("Shot")
 
 	# Updating.

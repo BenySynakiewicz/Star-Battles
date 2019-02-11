@@ -26,7 +26,7 @@
 
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
-from Engine.Utilities.Color import Color
+from Engine.Utilities.Color import Color, SetAlpha
 from Engine.Utilities.General import GetDecision, GetScreen
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.Node import Node
@@ -36,6 +36,14 @@ from Engine.World.Nodes.Weapons.Bomb import Bomb
 from Engine.World.Nodes.Weapons.BulletFromEnemy import BulletFromEnemy
 from Engine.World.Nodes.Weapons.BulletFromPlayer import BulletFromPlayer
 from Engine.World.Widgets.Bar import Bar
+
+##
+#
+# Globals.
+#
+##
+
+HealthBarAlpha = 50
 
 ##
 #
@@ -63,8 +71,8 @@ class AbstractParticipant(Node):
 
 		self._healthBar = Bar(
 			self._scene,
-			Color.Red,
-			Color.Green,
+			SetAlpha(Color.Red, HealthBarAlpha),
+			SetAlpha(Color.Green, HealthBarAlpha),
 			Vector(self._dimensions.X, Parameters.HealthBarHeight),
 			interpolateColors = True,
 			rounded = True,
@@ -134,16 +142,16 @@ class AbstractParticipant(Node):
 	def _RenderHealthBar(self):
 
 		dimensions = self._healthBar.GetDimensions()
-		position = self._position - (0, dimensions.Y + Parameters.SmallMargin) + ((self._dimensions - dimensions).X / 2, 0)
+		position = self._position - (0, dimensions.Y + 4 * Parameters.SmallMargin) + ((self._dimensions - dimensions).X / 2, 0)
 
 		self._healthBar.SetProgress((self._currentHealth / self._maximumHealth) * 100)
 		self._healthBar.SetPosition(position)
 		self._healthBar.Render()
 
-	def _ShootSomething(self, name, angle = None):
+	def _ShootSomething(self, name, angle = None, position = AtTop):
 
 		node = globals()[name](self._scene)
-		node.SetRelativePosition(self, AtTop)
+		node.SetRelativePosition(self, position)
 
 		if angle:
 

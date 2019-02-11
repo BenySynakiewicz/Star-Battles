@@ -27,27 +27,13 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Core.State import State
-from Engine.World.Concepts.Node import Node
-from Engine.World.Nodes.Other.Effect import Effect
-from Engine.World.Nodes.Weapons.Bomb import Bomb
-from Engine.World.Nodes.Weapons.BulletFromPlayer import BulletFromPlayer
-from Engine.World.Utilities.Positioning import AtSameCenter, AtTop, AtBottom
-from Engine.Utilities.Color import Color
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.General import GetScreen, GetScreenDimensions
-from Engine.Utilities.Vector import Vector
-
+from Engine.World.Nodes.Other.Effect import Effect
 from Engine.World.Nodes.AbstractParticipant import AbstractParticipant
+from Engine.World.Utilities.Positioning import AtSameCenter
 
 from numpy import clip
-
-##
-#
-# Globals.
-#
-##
-
-MaximumHealth = 100
 
 ##
 #
@@ -63,21 +49,18 @@ class Player(AbstractParticipant):
 
 		# Initialize the node.
 
-		super().__init__(scene, "Player", MaximumHealth, dropsBonus = True)
+		super().__init__(scene, "Player", 100, dropsBonus = True)
 
 		self._collisionClasses = {"Participants", "Bonuses"}
 		self._collisionExceptions = {"BulletFromPlayer"}
 
 		# Initialize new member variables.
 
-		# self._maximumHealth = MaximumHealth
-		# self._currentHealth = self._maximumHealth
-
 		self._bulletEnergy = 100
 		self._bombEnergy = 100
 		self._shieldEnergy = 100
 
-		self.__bombs = []
+		self._bombs = []
 
 		self._shieldUp = False
 
@@ -131,7 +114,7 @@ class Player(AbstractParticipant):
 
 	def ShootBomb(self):
 
-		if not self.__bombs:
+		if not self._bombs:
 
 			if self._bombEnergy < 100:
 				return
@@ -139,21 +122,21 @@ class Player(AbstractParticipant):
 			if not State().GetBonusManager().IsTwoBombsEnabled():
 
 				bomb = self._ShootSomething("Bomb")
-				self.__bombs.append(bomb)
+				self._bombs.append(bomb)
 
 			else:
 
 				leftBomb = self._ShootSomething("Bomb", +15)
-				self.__bombs.append(leftBomb)
+				self._bombs.append(leftBomb)
 
 				rightBomb = self._ShootSomething("Bomb", -15)
-				self.__bombs.append(rightBomb)
+				self._bombs.append(rightBomb)
 
 			self.ChangeBombEnergy(-100)
 
 		else:
 
-			for bomb in self.__bombs:
+			for bomb in self._bombs:
 				bomb.Explode()
 
 	# Updating and rendering.
@@ -173,7 +156,7 @@ class Player(AbstractParticipant):
 		if not self._shieldEnergy:
 			self._shieldUp = False
 
-		self.__bombs[:] = filter(lambda x: not x.IsTerminated(), self.__bombs)
+		self._bombs[:] = filter(lambda x: not x.IsTerminated(), self._bombs)
 
 	def Render(self):
 

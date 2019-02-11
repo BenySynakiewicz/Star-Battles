@@ -64,6 +64,10 @@ def InterpolateBetweenColors(firstColor, secondColor, progress):
 
 	return (*hsv_to_rgb(interpolatedColor[0], interpolatedColor[1], interpolatedColor[2]), interpolatedColor[3])
 
+def SetAlpha(color, alpha):
+
+	return (color[0], color[1], color[2], alpha)
+
 ##
 #
 # Utilities.
