@@ -71,7 +71,11 @@ class Widget:
 
 		return rectangle.collidepoint(mouseCursorPosition)
 
-	# Rendering.
+	# Updating and rendering.
+
+	def Update(self, milisecondsPassed):
+
+		pass
 
 	def Render(self):
 

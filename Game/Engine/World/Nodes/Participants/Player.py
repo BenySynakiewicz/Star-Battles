@@ -35,8 +35,9 @@ from Engine.World.Utilities.Positioning import AtSameCenter, AtTop, AtBottom
 from Engine.Utilities.Color import Color
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.General import GetScreen, GetScreenDimensions
-from Engine.Utilities.GUI import DrawBar
 from Engine.Utilities.Vector import Vector
+
+from Engine.World.Nodes.AbstractParticipant import AbstractParticipant
 
 from numpy import clip
 
@@ -54,7 +55,7 @@ MaximumHealth = 100
 #
 ##
 
-class Player(Node):
+class Player(AbstractParticipant):
 
 	# The constructor.
 
@@ -62,14 +63,15 @@ class Player(Node):
 
 		# Initialize the node.
 
-		super().__init__(scene, "Player", zIndex = 1)
+		super().__init__(scene, "Player", MaximumHealth, dropsBonus = True)
 
 		self._collisionClasses = {"Participants", "Bonuses"}
 		self._collisionExceptions = {"BulletFromPlayer"}
 
 		# Initialize new member variables.
 
-		self._health = MaximumHealth
+		# self._maximumHealth = MaximumHealth
+		# self._currentHealth = self._maximumHealth
 
 		self._bulletEnergy = 100
 		self._bombEnergy = 100
@@ -188,18 +190,7 @@ class Player(Node):
 
 		# Render the health bar.
 
-		barDimensions = Vector(self.GetDimensions().X, Parameters.HealthBarHeight)
-		DrawBar(
-
-			GetScreen(),
-
-			self._position - (0, barDimensions.Y + Parameters.SmallMargin) + ((self._dimensions.X - barDimensions.X) / 2, 0),
-			barDimensions,
-
-			Color.Red,
-			(self._health / MaximumHealth) * 100,
-
-		)
+		self._RenderHealthBar()
 
 	# Callbacks.
 
@@ -241,35 +232,6 @@ class Player(Node):
 
 			return
 
-		# If the colliding node is not absorbable - destroy the Player.
+		# If the colliding node is not absorbable - harm the player.
 
-		# self.Terminate()
-
-		self._health = max(0, self._health - 5)
-
-		if not self._health:
-			self.Terminate()
-
-	def OnTermination(self):
-
-		Resources().GetSound("Destruction").Play()
-
-	# Utilities.
-
-	def _ShootSomething(self, somethingsName, angle = None):
-
-		node = globals()[somethingsName](self._scene)
-		node.SetRelativePosition(self, AtTop)
-
-		if angle:
-
-			node.SetPosition(node.GetPosition().GetRotatedAround(self.GetCenter(), angle))
-
-			movementVector = (node.GetCenter() - self.GetCenter()).GetNormalized() * Parameters.BulletSpeed
-			node.SetMovementVector(movementVector)
-
-			node.SetRotation(angle)
-
-		self._scene.Append(node)
-
-		return node
+		self._OnUnprotectedCollision(node)

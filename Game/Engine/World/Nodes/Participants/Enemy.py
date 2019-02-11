@@ -35,6 +35,8 @@ from Engine.World.Nodes.Weapons.BulletFromEnemy import BulletFromEnemy
 from Engine.World.Nodes.Other.Bonus import Bonus
 from Engine.World.Utilities.Positioning import AtBottom
 
+from Engine.World.Nodes.AbstractParticipant import AbstractParticipant
+
 ##
 #
 # Globals.
@@ -50,7 +52,7 @@ ShootingProbabilityDivisor = 200000
 #
 ##
 
-class Enemy(Node):
+class Enemy(AbstractParticipant):
 
 	# The constructor.
 
@@ -58,7 +60,7 @@ class Enemy(Node):
 
 		# Initialize the node.
 
-		super().__init__(scene, "Enemy", movementVector = Vector(direction * Parameters.EnemySpeed, 0), zIndex = 1)
+		super().__init__(scene, "Enemy", dropsBonus = True, movementVector = Vector(direction * Parameters.EnemySpeed, 0))
 
 		self._collisionClasses = {"Participants"}
 		self._collisionExceptions = {"BulletFromEnemy"}
@@ -68,13 +70,7 @@ class Enemy(Node):
 
 		# Initialize new member variables.
 
-		self._isDestroyed = False
-
 		self.AppendTimer("Shot")
-
-	# Accessors.
-
-	def IsDestroyedByPlayer(self): return self._isDestroyed
 
 	# Operations.
 
@@ -109,36 +105,3 @@ class Enemy(Node):
 
 		if not self._isDestroyed and "Shoot" == GetDecision({"Shoot": self.GetTimer("Shot") / ShootingProbabilityDivisor}):
 			self.Shoot()
-
-	# Callbacks.
-
-	def OnCollision(self, node):
-
-		self.Destroy()
-
-	def OnTermination(self):
-
-		possibilities = {
-			"TripleShotBonus"   : Parameters.TripleShotBonusProbability,
-			"TwoBombsBonus"     : Parameters.TwoBombsBonusProbability,
-			"QuickerShieldBonus": Parameters.QuickerShieldBonusProbability,
-			"ShootAroundBonus"  : Parameters.ShootAroundBonusProbability,
-		}
-
-		decision = GetDecision(possibilities)
-		if not decision:
-			return
-
-		spriteIndices = {
-			"TripleShotBonus"   : 1,
-			"TwoBombsBonus"     : 2,
-			"QuickerShieldBonus": 3,
-			"ShootAroundBonus"  : 4,
-		}
-
-		bonusName = decision[0]
-
-		bonusNode = Bonus(self._scene, spriteIndices[bonusName], bonusName)
-		bonusNode.SetRelativePosition(self, AtBottom)
-
-		self._scene.Append(bonusNode)

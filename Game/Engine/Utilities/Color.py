@@ -24,6 +24,7 @@
 #
 ##
 
+from colorsys import rgb_to_hsv, hsv_to_rgb
 from types import SimpleNamespace
 
 ##
@@ -34,11 +35,41 @@ from types import SimpleNamespace
 
 Color = SimpleNamespace(
 
-	Black    = (0  , 0  , 0  ),
-	White    = (255, 255, 255),
+	Black    = (0  , 0  , 0  , 255),
+	White    = (255, 255, 255, 255),
 
-	Green = (25 , 255, 25 ),
-	Red   = (255, 25 , 25 ),
-	Blue  = (25 , 25 , 255),
+	Green = (25 , 255, 25 , 255),
+	Red   = (255, 25 , 25 , 255),
+	Blue  = (25 , 25 , 255, 255),
 
 )
+
+##
+#
+# Functions.
+#
+##
+
+def InterpolateBetweenColors(firstColor, secondColor, progress):
+
+	firstColorAsHSV = rgb_to_hsv(firstColor[0], firstColor[1], firstColor[2])
+	secondColorAsHSV = rgb_to_hsv(secondColor[0], secondColor[1], secondColor[2])
+
+	interpolatedColor = [0, 0, 0, 0]
+
+	interpolatedColor[0] = LinearInterpolation(firstColorAsHSV[0], secondColorAsHSV[0], progress)
+	interpolatedColor[1] = LinearInterpolation(firstColorAsHSV[1], secondColorAsHSV[1], progress)
+	interpolatedColor[2] = LinearInterpolation(firstColorAsHSV[2], secondColorAsHSV[2], progress)
+	interpolatedColor[3] = LinearInterpolation(firstColor[3], secondColor[3], progress)
+
+	return (*hsv_to_rgb(interpolatedColor[0], interpolatedColor[1], interpolatedColor[2]), interpolatedColor[3])
+
+##
+#
+# Utilities.
+#
+##
+
+def LinearInterpolation(a, b, progress):
+
+	return a * (1 - progress) + b * progress

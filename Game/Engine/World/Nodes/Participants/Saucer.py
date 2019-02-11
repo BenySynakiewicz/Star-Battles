@@ -31,11 +31,12 @@ from Engine.Utilities.Direction import Direction
 from Engine.Utilities.General import GetScreenDimensions
 from Engine.Utilities.General import GetDecision, GetScreen
 from Engine.Utilities.Vector import Vector
-from Engine.Utilities.GUI import DrawBar
 from Engine.World.Concepts.Node import Node
 from Engine.World.Nodes.Other.Bonus import Bonus
 from Engine.World.Nodes.Weapons.BulletFromEnemy import BulletFromEnemy
 from Engine.World.Utilities.Positioning import AtBottom
+
+from Engine.World.Nodes.AbstractParticipant import AbstractParticipant
 
 ##
 #
@@ -54,7 +55,7 @@ MaximumHealth = 500
 #
 ##
 
-class Saucer(Node):
+class Saucer(AbstractParticipant):
 
 	# The constructor.
 
@@ -62,7 +63,7 @@ class Saucer(Node):
 
 		# Initialize the node.
 
-		super().__init__(scene, "Saucer", movementVector = Vector(direction * Parameters.EnemySpeed, 0), zIndex = 1)
+		super().__init__(scene, "Saucer", MaximumHealth, dropsBonus = True, movementVector = Vector(direction * Parameters.EnemySpeed, 0))
 
 		self._collisionClasses = {"Participants"}
 		self._collisionExceptions = {"BulletFromEnemy"}
@@ -72,15 +73,8 @@ class Saucer(Node):
 
 		# Initialize new member variables.
 
-		self._health = MaximumHealth
-		self._isDestroyed = False
-
 		self.AppendTimer("Shot")
 		self.DestroyedByPlayer = False
-
-	# Accessors.
-
-	def IsDestroyedByPlayer(self): return self._isDestroyed
 
 	# Operations.
 
@@ -119,72 +113,4 @@ class Saucer(Node):
 		super().Render()
 
 		if not self._isDestroyed:
-
-			barDimensions = Vector(self.GetDimensions().X, Parameters.HealthBarHeight)
-			DrawBar(
-
-				GetScreen(),
-
-				self._position - (0, barDimensions.Y + Parameters.SmallMargin) + ((self._dimensions.X - barDimensions.X) / 2, 0),
-				barDimensions,
-
-				Color.Red,
-				(self._health / MaximumHealth) * 100,
-
-			)
-
-	# Callbacks.
-
-	def OnCollision(self, node):
-
-		self._health = max(0, self._health - 5)
-
-		if not self._health:
-			self.Destroy()
-
-	def OnTermination(self):
-
-		possibilities = {
-			"TripleShotBonus"   : Parameters.TripleShotBonusProbability,
-			"TwoBombsBonus"     : Parameters.TwoBombsBonusProbability,
-			"QuickerShieldBonus": Parameters.QuickerShieldBonusProbability,
-			"ShootAroundBonus"  : Parameters.ShootAroundBonusProbability,
-		}
-
-		decision = GetDecision(possibilities)
-		if not decision:
-			return
-
-		spriteIndices = {
-			"TripleShotBonus"   : 1,
-			"TwoBombsBonus"     : 2,
-			"QuickerShieldBonus": 3,
-			"ShootAroundBonus"  : 4,
-		}
-
-		bonusName = decision[0]
-
-		bonusNode = Bonus(self._scene, spriteIndices[bonusName], bonusName)
-		bonusNode.SetRelativePosition(self, AtBottom)
-
-		self._scene.Append(bonusNode)
-
-	# Utilities.
-
-	def _ShootSomething(self, somethingsName, angle = None):
-
-		node = globals()[somethingsName](self._scene)
-		node.SetRelativePosition(self, AtBottom)
-
-		if angle:
-
-			node.SetPosition(node.GetPosition().GetRotatedAround(self.GetCenter(), angle))
-
-			movementVector = (self.GetCenter() - node.GetCenter()).GetNormalized() * Parameters.BulletSpeed
-			node.SetMovementVector(movementVector)
-
-			node.SetRotation(angle)
-
-		self._scene.Append(node)
-
-		return node
+			self._RenderHealthBar()

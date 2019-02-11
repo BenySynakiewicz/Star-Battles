@@ -33,11 +33,11 @@ from Engine.World.Concepts.Scene import Scene
 from Engine.World.Nodes.Participants.Player import Player
 from Engine.World.Nodes.Participants.Enemy import Enemy
 from Engine.World.Scenes.EndGameScene import EndGameScene
+from Engine.World.Widgets.Bar import Bar
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.Color import Color
 from Engine.Utilities.General import Blit, GetDimensions, GetScreen, GetScreenDimensions, RenderText
-from Engine.Utilities.GUI import DrawBar
 
 from pygame import (
 	mouse,
@@ -63,6 +63,21 @@ class BattleScene(Scene):
 		self._bonusDescriptionText = None
 
 		self.UpdateScoreText()
+
+		# Initialize widgets.
+
+		energyBarDimensions = Vector(GetScreenDimensions().X / 3, Parameters.BarHeight)
+		energyBarVerticalPosition = GetScreenDimensions().Y - energyBarDimensions.Y
+
+		self._bulletEnergyBar = Bar(self, Color.Black, Color.Green, energyBarDimensions)
+		self._bombEnergyBar = Bar(self, Color.Black, Color.Red, energyBarDimensions)
+		self._shieldEnergyBar = Bar(self, Color.Blue, Color.Blue, energyBarDimensions)
+
+		self._bulletEnergyBar.SetPosition(Vector(0 * energyBarDimensions.X, energyBarVerticalPosition))
+		self._bombEnergyBar.SetPosition(Vector(1 * energyBarDimensions.X, energyBarVerticalPosition))
+		self._shieldEnergyBar.SetPosition(Vector(2 * energyBarDimensions.X, energyBarVerticalPosition))
+
+		self.Append([self._bulletEnergyBar, self._bombEnergyBar, self._shieldEnergyBar])
 
 		# Initialize the player.
 
@@ -160,7 +175,7 @@ class BattleScene(Scene):
 
 		for node in self._nodes:
 
-			if node._terminated and "Enemy" == type(node).__name__ and node.IsDestroyedByPlayer():
+			if node._terminated and "Enemy" == type(node).__name__ and node.IsDestroyed():
 				State().GetScoreManager().Update(+Parameters.EnemyValue)
 				self.UpdateScoreText()
 
@@ -169,6 +184,12 @@ class BattleScene(Scene):
 		# Update the battle manager.
 
 		self._battleManager.Update(milisecondsPassed)
+
+		# Update energy bars.
+
+		self._bulletEnergyBar.SetProgress(self.Player.GetBulletEnergy())
+		self._bombEnergyBar.SetProgress(self.Player.GetBombEnergy())
+		self._shieldEnergyBar.SetProgress(self.Player.GetShieldEnergy())
 
 		# Find collisions.
 
@@ -212,50 +233,3 @@ class BattleScene(Scene):
 
 		if self._bonusDescriptionText:
 			Blit(screen, self._bonusDescriptionText, Vector(screenDimensions.X - Parameters.Margin - GetDimensions(self._bonusDescriptionText).X, Parameters.Margin))
-
-		# Calculate the bar dimensions.
-
-		barDimensions = Vector(screenDimensions.X / 3, Parameters.BarHeight)
-		barVerticalPosition = screenDimensions.Y - barDimensions.Y
-
-		# Draw the bullet energy bar.
-
-		DrawBar(
-
-			screen,
-
-			Vector(0 * barDimensions.X, barVerticalPosition),
-			barDimensions,
-
-			Color.Green if (100 == self.Player.GetBulletEnergy()) else Color.Black,
-			self.Player.GetBulletEnergy(),
-
-		)
-
-		# Draw the bomb energy bar.
-
-		DrawBar(
-
-			screen,
-
-			Vector(1 * barDimensions.X, barVerticalPosition),
-			barDimensions,
-
-			Color.Red if (100 == self.Player.GetBombEnergy()) else Color.Black,
-			self.Player.GetBombEnergy(),
-
-		)
-
-		# Draw the shield energy bar.
-
-		DrawBar(
-
-			screen,
-
-			Vector(2 * barDimensions.X, barVerticalPosition),
-			barDimensions,
-
-			Color.Blue,
-			self.Player.GetShieldEnergy(),
-
-		)
