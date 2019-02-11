@@ -61,14 +61,12 @@ class Saucer(AbstractParticipant):
 		self._collisionClasses = {"Participants"}
 		self._collisionExceptions = {"BulletFromEnemy"}
 
-		# Set up movement.
+		initialPosition = Vector()
+		initialPosition.X = GetScreenDimensions().X - 1
+		initialPosition.Y = verticalOffset + row * (self._dimensions.Y + Parameters.Margin)
 
-		self._position = Vector(
-			-(self._dimensions.X - 1) if Direction.Right == direction else (GetScreenDimensions().X - 1),
-			verticalOffset + row * (self._dimensions.Y + Parameters.Margin),
-		)
-
-		self._movement = Movement(Parameters.EnemySpeed, Vector(direction, 0), startingPosition = self._position)
+		self._movement = Movement(Parameters.EnemySpeed, [initialPosition, Vector(Parameters.Margin, initialPosition.Y)])
+		self._position = self._movement.GetCurrentPosition()
 
 		# Initialize new member variables.
 
