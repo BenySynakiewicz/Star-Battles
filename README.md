@@ -2,7 +2,7 @@
 
 ![Screenshot](/Screenshot.jpeg?raw=true)
 
-A simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invaders), created for the purpose of learning the basics of the [pygame](https://www.pygame.org/) framework.
+A simple space shooter, created for the purpose of learning the basics of the [pygame](https://www.pygame.org/) framework.
 
 ## Changelog
 
