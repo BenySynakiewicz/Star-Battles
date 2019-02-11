@@ -9,8 +9,9 @@ A simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invad
 ### Version 1.3
 
 - Player is no longer a one-hit target.
-- Bonuses now last a limited amount of time.
+- Added a new type of a bonus (the health bonus).
 - Added a new type of an enemy (the "saucer").
+- Bonuses now last a limited amount of time.
 - Added support for mouse input (the game can now be played using just the mouse).
 - Huge changes in the UI.
 - Various visual improvements.
