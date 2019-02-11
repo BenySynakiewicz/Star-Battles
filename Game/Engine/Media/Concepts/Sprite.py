@@ -80,7 +80,7 @@ class Sprite:
 			# Make the shadow semi-transparent.
 
 			alpha = surfarray.pixels_alpha(shadow)
-			alpha[alpha > 0] = 120
+			alpha[alpha > 0] = 150
 
 	def GetDimensions(self):
 
