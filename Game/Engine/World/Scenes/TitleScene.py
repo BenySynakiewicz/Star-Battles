@@ -28,11 +28,12 @@ from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Core.State import State
 from Engine.Media.Concepts.SpriteInstance import SpriteInstance
-from Engine.Utilities.General import Blit, GetDimensions, GetScreen, RenderText
+from Engine.Utilities.General import GetScreenDimensions
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.Scene import Scene
 from Engine.World.Scenes.BattleScene import BattleScene
 from Engine.World.Widgets.Button import Button
+from Engine.World.Widgets.Label import Label
 
 from sys import exit
 
@@ -62,9 +63,15 @@ class TitleScene(Scene):
 		creatorFont = Resources().GetFont("Exo 2", Parameters.SmallTextHeight)
 		buttonFont = Resources().GetFont("Exo 2 Light", Parameters.MediumTextHeight)
 
-		self._title = RenderText(Parameters.Name, titleFont)
-		self._creator = RenderText(f"Created by {Parameters.Creator}", creatorFont)
-		self._version = RenderText(f"Version {Parameters.Version}", creatorFont, alignRight = True)
+		# Create labels.
+
+		self._titleLabel = Label(self, Parameters.Name, titleFont)
+		self._creatorLabel = Label(self, f"Created by {Parameters.Creator}", creatorFont)
+		self._versionLabel = Label(self, f"Version {Parameters.Version}", creatorFont)
+
+		labels = [self._titleLabel, self._creatorLabel, self._versionLabel]
+
+		self.Append(labels)
 
 		# Create buttons.
 
@@ -74,16 +81,19 @@ class TitleScene(Scene):
 		buttons = [self._newGameButton, self._quitButton]
 		[x.SetMinimumWidth(Parameters.ButtonWidth) for x in buttons]
 
-		self.Append(self._newGameButton)
-		self.Append(self._quitButton)
+		self.Append(buttons)
 
-	# Basic operations..
+		# Position the widgets.
+
+		self._PositionWidgets()
+
+	# Operations..
 
 	def Show(self):
 
 		self._cursor = SpriteInstance(Resources().GetSprite("Cursor"))
 
-	# Reacting and rendering.
+	# Reacting.
 
 	def React(self, events, _):
 
@@ -98,40 +108,39 @@ class TitleScene(Scene):
 					self._quitButton.Click()
 					exit()
 
-	def Render(self):
+	# Utilities.
 
-		super().Render(withOverlay = False)
+	def _PositionWidgets(self):
 
-		# Retrieve the screen.
+		# Retrieve the screen dimensions.
 
-		screen = GetScreen()
-		screenDimensions = GetDimensions(screen)
+		screenDimensions = GetScreenDimensions()
 
 		# Calculate the positions of texts and buttons.
 
-		titleDimensions = GetDimensions(self._title)
-		creatorDimensions = GetDimensions(self._creator)
-		versionDimensions = GetDimensions(self._version)
+		titleDimensions = self._titleLabel.GetDimensions()
+		creatorDimensions = self._creatorLabel.GetDimensions()
+		versionDimensions = self._versionLabel.GetDimensions()
 		newGameButtonDimensions = self._newGameButton.GetDimensions()
 		quitButtonDimensions = self._newGameButton.GetDimensions()
 
 		upperTextsHeight = max([creatorDimensions.Y, versionDimensions.Y])
 		lowerButtonsHeight = max([newGameButtonDimensions.Y, quitButtonDimensions.Y])
 
-		titlePosition = Vector(
+		self._titleLabel.SetPosition(Vector(
 			(screenDimensions.X - titleDimensions.X) / 2,
 			(screenDimensions.Y - Parameters.Margin - lowerButtonsHeight - titleDimensions.Y + upperTextsHeight) / 2,
-		)
+		))
 
-		creatorPosition = Vector(
+		self._creatorLabel.SetPosition(Vector(
 			Parameters.Margin,
 			Parameters.Margin,
-		)
+		))
 
-		versionPosition = Vector(
+		self._versionLabel.SetPosition(Vector(
 			screenDimensions.X - versionDimensions.X - Parameters.Margin,
 			Parameters.Margin,
-		)
+		))
 
 		self._newGameButton.SetPosition(Vector(
 			Parameters.Margin,
@@ -142,13 +151,3 @@ class TitleScene(Scene):
 			screenDimensions.X - Parameters.Margin - quitButtonDimensions.X,
 			screenDimensions.Y - Parameters.Margin - quitButtonDimensions.Y,
 		))
-
-		# Blit the texts.
-
-		Blit(screen, self._title, titlePosition)
-		Blit(screen, self._creator, creatorPosition)
-		Blit(screen, self._version, versionPosition)
-
-		# Render the overlay.
-
-		super().RenderOverlay()

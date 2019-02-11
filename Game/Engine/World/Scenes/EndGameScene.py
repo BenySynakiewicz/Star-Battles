@@ -32,6 +32,7 @@ from Engine.Utilities.General import Blit, GetDimensions, GetScreen, RenderText
 from Engine.Utilities.Vector import Vector
 from Engine.World.Concepts.Scene import Scene
 from Engine.World.Widgets.Button import Button
+from Engine.World.Widgets.Label import Label
 
 from pygame import MOUSEBUTTONDOWN
 
@@ -47,7 +48,11 @@ class EndGameScene(Scene):
 
 	def __init__(self):
 
+		# Initialize the scene.
+
 		super().__init__("Screenshot")
+
+		self._cursor = SpriteInstance(Resources().GetSprite("Cursor"))
 
 		# Save the game state.
 
@@ -72,21 +77,19 @@ class EndGameScene(Scene):
 		messageFont = Resources().GetFont("Exo 2 Light", Parameters.MediumTextHeight)
 		buttonFont = Resources().GetFont("Exo 2 Light", Parameters.MediumTextHeight)
 
-		self._title = RenderText(titleMessage, titleFont)
-		self._message = RenderText(message, messageFont)
+		self._titleLabel = Label(self, titleMessage, titleFont)
+		self._messageLabel = Label(self, message, messageFont)
 
 		self._continueButton = Button(self, "Continue", buttonFont)
 		self._continueButton.SetMinimumWidth(Parameters.ButtonWidth)
 
-		self.Append(self._continueButton)
+		self.Append([self._titleLabel, self._messageLabel, self._continueButton])
 
-	# Basic operations.
+		# Position the widgets.
 
-	def Show(self):
+		self._PositionWidgets()
 
-		self._cursor = SpriteInstance(Resources().GetSprite("Cursor"))
-
-	# Reacting and rendering.
+	# Reactions.
 
 	def React(self, events, keys):
 
@@ -98,9 +101,9 @@ class EndGameScene(Scene):
 					self._continueButton.Click()
 					self._nextScene = None
 
-	def Render(self):
+	# Utilities.
 
-		super().Render(withOverlay = False)
+	def _PositionWidgets(self):
 
 		# Retrieve the screen.
 
@@ -109,32 +112,23 @@ class EndGameScene(Scene):
 
 		# Calculate the positions of texts and buttons.
 
-		titleDimensions = GetDimensions(self._title)
-		messageDimensions = GetDimensions(self._message)
+		titleDimensions = self._titleLabel.GetDimensions()
+		messageDimensions = self._messageLabel.GetDimensions()
 		continueButtonDimensions = self._continueButton.GetDimensions()
 
 		titleAndMessageBundleHeight = titleDimensions.Y + messageDimensions.Y
 
-		titlePosition = Vector(
+		self._titleLabel.SetPosition(Vector(
 			(screenDimensions.X - titleDimensions.X) / 2,
 			(screenDimensions.Y - Parameters.Margin - continueButtonDimensions.Y - titleAndMessageBundleHeight) / 2,
-		)
+		))
 
-		messagePosition = Vector(
+		self._messageLabel.SetPosition(Vector(
 			(screenDimensions.X - messageDimensions.X) / 2,
-			titlePosition.Y + titleDimensions.Y,
-		)
+			self._titleLabel.GetPosition().Y + titleDimensions.Y,
+		))
 
 		self._continueButton.SetPosition(Vector(
 			(screenDimensions.X - continueButtonDimensions.X) / 2,
 			screenDimensions.Y - Parameters.Margin - continueButtonDimensions.Y,
 		))
-
-		# Blit the texts.
-
-		Blit(screen, self._title, titlePosition)
-		Blit(screen, self._message, messagePosition)
-
-		# Render the overlay.
-
-		super().RenderOverlay()

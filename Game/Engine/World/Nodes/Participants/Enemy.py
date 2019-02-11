@@ -26,6 +26,7 @@
 
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
+from Engine.Core.State import State
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.General import GetDecision, GetScreenDimensions
 from Engine.Utilities.Vector import Vector
@@ -85,6 +86,7 @@ class Enemy(AbstractParticipant):
 
 		self.ReplaceSprite("Explosion", dimensions = ExplosionDimensions, loop = False)
 
+		State().GetScoreManager().Update(+Parameters.EnemyValue)
 		self.OnDestruction()
 
 	# Weapons.

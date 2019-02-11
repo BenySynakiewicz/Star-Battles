@@ -34,6 +34,7 @@ from Engine.World.Nodes.Participants.Player import Player
 from Engine.World.Nodes.Participants.Enemy import Enemy
 from Engine.World.Scenes.EndGameScene import EndGameScene
 from Engine.World.Widgets.Bar import Bar
+from Engine.World.Widgets.Label import Label
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.Vector import Vector
 from Engine.Utilities.Color import Color
@@ -58,6 +59,17 @@ class BattleScene(Scene):
 		super().__init__("Background")
 
 		# Initialize texts.
+
+		self._scoreLabel = Label(self, "No score is currently tracked", Resources().GetFont("Exo 2", Parameters.SmallTextHeight))
+		self._scoreLabel.SetPosition(Vector(Parameters.Margin, Parameters.Margin))
+
+		self._bonusLabel = Label(self, "No bonus is currently active", Resources().GetFont("Exo 2", Parameters.SmallTextHeight))
+		self._bonusLabel.SetPosition(Vector(
+			GetScreenDimensions().X - Parameters.Margin - self._bonusLabel.GetDimensions().X,
+			Parameters.Margin
+		))
+
+		self.Append([self._scoreLabel, self._bonusLabel])
 
 		self._scoreText = None
 		self._bonusDescriptionText = None
@@ -107,6 +119,8 @@ class BattleScene(Scene):
 
 		self._scoreText = RenderText(f"{State().GetScoreManager().GetCurrentScore()} points", Resources().GetFont("Exo 2", Parameters.SmallTextHeight))
 
+		self._scoreLabel.SetText(f"{State().GetScoreManager().GetCurrentScore()} points")
+
 	def UpdateBonusDescriptionText(self):
 
 		if State().GetBonusManager().IsTripleShotEnabled():
@@ -117,6 +131,12 @@ class BattleScene(Scene):
 			description = "QUICKER SHIELD bonus is now active"
 		else:
 			description = None
+
+		self._bonusLabel.SetText(description)
+		self._bonusLabel.SetPosition(Vector(
+			GetScreenDimensions().X - Parameters.Margin - self._bonusLabel.GetDimensions().X,
+			Parameters.Margin
+		))
 
 		self._bonusDescriptionText = RenderText(description, Resources().GetFont("Exo 2", Parameters.SmallTextHeight)) if description else None
 
@@ -175,11 +195,10 @@ class BattleScene(Scene):
 
 		for node in self._nodes:
 
-			if node._terminated and "Enemy" == type(node).__name__ and node.IsDestroyed():
-				State().GetScoreManager().Update(+Parameters.EnemyValue)
+			if "Enemy" == type(node).__name__ and node.IsDestroyed():
 				self.UpdateScoreText()
 
-		self._nodes[:] = filter(lambda node: not node._terminated, self._nodes)
+		self._nodes[:] = filter(lambda x: not x.IsTerminated(), self._nodes)
 
 		# Update the battle manager.
 
@@ -229,7 +248,14 @@ class BattleScene(Scene):
 
 		# Draw the score.
 
-		Blit(screen, self._scoreText, Vector(Parameters.Margin, Parameters.Margin))
+		# Blit(screen, self._scoreText, Vector(Parameters.Margin, Parameters.Margin))
 
-		if self._bonusDescriptionText:
-			Blit(screen, self._bonusDescriptionText, Vector(screenDimensions.X - Parameters.Margin - GetDimensions(self._bonusDescriptionText).X, Parameters.Margin))
+		# if self._bonusDescriptionText:
+			# Blit(
+				# screen,
+				# self._bonusDescriptionText,
+				# Vector(
+					# screenDimensions.X - Parameters.Margin - GetDimensions(self._bonusDescriptionText).X,
+					# Parameters.Margin
+				# ),
+			# )

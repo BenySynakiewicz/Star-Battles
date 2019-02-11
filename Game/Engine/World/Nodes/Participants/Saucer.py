@@ -26,7 +26,6 @@
 
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
-from Engine.World.Concepts.Movement import Movement
 from Engine.World.Nodes.AbstractParticipant import AbstractParticipant
 from Engine.World.Utilities.Positioning import AtBottom
 from Engine.Utilities.Direction import Direction
@@ -61,12 +60,17 @@ class Saucer(AbstractParticipant):
 		self._collisionClasses = {"Participants"}
 		self._collisionExceptions = {"BulletFromEnemy"}
 
-		initialPosition = Vector()
-		initialPosition.X = GetScreenDimensions().X - 1
-		initialPosition.Y = verticalOffset + row * (self._dimensions.Y + Parameters.Margin)
+		# Set up the position and the movement.
 
-		self._movement = Movement(Parameters.EnemySpeed, [initialPosition, Vector(Parameters.Margin, initialPosition.Y)])
-		self._position = initialPosition
+		self._position = Vector(
+			GetScreenDimensions().X - 1,
+			verticalOffset + row * (self._dimensions.Y + Parameters.Margin)
+		)
+
+		self._movement.Set(Parameters.EnemySpeed, [
+			Vector(GetScreenDimensions().X - Parameters.Margin - self._dimensions.X, self._position.Y),
+			Vector(Parameters.Margin, self._position.Y)
+		])
 
 		# Initialize new member variables.
 
