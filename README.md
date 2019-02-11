@@ -8,9 +8,11 @@ A simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invad
 
 ### Version 1.3
 
-- Added support for mouse input (the game can now be played using solely the mouse).
-- Significant changes in the UI.
-- Minor visual improvements.
+- Player is no longer a one-hit target.
+- Added a new type of an enemy (the "saucer").
+- Added support for mouse input (the game can now be played using just the mouse).
+- Huge changes in the UI.
+- Various visual improvements.
 - Reworked resource caching.
 
 ### Version 1.2
@@ -33,15 +35,11 @@ A simple clone of the [Space Invaders](https://en.wikipedia.org/wiki/Space_Invad
 ### *TO-DO*s
 
 - **TO-DO**: Make energy bars prettier.
-- **TO-DO**: Add more types of enemies.
 - **TO-DO**: Add battle statistics.
 - **TO-DO**: Remember highscore*s*, not just the single highest score.
 - **TO-DO**: Add animated backgrounds.
 - **TO-DO**: Make enemies move more creatively.
-- **TO-DO**: Create a proper main menu/game menu.
-- **TO-DO**: Both player and enemies should have some resistance (health) instead of being one-shot targets.
 - **TO-DO**: Idea: timed bonuses.
-- **TO-DO**: Idea: shielded enemies with health bars.
 - **TO-DO**: Idea: liberating allies from captivity.
 
 ## Assets
