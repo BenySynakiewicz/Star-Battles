@@ -25,7 +25,6 @@
 ##
 
 from Engine.Core.Parameters import Parameters
-from Engine.Logic.BonusManager import BonusManager
 from Engine.Logic.ScoreManager import ScoreManager
 from Engine.Utilities.Singleton import Singleton
 
@@ -39,7 +38,6 @@ class State(metaclass = Singleton):
 
 	def __init__(self):
 
-		self._bonusManager = BonusManager()
 		self._scoreManager = ScoreManager()
 
 		self.LoadFromFile()
@@ -60,17 +58,12 @@ class State(metaclass = Singleton):
 		with open(Parameters.HighscoreFilePath, "w") as file:
 			file.write(str(self._scoreManager.GetCurrentScore()))
 
-	def GetBonusManager(self):
-
-		return self._bonusManager
-
 	def GetScoreManager(self):
 
 		return self._scoreManager
 
 	def Clear(self):
 
-		self._bonusManager.Clear()
 		self._scoreManager.Clear()
 
 		self.LoadFromFile()

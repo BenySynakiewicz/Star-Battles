@@ -71,11 +71,6 @@ class BattleScene(Scene):
 
 		self.Append([self._scoreLabel, self._bonusLabel])
 
-		self._scoreText = None
-		self._bonusDescriptionText = None
-
-		self.UpdateScoreText()
-
 		# Initialize widgets.
 
 		energyBarDimensions = Vector(GetScreenDimensions().X / 3, Parameters.BarHeight)
@@ -109,7 +104,7 @@ class BattleScene(Scene):
 
 		# Initialize the battle manager.
 
-		self._battleManager = BattleManager(self, 2 * Parameters.Margin + GetDimensions(self._scoreText).Y)
+		self._battleManager = BattleManager(self, 2 * Parameters.Margin + self._scoreLabel.GetDimensions().Y)
 
 	def Show(self):
 
@@ -117,28 +112,22 @@ class BattleScene(Scene):
 
 	def UpdateScoreText(self):
 
-		self._scoreText = RenderText(f"{State().GetScoreManager().GetCurrentScore()} points", Resources().GetFont("Exo 2", Parameters.SmallTextHeight))
-
 		self._scoreLabel.SetText(f"{State().GetScoreManager().GetCurrentScore()} points")
 
 	def UpdateBonusDescriptionText(self):
 
-		if State().GetBonusManager().IsTripleShotEnabled():
-			description = "TRIPLE SHOT bonus is now active"
-		elif State().GetBonusManager().IsTwoBombsEnabled():
-			description = "TWO BOMBS bonus is now active"
-		elif State().GetBonusManager().IsQuickerShieldEnabled():
-			description = "QUICKER SHIELD bonus is now active"
+		bonusManager = self.Player.GetBonusManager()
+
+		if bonusManager.IsAnyBonusActive():
+			description = f"{bonusManager.GetActiveBonusName()} bonus is now active [{bonusManager.GetActiveBonusTime()} s left]"
 		else:
-			description = None
+			description = "No bonus is currently active"
 
-		self._bonusLabel.SetText(description)
-		self._bonusLabel.SetPosition(Vector(
-			GetScreenDimensions().X - Parameters.Margin - self._bonusLabel.GetDimensions().X,
-			Parameters.Margin
-		))
-
-		self._bonusDescriptionText = RenderText(description, Resources().GetFont("Exo 2", Parameters.SmallTextHeight)) if description else None
+		if self._bonusLabel.SetText(description):
+			self._bonusLabel.SetPosition(Vector(
+				GetScreenDimensions().X - Parameters.Margin - self._bonusLabel.GetDimensions().X,
+				Parameters.Margin
+			))
 
 	def React(self, events, keys):
 
@@ -180,6 +169,8 @@ class BattleScene(Scene):
 		mouseMovement = mouse.get_rel()
 		self.Player.Move(Direction.Right, mouseMovement[0])
 
+	# Updating.
+
 	def Update(self, milisecondsPassed):
 
 		super().Update(milisecondsPassed)
@@ -203,6 +194,11 @@ class BattleScene(Scene):
 		# Update the battle manager.
 
 		self._battleManager.Update(milisecondsPassed)
+
+		# Update labels.
+
+		self.UpdateScoreText()
+		self.UpdateBonusDescriptionText()
 
 		# Update energy bars.
 
@@ -234,28 +230,3 @@ class BattleScene(Scene):
 
 				node.OnCollision(collidingNode)
 				collidingNode.OnCollision(node)
-
-	def Render(self):
-
-		# Render the background.
-
-		super().Render()
-
-		# Retrieve some parameters.
-
-		screen = GetScreen()
-		screenDimensions = GetDimensions(screen)
-
-		# Draw the score.
-
-		# Blit(screen, self._scoreText, Vector(Parameters.Margin, Parameters.Margin))
-
-		# if self._bonusDescriptionText:
-			# Blit(
-				# screen,
-				# self._bonusDescriptionText,
-				# Vector(
-					# screenDimensions.X - Parameters.Margin - GetDimensions(self._bonusDescriptionText).X,
-					# Parameters.Margin
-				# ),
-			# )

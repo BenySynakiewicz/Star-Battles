@@ -27,6 +27,7 @@
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
 from Engine.Core.State import State
+from Engine.Logic.BonusManager import BonusManager
 from Engine.Utilities.Direction import Direction
 from Engine.Utilities.General import GetScreen, GetScreenDimensions
 from Engine.World.Nodes.Other.Effect import Effect
@@ -56,6 +57,8 @@ class Player(AbstractParticipant):
 
 		# Initialize new member variables.
 
+		self._bonusManager = BonusManager()
+
 		self._bulletEnergy = 100
 		self._bombEnergy = 100
 		self._shieldEnergy = 100
@@ -66,6 +69,7 @@ class Player(AbstractParticipant):
 
 	# Accessors.
 
+	def GetBonusManager(self): return self._bonusManager
 	def GetBulletEnergy(self): return self._bulletEnergy
 	def GetBombEnergy(self): return self._bombEnergy
 	def GetShieldEnergy(self): return self._shieldEnergy
@@ -98,7 +102,7 @@ class Player(AbstractParticipant):
 
 		self._ShootSomething("BulletFromPlayer")
 
-		if State().GetBonusManager().IsTripleShotEnabled():
+		if self._bonusManager.IsTripleShotEnabled():
 			self._ShootSomething("BulletFromPlayer", +10)
 			self._ShootSomething("BulletFromPlayer", -10)
 
@@ -119,7 +123,7 @@ class Player(AbstractParticipant):
 			if self._bombEnergy < 100:
 				return
 
-			if not State().GetBonusManager().IsTwoBombsEnabled():
+			if not self._bonusManager.IsTwoBombsEnabled():
 
 				bomb = self._ShootSomething("Bomb")
 				self._bombs.append(bomb)
@@ -145,9 +149,11 @@ class Player(AbstractParticipant):
 
 		super().Update(milisecondsPassed)
 
+		self._bonusManager.Update(milisecondsPassed)
+
 		shieldEnergyChange = Parameters.ShieldEnergyRegeneration
 		if self._shieldUp:
-			shieldEnergyChange -= Parameters.ShieldEnergyUsage if not State().GetBonusManager().IsQuickerShieldEnabled() else Parameters.LowerShieldEnergyUsage
+			shieldEnergyChange -= Parameters.ShieldEnergyUsage if not self._bonusManager.IsQuickerShieldEnabled() else Parameters.LowerShieldEnergyUsage
 
 		self.ChangeBulletEnergy(milisecondsPassed * Parameters.BulletEnergyRegeneration)
 		self.ChangeBombEnergy(milisecondsPassed * Parameters.BombEnergyRegeneration)
@@ -191,20 +197,16 @@ class Player(AbstractParticipant):
 
 		nodeName = node.GetName()
 
-		longTimeBonuses = {
-			"TripleShotBonus"   : State().GetBonusManager().EnableTripleShot,
-			"TwoBombsBonus"     : State().GetBonusManager().EnableTwoBombs,
-			"QuickerShieldBonus": State().GetBonusManager().EnableQuickerShield,
+		bonuses = {
+			"TripleShotBonus": self._bonusManager.EnableTripleShot,
+			"TwoBombsBonus": self._bonusManager.EnableTwoBombs,
+			"QuickerShieldBonus": self._bonusManager.EnableQuickerShield,
+			"ShootAroundBonus": self.ShootAround,
 		}
 
-		oneTimeBonuses = {
-			"ShootAroundBonus": Player.ShootAround,
-		}
+		if nodeName in bonuses:
 
-		if nodeName in longTimeBonuses or nodeName in oneTimeBonuses:
-
-			if nodeName in longTimeBonuses: longTimeBonuses[nodeName]()
-			else: oneTimeBonuses[nodeName](self)
+			bonuses[nodeName]()
 
 			self._scene.UpdateBonusDescriptionText()
 

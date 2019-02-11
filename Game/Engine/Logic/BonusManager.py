@@ -26,44 +26,84 @@
 
 class BonusManager:
 
+	# The constructor.
+
 	def __init__(self):
 
-		self._tripleShot = False
-		self._twoBombs = False
-		self._quickerShield = False
+		self._tripleShot = 0
+		self._twoBombs = 0
+		self._quickerShield = 0
 
-	def IsTripleShotEnabled(self):
+	# Accessors.
 
-		return self._tripleShot
+	def IsAnyBonusActive(self):
 
-	def IsTwoBombsEnabled(self):
+		return self.IsTripleShotEnabled() or self.IsTwoBombsEnabled() or self.IsQuickerShieldEnabled()
 
-		return self._twoBombs
+	def GetActiveBonusName(self):
 
-	def IsQuickerShieldEnabled(self):
+		if self.IsTripleShotEnabled():
+			return "TRIPLE SHOT"
 
-		return self._quickerShield
+		if self.IsTwoBombsEnabled():
+			return "TWO BOMBS"
 
-	def EnableTripleShot(self):
+		if self.IsQuickerShieldEnabled():
+			return "QUICKER SHIELD"
 
-		self._tripleShot = True
-		self._twoBombs = False
-		self._quickerShield = False
+		return None
 
-	def EnableTwoBombs(self):
+	def GetActiveBonusTime(self):
 
-		self._tripleShot = False
-		self._twoBombs = True
-		self._quickerShield = False
+		if self.IsTripleShotEnabled():
+			return int(self._tripleShot)
 
-	def EnableQuickerShield(self):
+		if self.IsTwoBombsEnabled():
+			return int(self._twoBombs)
 
-		self._tripleShot = False
-		self._twoBombs = False
-		self._quickerShield = True
+		if self.IsQuickerShieldEnabled():
+			return int(self._quickerShield)
+
+		return None
+
+	def IsTripleShotEnabled(self): return self._tripleShot > 0
+	def IsTwoBombsEnabled(self): return self._twoBombs > 0
+	def IsQuickerShieldEnabled(self): return self._quickerShield > 0
+
+	# Operations.
+
+	def EnableTripleShot(self, time = 10):
+
+		self._tripleShot += time
+		self._twoBombs = 0
+		self._quickerShield = 0
+
+	def EnableTwoBombs(self, time = 10):
+
+		self._tripleShot = 0
+		self._twoBombs += time
+		self._quickerShield = 0
+
+	def EnableQuickerShield(self, time = 10):
+
+		self._tripleShot = 0
+		self._twoBombs = 0
+		self._quickerShield += time
+
+	def Update(self, milisecondsPassed):
+
+		secondsPassed = milisecondsPassed / 1000
+
+		self._tripleShot -= secondsPassed
+		self._twoBombs -= secondsPassed
+		self._quickerShield -= secondsPassed
+
+		self._tripleShot = max(self._tripleShot, 0)
+		self._twoBombs = max(self._twoBombs, 0)
+		self._quickerShield = max(self._quickerShield, 0)
 
 	def Clear(self):
 
-		self._tripleShot = False
-		self._twoBombs = False
-		self._quickerShield = False
+		self._tripleShot = 0
+		self._twoBombs = 0
+		self._quickerShield = 0

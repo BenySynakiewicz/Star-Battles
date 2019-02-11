@@ -66,6 +66,12 @@ class Label(Widget):
 			self._text = text
 			self._GenerateSurface()
 
+			return True
+
+		else:
+
+			return False
+
 	# Utilities.
 
 	def _GenerateSurface(self):
