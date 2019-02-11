@@ -123,16 +123,6 @@ class Game:
 		Resources().Paths.Sounds = "Resources/Sounds"
 		Resources().Paths.Music = "Resources/Music"
 
-		# Load fonts.
-
-		# Resources().LoadFont("Exo 2 Light.ttf")
-		# Resources().LoadFont("Exo 2 Light.ttf")
-		# Resources().LoadFont("Exo 2.ttf")
-
-		# Load backgrounds.
-
-		# Resources().LoadBackground("Background.jpeg")
-
 		# Load sprites.
 
 		Resources().LoadSprite("Cursor", shadows = False, framesPerSecond = 10)
@@ -144,6 +134,7 @@ class Game:
 		Resources().LoadSprite("Bonus 2")
 		Resources().LoadSprite("Bonus 3")
 		Resources().LoadSprite("Bonus 4")
+		Resources().LoadSprite("Bonus 5")
 		Resources().LoadSprite("Player", shadows = True, framesPerSecond = 6)
 		Resources().LoadSprite("Enemy", shadows = True, framesPerSecond = 6)
 		Resources().LoadSprite("Saucer.png", shadows = True)

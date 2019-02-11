@@ -50,7 +50,7 @@ class Player(AbstractParticipant):
 
 		# Initialize the node.
 
-		super().__init__(scene, "Player", 100, dropsBonus = True)
+		super().__init__(scene, "Player", 100, dropsBonus = False)
 
 		self._collisionClasses = {"Participants", "Bonuses"}
 		self._collisionExceptions = {"BulletFromPlayer"}
@@ -75,11 +75,13 @@ class Player(AbstractParticipant):
 	def GetShieldEnergy(self): return self._shieldEnergy
 	def IsShieldUp(self): return self._shieldUp
 
-	# Basic operations.
+	# Operations.
 
 	def ChangeBulletEnergy(self, change): self._bulletEnergy = clip(self._bulletEnergy + change, 0, 100)
 	def ChangeBombEnergy(self, change): self._bombEnergy = clip(self._bombEnergy + change, 0, 100)
 	def ChangeShieldEnergy(self, change): self._shieldEnergy = clip(self._shieldEnergy + change, 0, 100)
+
+	def Heal(self): self._currentHealth = self._maximumHealth
 
 	# Movement.
 
@@ -202,6 +204,7 @@ class Player(AbstractParticipant):
 			"TwoBombsBonus": self._bonusManager.EnableTwoBombs,
 			"QuickerShieldBonus": self._bonusManager.EnableQuickerShield,
 			"ShootAroundBonus": self.ShootAround,
+			"HealthBonus": self.Heal,
 		}
 
 		if nodeName in bonuses:

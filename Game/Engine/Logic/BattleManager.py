@@ -70,7 +70,7 @@ class BattleManager(Timed):
 
 			self.ClearTimer("Saucer")
 
-		elif self.GetTimer("Saucer") // 10000 > 0:
+		elif self.GetTimer("Saucer") // 30000 > 0:
 
 			self._SpawnSaucers()
 
@@ -100,8 +100,7 @@ class BattleManager(Timed):
 
 		currentScore = State().GetScoreManager().GetCurrentScore()
 
-		# if currentScore >= 50:
-		self._saucer = Saucer(self._scene, self._verticalOffset, 3, Direction.Left)
+		self._saucer = Saucer(self._scene, self._verticalOffset, 3.25, Direction.Left)
 		self._scene.Append(self._saucer)
 
 		# Clear the timer.

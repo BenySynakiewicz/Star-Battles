@@ -26,6 +26,7 @@
 
 from Engine.Core.Parameters import Parameters
 from Engine.Core.Resources import Resources
+from Engine.Core.State import State
 from Engine.World.Nodes.AbstractParticipant import AbstractParticipant
 from Engine.World.Utilities.Positioners import AtBottom
 from Engine.Utilities.Direction import Direction
@@ -39,7 +40,7 @@ from Engine.Utilities.Vector import Vector
 ##
 
 ExplosionDimensions = Vector(200, 200)
-ShootingProbabilityDivisor = 200000
+ShootingProbabilityDivisor = 800000
 
 ##
 #
@@ -89,13 +90,18 @@ class Saucer(AbstractParticipant):
 
 		self.ReplaceSprite("Explosion", dimensions = ExplosionDimensions, loop = False)
 
+		State().GetScoreManager().Update(+Parameters.SaucerValue)
 		self.OnDestruction()
 
 	# Using weapons.
 
 	def Shoot(self):
 
-		self._ShootSomething("BulletFromEnemy", position = AtBottom)
+		numberOfBullets = 25
+		radialStep = (360 / numberOfBullets)
+
+		for n in range(numberOfBullets):
+			self._ShootSomething("BulletFromEnemy", radialStep * n, additionalRotation = 180)
 
 		self.ClearTimer("Shot")
 

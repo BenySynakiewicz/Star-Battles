@@ -64,15 +64,16 @@ Parameters = SimpleNamespace(
 	CargoSpeed = 0.400,
 
 	EnemyValue = 10,
-	CargoValue = 50,
+	SaucerValue = 100,
 
 	SmallTrajectoryDeviation = 0.03,
 	BigTrajectoryDeviation = 0.06,
 
-	TripleShotBonusProbability = 0.03,
-	TwoBombsBonusProbability = 0.06,
-	QuickerShieldBonusProbability = 0.02,
-	ShootAroundBonusProbability = 0.01,
+	TripleShotBonusProbability = 0.030,
+	TwoBombsBonusProbability = 0.060,
+	QuickerShieldBonusProbability = 0.020,
+	ShootAroundBonusProbability = 0.010,
+	HealthBonusProbability = 0.020,
 
 	BulletEnergyRegeneration = 0.225,
 	BombEnergyRegeneration = 0.015,

@@ -119,10 +119,11 @@ class AbstractParticipant(Node):
 	def _DropBonus(self):
 
 		possibilities = {
-			"TripleShotBonus"   : Parameters.TripleShotBonusProbability,
-			"TwoBombsBonus"     : Parameters.TwoBombsBonusProbability,
+			"TripleShotBonus": Parameters.TripleShotBonusProbability,
+			"TwoBombsBonus": Parameters.TwoBombsBonusProbability,
 			"QuickerShieldBonus": Parameters.QuickerShieldBonusProbability,
-			"ShootAroundBonus"  : Parameters.ShootAroundBonusProbability,
+			"ShootAroundBonus": Parameters.ShootAroundBonusProbability,
+			"HealthBonus": Parameters.HealthBonusProbability,
 		}
 
 		decision = GetDecision(possibilities)
@@ -130,10 +131,11 @@ class AbstractParticipant(Node):
 			return
 
 		spriteIndices = {
-			"TripleShotBonus"   : 1,
-			"TwoBombsBonus"     : 2,
+			"TripleShotBonus": 1,
+			"TwoBombsBonus": 2,
 			"QuickerShieldBonus": 3,
-			"ShootAroundBonus"  : 4,
+			"ShootAroundBonus": 4,
+			"HealthBonus": 5,
 		}
 
 		bonusName = decision[0]
@@ -152,7 +154,7 @@ class AbstractParticipant(Node):
 		self._healthBar.SetPosition(position)
 		self._healthBar.Render()
 
-	def _ShootSomething(self, name, angle = None, position = AtTop):
+	def _ShootSomething(self, name, angle = None, position = AtTop, additionalRotation = 0):
 
 		node = globals()[name](self._scene)
 		node.SetRelativePosition(self, position)
@@ -161,12 +163,10 @@ class AbstractParticipant(Node):
 
 			node.SetPosition(node.GetPosition().GetRotatedAround(self.GetCenter(), angle))
 
-			movementVector = (node.GetCenter() - self.GetCenter()).GetNormalized()# * Parameters.BulletSpeed
-			node.GetMovement().SetRoute(movementVector)
-			node.GetMovement().SetSpeed(Parameters.BulletSpeed)
-			# node.SetMovementVector(movementVector)
+			movementVector = node.GetCenter() - self.GetCenter()
+			node.GetMovement().Set(Parameters.BulletSpeed, movementVector)
 
-			node.SetRotation(angle)
+			node.SetRotation(angle + additionalRotation)
 
 		self._scene.Append(node)
 
