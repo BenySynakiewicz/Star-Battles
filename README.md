@@ -6,6 +6,10 @@ A simple space shooter, created for the purpose of learning the basics of the [p
 
 ## Changelog
 
+### Version 1.4
+
+- **TO-DO**: Make the game significantly more difficult.
+
 ### Version 1.3
 
 - Player is no longer a one-hit target.
